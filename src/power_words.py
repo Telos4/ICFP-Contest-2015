@@ -15,21 +15,19 @@ words of power go in lowercase because of matching
 """
 words_for_sure = ["ei!", "ia! ia!", "r'lyeh", "yuggoth"]
 
-words_probable = ["cthulhu", "dagon", "nyarlathotep",
-                  "shub-niggurath", "huitloxopetl", 
-                  "wza-y'ei!", "y'kaa haa ho-ii", 
+words_probable = ["cthulhu", "dagon", 
                   "rhan-tegoth-cthulhu fthagn-ei! ei! ei! ei!-rhan-teogth.",
                   "rhan-tegoth rhan-tegoth!",
                   "ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn",
                   "h. p. lovecraft", "azathoth", "chaugnar faugn",
                   "shoggoths", "necronomicon"]
 
-words_even_less_prob = ["derleth", "hastur", "ithaqua",
+words_even_less_prob = ["derleth",
                         "zhar", "lloigor", "cyaegha", "nyogtha",
                         "tsathoggua", "aphoom-zhah", "cthugha",
                         "dagon","ghatanothoa",
                         "mother hydra","zoth-ommog", "gatanozoa",
-                        "ghatanothoa", "arlyeh", "ponape", "elder things",
+                        "ghatanothoa", "arlyeh", "elder things",
                         "great race"]
 
 """
