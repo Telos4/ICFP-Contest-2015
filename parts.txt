@@ -60,6 +60,15 @@ Identifyable parts of a solution:
 - Path finding:
 -- Hex: http://www.redblobgames.com/grids/hexagons/
 -- A*: http://www.redblobgames.com/pathfinding/a-star/implementation.html
+-- BB in Python: https://web.stanford.edu/class/ee364b/lectures/bb_python/bb30.py http://rosettacode.org/wiki/Knapsack_Problem/Python https://codereview.stackexchange.com/questions/44421/knapsack-branch-and-bound-forward-filter
+
+- Q-learning (Iterative Schätzung von bi): 
+-- in Tetris-Code, eingecheckt
+-- https://studywolf.wordpress.com/2012/11/25/reinforcement-learning-q-learning-and-exploration/ 
+-- https://github.com/spragunr/deep_q_rl 
+-- http://computing.dcu.ie/~humphrys/Notes/RL/Code/code.q.html 
+-- https://code.google.com/p/opennero/wiki/QLearning 
+-- http://mnemstudio.org/path-finding-q-learning-tutorial.htm
 
 - Random titbits
 -- http://playboard.me/android/apps/com.sam.hex
