@@ -2,22 +2,49 @@ import json
 from math import floor
 from math import ceil
 from copy import deepcopy
+import string
 
 class Cell:
     """
     representation of a single cell on the board
     """
-    def __init__(self, x, y):
+    def __init__(self, x, y, full=False):
         self.x = x
         self.y = y
-        self.full = False
+        self.full = full
 
-class Map:
+    def __str__(self):
+        if self.full == True:
+            return 'X'
+        else:
+            return ' '
+
+class Board:
     """
-    representation of the map
+    representation of the board
     """
-    def __init__(self, map_dict):
-        pass
+    def __init__(self, width, height, filled):
+        self.width = width
+        self.height = height
+        self.fields = [[Cell(i,j) for j in xrange(self.height)] for i in xrange(self.width)]
+        self.filled = [Cell(f["x"], f["y"], full=True) for f in filled]
+        for f in self.filled:
+            self.fields[f.x][f.y] = f
+
+    def __str__(self):
+        """
+        basic ascii output for debugging
+        :return:
+        """
+        s = ''.join(['-' for i in xrange(self.width+2)])
+        s += '\n'
+        for j in xrange(self.height):
+            s += '|'
+            for i in xrange(self.width):
+                s += str(self.fields[i][j])
+            s += '|\n'
+        s += ''.join(['-' for i in xrange(self.width+2)])
+        return s
 
 
 class Unit:

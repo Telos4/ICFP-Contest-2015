@@ -9,6 +9,10 @@ def main():
     # test JSON parser
     problem_dict = handlejson.parse_to_dictionary(handlejson.data)
 
+    board = data_structures.Board(problem_dict['width'], problem_dict['height'], problem_dict['filled'])
+
+    print board
+
     # create a units
     units = [data_structures.Unit(u) for u in problem_dict['units']]
 

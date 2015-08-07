@@ -1,0 +1,29 @@
+
+
+Prinzipielles Vorgehen:
+- Gegeben:
+Form von n Units u1, u2, u3, ... un				    (üblich: n < 10)
+Folge von m Unit-Indizes ui1, ui2, ui3, ..., uim    (üblich: m = 100)
+Menge von Bewegungen bl, br, bdl, bdr, brot+, brot-
+Score-Funktion r(bi1, ..., bit) aktuelle Punktzahl im Spiel
+   mit bi1, ..., bit einer Folge von t Bewegungsindizes
+Power-Words als Folge von Bewegungen
+
+- Gesucht:
+Liste an Bewegungsindizes bi1, bi2, bi3, ..., bit	(üblich: t sehr groß)
+    mit r(bi1, ..., bit) groß
+	
+- Vorgehen:
+	Bestimme iterative Schätzung für bi1, bi2, bi3, ..., bit
+	als ~bi1, ~bi2, ...., ~bik, ~bik+1, ... , ~bik+l, ausgehend
+	von aktuellem Index k (initial 1)und Lookahead über l Zeichen,
+	mit einer Schätzung fürs Rating der Gesamtfolge
+	~r(~bi1, ~bi2, ...., ~bik, ~bik+1, ... , ~bik+l)
+	
+- Ansätze:
+	Branch and Bound
+	Wiederholen von bereits bekannten guten Pfaden
+		(Bienenstrategie)
+	Wiederholen von bereits bekannten guten Pfaden
+		in Form von Blöcken, die offline berechnet werden
+
