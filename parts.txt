@@ -34,10 +34,13 @@ Identifyable parts of a solution:
 -- server
 
 - Solution strategies for (normal) tetris:
--- https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/
--- https://luckytoilet.wordpress.com/2011/05/27/coding-a-tetris-ai-using-a-genetic-algorithm/
+-- (old links are bullshit)
+-- maxflow on the map? use https://github.com/pmneila/PyMaxflow
+-- 
 
 - Genetic algorithms in Python (needed for above):
 -- https://github.com/deap/deap
 -- http://pyevolve.sourceforge.net/
 
+- Random titbits
+-- http://playboard.me/android/apps/com.sam.hex
