@@ -6,3 +6,6 @@ Cthulhu fthagn-Ei! Ei! Ei! Ei!-Rhan-Teogth. Rhan-Tegoth, Rhan-Tegoth!”
 
 Ia! Ia! fhtagn! würd ich für wahscheinlich halten
 
+Siehe src/power_words.py
+
+Siehe https://lovecraftbookclub.wordpress.com/the-lovecraft-dictionary/ und https://en.wiktionary.org/wiki/Concordance:HP_Lovecraft
