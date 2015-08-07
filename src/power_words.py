@@ -33,13 +33,15 @@ words_even_less_prob = ["derleth",
 """
 https://lovecraftbookclub.wordpress.com/the-lovecraft-dictionary/
 https://en.wiktionary.org/wiki/Concordance:HP_Lovecraft
+Lebensdaten: 20. August 1890 in Providence, Rhode Island; 15. Maerz 1937
 """
 more_words = ["angarola", "call of cthulhu", "pickman's model",
               "antediluvian", "cotton mather", "cyclopean", "cymric",
               "eldritch", "fuseli", "grotto", "hadoth", "akhematen",
               "amarna", "nephren-ka", "neb", "neb-hepet-re",
               "mentuhotep", "priory", "sime", "regnum congo",
-              "pigafetta"]
+              "pigafetta", "Providence", "Rhode Island", "20.8",
+              "8.20", "15.3", "3.15", "15.03", "03.15"]
 # see "words.txt":
 even_more = ["abnormal",
 "aeon",
@@ -98,7 +100,6 @@ even_more = ["abnormal",
 "formulae",
 "fugitive",
 "fulgurous",
-"g[edit]",
 "gibberish",
 "gibbous",
 "glimpses",
