@@ -40,8 +40,8 @@ more_words = ["angarola", "call of cthulhu", "pickman's model",
               "eldritch", "fuseli", "grotto", "hadoth", "akhematen",
               "amarna", "nephren-ka", "neb", "neb-hepet-re",
               "mentuhotep", "priory", "sime", "regnum congo",
-              "pigafetta", "Providence", "Rhode Island", "20.8",
-              "8.20", "15.3", "3.15", "15.03", "03.15"]
+              "pigafetta", "providence", "rhode island",
+              "15.3", "3.15", "15.03", "03.15"]
 # see "words.txt":
 even_more = ["abnormal",
 "aeon",
