@@ -100,7 +100,7 @@ def main():
     for w in words:
         m = reverse_matching(w)
         if not evaluate_meaning(m): 
-            print "NOPE", w
+            print "NOPE", w, m
             continue
         print "word", w
         print m
