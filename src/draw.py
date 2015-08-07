@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 
 import handlejson as hj
 from data import *
@@ -26,7 +27,7 @@ def drawBoard(width, height, scale):
 
     return img
 
-def drawCell(img, width, height, scale):
+def drawCell(img, color, width, height, scale):
     w = scale
     h = scale
 
@@ -37,7 +38,20 @@ def drawCell(img, width, height, scale):
         x = width*scale + w/2 # odd rows shifted to the right
         y = height*scale
     
-    cv2.rectangle(img, (x,y), (x+w,y+h), (0,0,255), thickness=cv2.cv.CV_FILLED)
+    cv2.rectangle(img, (x,y), (x+w,y+h), color, thickness=cv2.cv.CV_FILLED)
+
+def drawPivot(img, color, width, height, scale):
+    w = scale
+    h = scale
+
+    if height % 2 == 0:
+        x = width*scale
+        y = height*scale
+    else:
+        x = width*scale + w/2 # odd rows shifted to the right
+        y = height*scale
+
+    cv2.rectangle(img, (x+w/3,y+h/3), (x+w-w/3,y+h-h/3), color, thickness=cv2.cv.CV_FILLED)
 
 if __name__ == '__main__':
     datas = [data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23]
@@ -51,13 +65,32 @@ if __name__ == '__main__':
         height = parsedData['height']
         scale = 20
         filled = parsedData['filled']
+        units = parsedData['units']
+
+        if not os.path.exists('Maps'):
+            os.makedirs('Maps')
+
+        directory = 'Maps/Map_' + str(i)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        for j in range(len(units)):
+            img = drawBoard(width, height, scale)
+            for cell in units[j]['members']:
+                drawCell(img, (255,0,0), cell['x']+width/2, cell['y']+height/2, scale)
+
+            pivot = units[j]['pivot']
+            drawPivot(img, (0,255,0), pivot['x']+width/2, pivot['y']+height/2, scale)
+
+            cv2.imwrite(directory + '/unit_' + str(j) + '.png', img)
+
 
         img = drawBoard(width, height, scale)
 
         for cell in filled:
-            drawCell(img, cell['x'], cell['y'], scale)
+            drawCell(img, (0,0,255), cell['x'], cell['y'], scale)
 
-        cv2.imwrite('Maps/map_' + str(i) + '.png', img)
+        cv2.imwrite(directory + '/map_' + str(i) + '.png', img)
 
         #while not (cv2.waitKey(1) & 0xFF == ord('q')):
             #cv2.imshow('test', img)
