@@ -10,7 +10,7 @@ def parse_to_dictionary(s):
 
 
 def create_response_string(d):
-    _check_response_is_valide(d)
+    _check_response_is_valid(d)
     try:
         return json.dumps(d)
     except ValueError:
