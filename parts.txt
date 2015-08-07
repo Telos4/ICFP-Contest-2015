@@ -44,9 +44,16 @@ Identifyable parts of a solution:
 -- https://github.com/deap/deap
 -- http://pyevolve.sourceforge.net/
 
-- MDP in Python:
+- MDP in Python / MDP and Tetris
 -- https://github.com/sawcordwell/pymdptoolbox / https://pypi.python.org/pypi/pymdptoolbox/
+-- http://de.slideshare.net/JungkyuLee1/tetris-automatic-playing
+-- http://cs229.stanford.edu/proj2012/BodoiaPuranik-ApplyingReinforcementLearningToCompetitiveTetris.pdf
+-- https://github.com/tbq/tetris-auto-player
 
+- Another approach (Sarsa):
+-- http://research.ict.ru.ac.za/g02c0108/CSHnsThesis.pdf
+-- http://artint.info/demos/rl/SarsaController.java
+-- https://github.com/amarack/python-rl/blob/master/pyrl/agents/sarsa_lambda_ann.py
 
 - Random titbits
 -- http://playboard.me/android/apps/com.sam.hex
