@@ -28,12 +28,22 @@ class BoardManager:
 
         for unit_index in self.unit_indizes[game_number]:
             # spawn unit
-            u = Unit(self.unit_dict[unit_index], board.width)
+            u = Unit(self.unit_dict[unit_index])
+            u = u.moveToSpawnPosition(board.width)
+            self.update_board(board, u)
+
+            print board
             pass
 
 
-    def update_board(self, board, unit, sequence):
-        pass
+    def update_board(self, board, unit):
+        for m in unit.members:
+            if board.fields[m.x][m.y].full == True:
+                print "moved unit to occupied space -> stuck"
+            else:
+                board.fields[m.x][m.y].full = True
+                board.filled.append(board.fields[m.x][m.y])
+                print "moved unit to empty space -> ok"
 
 class Cell:
     """
