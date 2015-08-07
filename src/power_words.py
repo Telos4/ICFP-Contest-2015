@@ -10,6 +10,9 @@ inp = { 'W' : ['p', '\'',  '!', '.', '0', '3'],
 
 inv_map = {e: k for k, v in inp.items() for e in v}
 
+"""
+words of power go in lowercase because of matching
+"""
 words_for_sure = ["ei!", "ia! ia!", "r'lyeh", "yuggoth"]
 
 words_probable = ["cthulhu", "dagon", "nyarlathotep",
@@ -18,14 +21,22 @@ words_probable = ["cthulhu", "dagon", "nyarlathotep",
                   "rhan-tegoth-cthulhu fthagn-ei! ei! ei! ei!-rhan-teogth.",
                   "rhan-tegoth rhan-tegoth!",
                   "ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn",
-                  "h. p. lovecraft", "necronomicon"]
+                  "h. p. lovecraft", "azathoth", "chaugnar faugn",
+                  "shoggoths", "necronomicon"]
 
 words_even_less_prob = ["derleth", "hastur", "ithaqua",
                         "zhar", "lloigor", "cyaegha", "nyogtha",
                         "tsathoggua", "aphoom-zhah", "cthugha",
                         "dagon","ghatanothoa",
                         "mother hydra","zoth-ommog", "gatanozoa",
-                        "ghatanothoa", "arlyeh", "ponape"]
+                        "ghatanothoa", "arlyeh", "ponape", "elder things",
+                        "great race"]
+
+"""
+validation below said nope. check and remove from lists above
+"""
+words_rejected = "nyarlathotep", "shub-niggurath", "huitloxopetl",
+"wza-y'ei!", "y'kaa haa ho-ii", "hastur", "ithaqua", "ponape"
 
 words = words_for_sure + words_probable + words_even_less_prob
 
