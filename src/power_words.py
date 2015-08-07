@@ -22,7 +22,7 @@ words_probable = ["cthulhu", "dagon",
                   "rhan-tegoth rhan-tegoth!",
                   "ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn",
                   "h. p. lovecraft", "azathoth", "chaugnar faugn",
-                  "shoggoths", "necronomicon"]
+                  "shoggoths", "necronomicon", "sarnath"]
 
 words_even_less_prob = ["derleth",
                         "zhar", "lloigor", "cyaegha", "nyogtha",
