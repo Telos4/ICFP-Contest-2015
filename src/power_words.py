@@ -18,14 +18,15 @@ words_probable = ["cthulhu", "dagon", "nyarlathotep",
                   "rhan-tegoth-cthulhu fthagn-ei! ei! ei! ei!-rhan-teogth.",
                   "rhan-tegoth rhan-tegoth!",
                   "ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn",
-                  "H. P. Lovecraft"]
+                  "H. P. Lovecraft", "Azathoth", "Chaugnar Faugn", "Shoggoths"]
 
 words_even_less_prob = ["derleth", "hastur", "ithaqua",
                         "zhar", "lloigor", "cyaegha", "nyogtha",
                         "tsathoggua", "aphoom-zhah", "cthugha",
                         "dagon","ghatanothoa",
                         "mother hydra","zoth-ommog", "gatanozoa",
-                        "ghatanothoa", "arlyeh", "ponape"]
+                        "ghatanothoa", "arlyeh", "ponape", "Elder Things",
+                        "Great Race"]
 
 words = words_for_sure + words_probable + words_even_less_prob
 
