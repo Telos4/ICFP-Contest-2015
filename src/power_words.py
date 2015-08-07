@@ -17,7 +17,8 @@ words_probable = ["cthulhu", "dagon", "nyarlathotep",
                   "wza-y'ei!", "y'kaa haa ho-ii", 
                   "rhan-tegoth-cthulhu fthagn-ei! ei! ei! ei!-rhan-teogth.",
                   "rhan-tegoth rhan-tegoth!",
-                  "ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"]
+                  "ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn",
+                  "H. P. Lovecraft"]
 
 words_even_less_prob = ["derleth", "hastur", "ithaqua",
                         "zhar", "lloigor", "cyaegha", "nyogtha",
