@@ -86,22 +86,22 @@ class Unit:
                 cell.x = cell.x + 1
 
         elif direction == 'SW':
-            if movedUnit.pivot.x % 2 == 0:
+            if movedUnit.pivot.y % 2 == 0:
                 movedUnit.pivot.x = movedUnit.pivot.x - 1
             movedUnit.pivot.y = movedUnit.pivot.y + 1
 
             for cell in movedUnit.members:
-                if cell.x % 2 == 0:
+                if cell.y % 2 == 0:
                     cell.x = cell.x - 1
                 cell.y = cell.y + 1
 
         elif direction == 'SE':
-            if not movedUnit.pivot.x % 2 == 0:
+            if not movedUnit.pivot.y % 2 == 0:
                 movedUnit.pivot.x = movedUnit.pivot.x + 1
             movedUnit.pivot.y = movedUnit.pivot.y + 1
 
             for cell in movedUnit.members:
-                if not cell.x % 2 == 0:
+                if not cell.y % 2 == 0:
                     cell.x = cell.x + 1
                 cell.y = cell.y + 1
 
