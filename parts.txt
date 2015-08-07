@@ -1,0 +1,18 @@
+Identifyable parts of a solution:
+
+- JSON parser and generator
+
+- tetris engine on hexagons:
+-- the way tetris does it usually
+-- hexagons: fitting data structure?
+
+- crypto: analyse linear congruental generator for pseudo-random
+-- solvers? compute power?
+-- use prediction for benefits in game
+
+- output commands: combine to obtain words of power
+-- combination/dictionary attack? do not change the solution
+-- find out words of power from Lovecraft
+-- obtain *better* words of power through modifying the solution to a similar one
+
+- build system and submission communication
