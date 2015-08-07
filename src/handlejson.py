@@ -1,6 +1,6 @@
 import json
+import subprocess
 
-data = '{"height":20,"width":15,"sourceSeeds":[0,24762,24103,12700,5864,1155,24803,29992,18660,19102],"units":[{"members":[{"x":0,"y":0}],"pivot":{"x":4,"y":0}},{"members":[{"x":0,"y":0}],"pivot":{"x":4,"y":0}},{"members":[{"x":0,"y":0}],"pivot":{"x":4,"y":0}},{"members":[{"x":0,"y":0}],"pivot":{"x":4,"y":0}},{"members":[{"x":0,"y":0}],"pivot":{"x":4,"y":0}},{"members":[{"x":0,"y":0}],"pivot":{"x":4,"y":0}},{"members":[{"x":0,"y":0}],"pivot":{"x":4,"y":0}},{"members":[{"x":0,"y":0}],"pivot":{"x":4,"y":0}},{"members":[{"x":1,"y":0},{"x":2,"y":0},{"x":0,"y":1},{"x":2,"y":1},{"x":1,"y":2},{"x":2,"y":2}],"pivot":{"x":3,"y":5}},{"members":[{"x":1,"y":0},{"x":2,"y":0},{"x":0,"y":1},{"x":2,"y":1},{"x":1,"y":2},{"x":2,"y":2}],"pivot":{"x":3,"y":5}},{"members":[{"x":1,"y":0},{"x":2,"y":0},{"x":3,"y":0},{"x":0,"y":1},{"x":3,"y":1},{"x":0,"y":2},{"x":4,"y":2},{"x":0,"y":3},{"x":3,"y":3},{"x":1,"y":4},{"x":2,"y":4},{"x":3,"y":4}],"pivot":{"x":8,"y":6}}],"id":12,"filled":[],"sourceLength":100}'
 
 def parse_to_dictionary(s):
     try:
@@ -8,11 +8,17 @@ def parse_to_dictionary(s):
     except ValueError:
         raise ValueError('your string was invalid, it cannot be parsed to python: ' + s)
 
+def send_response(problemid_int, seed_int, solution_str, tag_str_or_none=None):
+    subprocess.call(['curl','--user',':hi4a3Ue84FtxUGqVQWla3aoBU9AMUphhm9KuscMIOFQ=','-X','POST','-H','Content-Type: application/json','-d',_create_response(problemid_int, seed_int, solution_str, tag_str_or_none),'https://davar.icfpcontest.org/teams/206/solutions'])
 
-def create_response_string(d):
+def _create_response(problemid_int, seed_int, solution_str, tag_str_or_none=None):
+    return _create_response_from_dic({'problemId':problemid_int,'seed':seed_int,'tag':tag_str_or_none,'solution':solution_str})
+
+
+def _create_response_from_dic(d):
     _check_response_is_valid(d)
     try:
-        return json.dumps(d)
+        return json.dumps([d])
     except ValueError:
         raise ValueError('your dictionary cannot be parsed to a json string')
 
