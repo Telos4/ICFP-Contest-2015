@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# http://arkhamarchivist.com/wordcount-lovecraft-favorite-words/
+
 
 inp = { 'W' : ['p', '\'',  '!', '.', '0', '3'],
         'E' : ['b', 'c', 'e', 'f', 'y', '2'],
