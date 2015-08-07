@@ -29,18 +29,29 @@ Identifyable parts of a solution:
 - own jury system?
 
 - phone home system for words of powers and other stuff?
--- may we?
+-- may we? (asked the orgs, no answer)
 -- should we?
 -- server
 
 - Solution strategies for (normal) tetris:
 -- (old links are bullshit)
 -- maxflow on the map? use https://github.com/pmneila/PyMaxflow
+-- http://arxiv.org/abs/cs/0210020 / http://arxiv.org/pdf/cs/0210020v1.pdf
+-- https://www2.cs.fau.de/EN/publication/download/mic.pdf
 -- 
 
-- Genetic algorithms in Python (needed for above):
+- Genetic algorithms in Python (depricated):
 -- https://github.com/deap/deap
 -- http://pyevolve.sourceforge.net/
 
+- MDP in Python:
+-- https://github.com/sawcordwell/pymdptoolbox / https://pypi.python.org/pypi/pymdptoolbox/
+
+
 - Random titbits
 -- http://playboard.me/android/apps/com.sam.hex
+-- https://hextris.github.io/hextris/
+-- http://www.plonga.com/puzzle/Tetris/Hexagon-Tetris -- more or less our case
+-- http://colinfahey.com/tetris/tetris.html
+
+
