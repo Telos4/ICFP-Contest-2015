@@ -1,3 +1,5 @@
+Language: Python
+
 Identifyable parts of a solution:
 
 - JSON parser and generator
@@ -11,8 +13,9 @@ Identifyable parts of a solution:
 -- unit can rotate with "pivot point"
 -- unit is not necessarily a connected set of cells
 -- units may not return to their old position (force this in the board representation!)
+-- units are not created by us, but we can find out their order through lcg milking
 
-- crypto: analyse linear congruental generator for pseudo-random
+- crypto: analyse linear congruental generator (lcd) for pseudo-random
 -- solvers? compute power?
 -- use prediction for benefits in game
 
@@ -22,3 +25,5 @@ Identifyable parts of a solution:
 -- obtain *better* words of power through modifying the solution to a similar one
 
 - build system and submission communication
+
+- own jury system?
