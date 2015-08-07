@@ -7,6 +7,15 @@ class Cell:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.full = False
+
+class Map:
+    """
+    representation of the map
+    """
+    def __init__(self, map_dict):
+        pass
+
 
 class Unit:
     def __init__(self, unit_dict):
@@ -15,6 +24,15 @@ class Unit:
         """
         self.members = [Cell(m["x"],m["y"]) for m in unit_dict["members"]]  # members
         self.pivot = Cell(unit_dict["pivot"]["x"], unit_dict["pivot"]["y"]) # pivot cell
+
+    def move(self, direction):
+        """
+
+        :param direction:
+        :return:
+        """
+        pass
+
 
     # def __str__(self):
     #     mx = max([m.x ])

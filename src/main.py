@@ -1,7 +1,7 @@
 # dummy main
 import lcd_generator as lcd
 import handlejson
-import unit
+import data_structures
 
 def main():
     print "ICFP 2015"
@@ -10,7 +10,7 @@ def main():
     problem_dict = handlejson.parse_to_dictionary(handlejson.data)
 
     # create a units
-    units = [unit.Unit(u) for u in problem_dict['units']]
+    units = [data_structures.Unit(u) for u in problem_dict['units']]
 
     for u in units:
         print u
