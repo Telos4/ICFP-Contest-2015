@@ -4,6 +4,7 @@ import os
 
 import handlejson as hj
 from data import *
+import data_structures as ds
 
 def drawBoard(width, height, scale):
     width = width+1
@@ -41,6 +42,32 @@ def drawCell(img, color, width, height, scale):
     cv2.rectangle(img, (x,y), (x+w,y+h), color, thickness=cv2.cv.CV_FILLED)
 
 def drawPivot(img, color, width, height, scale):
+    parsedData = hj.parse_to_dictionary(data2)
+    units = parsedData['units']
+    filled = parsedData['filled']
+    width = parsedData['width']
+    height = parsedData['height']
+    scale = 20
+
+    img = drawBoard(img, (0,0,255), cell['x'], cell['y'], scale)
+
+    unit = ds.Unit(units[0])
+
+    for cell in unit.members:
+        drawCell(img, (0,255,0), cell.x, cell.y, scale)
+
+    unit = unit.moveToSpawnPosition(width)
+    
+    for cell in filled:
+        drawCell(img, (0,0,255), cell['x'], cell['y'], scale)
+
+    for cell in unit.members:
+        drawCell(img, (255,0,0), cell.x, cell.y, scale)
+
+    cv2.imwrite('unit.png', img)
+
+
+    """
     w = scale
     h = scale
 
@@ -94,3 +121,5 @@ if __name__ == '__main__':
 
         #while not (cv2.waitKey(1) & 0xFF == ord('q')):
             #cv2.imshow('test', img)
+
+    """
