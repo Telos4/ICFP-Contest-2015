@@ -28,6 +28,11 @@ Identifyable parts of a solution:
 
 - own jury system?
 
+- phone home system for words of powers and other stuff?
+-- may we?
+-- should we?
+-- server
+
 - Solution strategies for (normal) tetris:
 -- https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/
 -- https://luckytoilet.wordpress.com/2011/05/27/coding-a-tetris-ai-using-a-genetic-algorithm/
