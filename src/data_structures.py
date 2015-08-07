@@ -20,6 +20,8 @@ class BoardManager:
 
         self.unit_dict = problem_dict['units']
 
+        self.l = 10 # prediction length
+
     def simulation(self, game_number):
         assert game_number < len(self.unit_indizes), "error: no such game"
 

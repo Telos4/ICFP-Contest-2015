@@ -16,10 +16,5 @@ def main():
     boardmanager.simulation(0)
 
 
-    # test of random sequence generator for the example from the documentation
-    unit_indizes = lcd.generate_random_sequence(17,10,20)
-    print unit_indizes
-
-
 if __name__ == "__main__":
     main()
