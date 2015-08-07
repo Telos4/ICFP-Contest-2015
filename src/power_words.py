@@ -50,7 +50,10 @@ def forward_matching(path):
             possible_pref = word + c
             for w in words:
                 if is_prefix(possible_pref, w):
-                    print s,w
+                    part = w[0:len(possible_pref)]
+                    tail = '(' + w[len(possible_pref):] + ')'
+                    # print s,w
+                    print s,part,tail,possible_pref
         
 def main():
     for w in words:
@@ -65,7 +68,8 @@ def main():
                 ['W', 'SW'], ['E', 'SE'], 
                 ['W', 'R+'], ['W', 'R-'], 
                 ['E', 'R+'], ['E', 'R-'], 
-                ['E', 'E'], ['W','W']]
+                ['E', 'E'], ['W','W'],
+                ['SW', 'R-', 'SE', 'E', 'E', 'SW']]
     for p in suspects:
         forward_matching(p)
         print "-------------"
