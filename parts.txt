@@ -6,6 +6,12 @@ Identifyable parts of a solution:
 -- the way tetris does it usually
 -- hexagons: fitting data structure?
 
+- units
+-- units can lock: with a wrong command
+-- unit can rotate with "pivot point"
+-- unit is not necessarily a connected set of cells
+-- units may not return to their old position (force this in the board representation!)
+
 - crypto: analyse linear congruental generator for pseudo-random
 -- solvers? compute power?
 -- use prediction for benefits in game
