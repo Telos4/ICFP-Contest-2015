@@ -49,6 +49,8 @@ Identifyable parts of a solution:
 -- http://de.slideshare.net/JungkyuLee1/tetris-automatic-playing
 -- http://cs229.stanford.edu/proj2012/BodoiaPuranik-ApplyingReinforcementLearningToCompetitiveTetris.pdf
 -- https://github.com/tbq/tetris-auto-player
+-- Use tetris AI for each non-empty line as bottom and then rank them bottom-up?
+--- Still need a path finder!
 
 - Another approach (Sarsa):
 -- http://research.ict.ru.ac.za/g02c0108/CSHnsThesis.pdf
