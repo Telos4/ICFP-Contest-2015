@@ -24,11 +24,11 @@ class BoardManager:
 
         self.l = 10  # prediction length
 
-    def simulation(self, game_number):
+    def simulation(self, map_number, game_number):
         assert game_number < len(self.queued_units), "error: no such game"
 
         # create empty board
-        board = self.initial_board
+        board = deepcopy(self.initial_board)
 
         movement_sequence = ['W', 'W', 'W', 'W', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'E', 'SE', 'W',
                              'W', 'W', 'W', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'E', 'SE', 'E', 'E',
@@ -42,7 +42,7 @@ class BoardManager:
         #                      'SW', 'SE', 'SW', 'SE', 'SW', 'W', 'SE', 'SW', 'RC', 'RC', 'W', 'RCC']
         queued_units = self.queued_units[game_number]
 
-        board = self.apply_sequence(board, None, queued_units, movement_sequence)
+        board = self.apply_sequence(board, None, queued_units, movement_sequence, map_number, game_number)
 
 
         # for unit_index in self.queued_units[game_number]:
@@ -54,7 +54,7 @@ class BoardManager:
         #     print board
         #     pass
 
-    def apply_sequence(self, board, active_unit, queued_units, movement_sequence):
+    def apply_sequence(self, board, active_unit, queued_units, movement_sequence, map_number, game_number):
         """
         Simulate the game starting with the current board state and apply the movement sequence
         for the active unit. If the unit becomes stuck the next unit in queued_units runs the
@@ -111,7 +111,8 @@ class BoardManager:
                 print "no more units in queue!"
                 break
 
-        f = open('movements.txt', 'w')
+        filename = 'movements_map' + str(map_number) + '_game' + str(game_number) + '.txt'
+        f = open(filename, 'w')
         f.write('movement_sequence = [')
         for i in range(len(movement_sequence)-1):
             f.write('\'' + movement_sequence[i] + '\',')
@@ -161,7 +162,7 @@ class BoardManager:
         """
         check if any rows are completely filled and delete them
         """
-        for j in xrange(board.height-1, 0, -1):
+        for j in xrange(board.height-1, -1, -1):
             # check if row is full
             if all([board.fields[i][j].full for i in xrange(board.width)]):
                 # delete the row
