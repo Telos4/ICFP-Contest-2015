@@ -3,6 +3,49 @@ from math import floor
 from math import ceil
 from copy import deepcopy
 import string
+import  lcd_generator as lcd
+
+class BoardManager:
+    def __init__(self, problem_dict):
+        # create the board
+        self.initial_board = Board(problem_dict['width'], problem_dict['height'], problem_dict['filled'])
+
+        print self.initial_board
+
+        # create list of units to spawn
+        self.unit_indizes = [lcd.generate_random_sequence(seed, problem_dict['sourceLength'],
+                                                          len(problem_dict['units'])) for seed in
+                             problem_dict['sourceSeeds']]
+        print self.unit_indizes
+
+        self.unit_dict = problem_dict['units']
+
+        self.l = 10 # prediction length
+
+    def simulation(self, game_number):
+        assert game_number < len(self.unit_indizes), "error: no such game"
+
+        # create empty board
+        board = self.initial_board
+
+        for unit_index in self.unit_indizes[game_number]:
+            # spawn unit
+            u = Unit(self.unit_dict[unit_index])
+            u = u.moveToSpawnPosition(board.width)
+            self.update_board(board, u)
+
+            print board
+            pass
+
+
+    def update_board(self, board, unit):
+        for m in unit.members:
+            if board.fields[m.x][m.y].full == True:
+                print "moved unit to occupied space -> stuck"
+            else:
+                board.fields[m.x][m.y].full = True
+                board.filled.append(board.fields[m.x][m.y])
+                print "moved unit to empty space -> ok"
 
 class Cell:
     """

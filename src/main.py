@@ -2,28 +2,18 @@
 import lcd_generator as lcd
 import handlejson
 import data_structures
+import data
 
 def main():
     print "ICFP 2015"
 
     # test JSON parser
-    problem_dict = handlejson.parse_to_dictionary(handlejson.data)
+    problem_dict = handlejson.parse_to_dictionary(data.data7)
 
-    board = data_structures.Board(problem_dict['width'], problem_dict['height'], problem_dict['filled'])
+    # create a boardmanager
+    boardmanager = data_structures.BoardManager(problem_dict)
 
-    print board
-
-    # create a units
-    units = [data_structures.Unit(u) for u in problem_dict['units']]
-
-    for u in units:
-        print u
-        print "-------------------------"
-
-
-    # test of random sequence generator for the example from the documentation
-    unit_indizes = lcd.generate_random_sequence(17,10)
-    print unit_indizes
+    boardmanager.simulation(0)
 
 
 if __name__ == "__main__":
