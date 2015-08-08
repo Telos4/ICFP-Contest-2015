@@ -61,6 +61,12 @@ class BoardManager:
             # if there is currently no active unit we create a new unit
             active_unit = self.get_new_unit(board, queued_units)
 
+            states = []
+            visited = set()
+            for cell in active_unit.members:
+                visited.add((cell.x, cell.y))
+            states.append(visited)
+
         movement_sequence = []
 
         #for m in movement_sequence:
@@ -90,7 +96,7 @@ class BoardManager:
                 # if there is an active unit, try moving it to new location
                 moved_unit = active_unit.move(m)  # get location of unit after move
 
-                if self.at_valid_location(board, moved_unit):
+                if self.at_valid_location(board, states, moved_unit):
                     # move was valid -> unit is moved
                     active_unit = moved_unit
                 else:
@@ -101,7 +107,12 @@ class BoardManager:
                     active_unit = self.get_new_unit(board, queued_units)
 
             if active_unit is not None:
-                 print board.plot(active_unit)
+                visited = set()
+                for cell in active_unit.members:
+                    visited.add((cell.x, cell.y))
+                states.append(visited)
+
+                print board.plot(active_unit)
 
             if active_unit is None:
                 # there are no more active units -> stop
@@ -125,7 +136,7 @@ class BoardManager:
             # when there are still units in the queue we create the next unit
             unit = Unit(self.unit_dict[queued_units.pop()])
             unit = unit.moveToSpawnPosition(board.width)
-            if not self.at_valid_location(board, unit):
+            if not self.at_valid_location(board, set(), unit):
                 print "spawn location was already occupied! -> Game over"
                 unit = None
         else:
@@ -133,7 +144,7 @@ class BoardManager:
             unit = None
         return unit
 
-    def at_valid_location(self, board, unit):
+    def at_valid_location(self, board, states, unit):
         for m in unit.members:
             if m.x < 0 or m.x >= board.width or m.y < 0 or m.y >= board.height:
                 print "moved out of the map -> invalid location"
@@ -142,6 +153,16 @@ class BoardManager:
             elif board.fields[m.x][m.y].full == True:
                 print "moved unit to occupied space -> invalid location"
                 return False
+            else:
+                print len(states)
+                unitSet = set()
+                for cell in unit.members:
+                    unitSet.add((cell.x,cell.y))
+                for state in states:
+                    if len(unitSet.symmetric_difference(state)) == 0:
+                        print "already visited -> invalid location"
+                        return False
+
         return True
 
     def lock_fields(self, board, unit):
