@@ -101,18 +101,19 @@ class BoardManager:
 
 
     # OL hack
-    def place_auto(self):
+    def place_auto(self, board):
         # board.active_unit.members == coords of tiles
         # board.height-1 == bottom line
         # board.field[i][j] == cell.x, .y, .full == True = occupied
-        reltile = relativePos(self, board.active_unit)
+        reltile = self.relativePos(board.active_unit)
         destination = None
         success = False
-        for cell in reversed(board.field):
+        # print board.fields
+        for cell in reversed(board.fields):
             if not cell.full:
                 # test if other occupants of the current tile fit
                 for part in reltile.members:
-                    if board.field[cell.x + part.x, cell.y + part.y].full:
+                    if board.fields[cell.x + part.x, cell.y + part.y].full:
                         success = True
                         break
                 if success:
@@ -124,10 +125,10 @@ class BoardManager:
             return None
         
         source = max(board.active_unit)
-        graph = makeGraph(self, board)
+        graph = self.makeGraph(board)
 
-        source = convert_for_astar(self, source)
-        destination = convert_for_astar(self, destination)
+        source = self.convert_for_astar(source)
+        destination = self.convert_for_astar(destination)
 
         print "calling a-star:",source,destination,graph
 
@@ -206,19 +207,31 @@ class BoardManager:
                 if(d == Directions.Right):
                     list_of_neighbours.append( (cell.x+1, cell.y  ) )
 
-                graph.edges += { convert_for_astar(cell) : list_of_neighbours }
+                graph.edges += { self.convert_for_astar(cell) : list_of_neighbours }
                 
         return graph
 
-    def relativePos(self, member):
-        mymember = member
-        top = max(mymember) ## topmost coordinate
+    def relativePos(self, unit):
+        mymember = unit.members
+        # top = max(mymember) ## topmost coordinate
+        top = Cell(-1, -1, False)
+        for m in mymember:
+            if not m.full: continue
+            if m.x > top.x:
+                top.x = m.x
+            if m.y > top.y:
+                top.y = m.y
 
         print "offset",top
 
         for coords in mymember:
-            coords - top
-        return mymember
+            # coords - top
+            coords.x -= top.x
+            coords.y -= top.y
+
+        xunit = unit
+        xunit.members = mymember
+        return unit
 
     """
     def ol_test():
@@ -279,7 +292,7 @@ class BoardManager:
                 elif m == ord('5') or m == ord(' '):
                     # m = ' '
                     print "starting auto-placer..."
-                    place_auto()
+                    self.place_auto(board)
                 else:
                     break
 
