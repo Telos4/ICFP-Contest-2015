@@ -114,7 +114,9 @@ class BoardManager:
                 if not cell.full:
                     # test if other occupants of the current tile fit
                     for part in reltile.members:
-                        if cell.x + part.x > board.width or cell.y + part.y > board.height: continue
+                        if cell.x + part.x > board.width or cell.y + part.y > board.height: 
+                            print "overrun:", cell.x + part.x, ">", board.width, "or", cell.y + part.y, ">", board.height
+                            continue
                         if board.fields[cell.x + part.x][cell.y + part.y].full:
                             success = True
                             break
