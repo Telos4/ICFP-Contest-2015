@@ -144,7 +144,13 @@ class BoardManager:
         came_from, cost_sf = a_star_search(graph, source, destination)
         print "called a-star:",came_from
 
-        return came_from, destination, cost_sf
+        came_from_trunc = []
+        for node in came_from:
+            came_from_trunc.append(node)
+            if node == destination:
+                break
+
+        return came_from_trunc, destination, cost_sf
 
     def convert_for_astar(self, cell):
         return (cell.x, cell.y)
