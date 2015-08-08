@@ -127,6 +127,8 @@ class BoardManager:
         if answ == 'y':
             filename = 'Movements/movements_map' + str(map_number) + '_game' + str(game_number) + '.txt'
             f = open(filename, 'w')
+            f.write('mapId = ' + str(map_number) + '\n')
+            f.write('seedIndex = ' + str(game_number) + '\n')
             f.write('movement_sequence = [')
             for i in range(len(movement_sequence)-1):
                 f.write('\'' + movement_sequence[i] + '\',')
