@@ -48,7 +48,7 @@ pop_never = ["elder things"]
 
 words_for_sure = ["r'lyeh"]
 
-words_probable = [ "aleister crowley", "sarnath", "in his house at r'lyeh dead cthulhu waits dreaming."]
+words_probable = [ "thelema", "aleister crowley", "sarnath", "in his house at r'lyeh dead cthulhu waits dreaming."]
 
 words_even_less_prob = ["derleth",
                         "zhar", "lloigor", "cyaegha", "nyogtha",
