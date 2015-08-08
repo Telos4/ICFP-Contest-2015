@@ -144,3 +144,14 @@ def convert_greedy(movement_sequence):
             retind.append(positions.index(p))
 
     return _postprocess(retind,positions,movement_sequence)
+
+
+
+def convert_back_letter_to_classes(s):
+    ret = []
+    for i in s:
+        for k in inp.keys():
+            if i in inp[k]:
+                ret.append(k)
+    return ret
+
