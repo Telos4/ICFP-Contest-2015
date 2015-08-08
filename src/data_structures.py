@@ -49,8 +49,8 @@ class BoardManager:
         print "board after movements: \n" + str(board)
         print "final score: " + str(board.move_score + board.power_score)
 
-        #board = self.get_initial_board(game_number)
-        #self.manual(board, map_number, game_number)
+        board = self.get_initial_board(game_number)
+        self.manual(board, map_number, game_number)
 
     def calc_board_state(self, board, movement_sequence):
         """
@@ -161,6 +161,8 @@ class BoardManager:
                     # move was invalid -> unit gets locked
                     board.lock_fields(board.active_unit)
 
+                    print board.move_score
+
                     # get new active unit
                     board.active_unit = board.get_new_unit()
                     states = []
@@ -171,12 +173,12 @@ class BoardManager:
                     visited.add((cell.x, cell.y))
                 states.append(visited)
 
-                print board.plot(board.active_unit)
-
             if board.active_unit is None:
                 # there are no more active units -> stop
                 print "no more units in queue!"
                 break
+
+        print board.move_score
 
         answ = raw_input('save movements? (y/n)')
         if answ == 'y':
