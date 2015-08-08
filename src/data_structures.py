@@ -161,7 +161,7 @@ class BoardManager:
         """
         check if any rows are completely filled and delete them
         """
-        for j in xrange(board.height-1, 0, -1):
+        for j in xrange(board.height-1, -1, -1):
             # check if row is full
             if all([board.fields[i][j].full for i in xrange(board.width)]):
                 # delete the row
