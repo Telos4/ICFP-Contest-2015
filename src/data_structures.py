@@ -59,6 +59,7 @@ class BoardManager:
 
         for m in movement_sequence:
             if active_unit is not None:
+                board.plotcv(active_unit)
                 # if there is an active unit, try moving it to new location
                 moved_unit = active_unit.move(m)  # get location of unit after move
 
@@ -74,7 +75,7 @@ class BoardManager:
 
             if active_unit is not None:
                 print board.plot(active_unit)
-                board.plotcv(active_unit)
+                #board.plotcv(active_unit)
 
             if active_unit is None:
                 # there are no more active units -> stop
