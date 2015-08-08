@@ -96,9 +96,12 @@ class BoardManager:
                 # if there is an active unit, try moving it to new location
                 moved_unit = active_unit.move(m)  # get location of unit after move
 
-                if self.at_valid_location(board, states, moved_unit):
-                    # move was valid -> unit is moved
-                    active_unit = moved_unit
+                if self.at_valid_location(board, moved_unit):
+                    if self.already_visited(states, moved_unit):
+                        # move was valid -> unit is moved
+                        active_unit = moved_unit
+                    else:
+                        break
                 else:
                     # move was invalid -> unit gets locked
                     self.lock_fields(board, active_unit)
@@ -136,7 +139,7 @@ class BoardManager:
             # when there are still units in the queue we create the next unit
             unit = Unit(self.unit_dict[queued_units.pop()])
             unit = unit.moveToSpawnPosition(board.width)
-            if not self.at_valid_location(board, set(), unit):
+            if not self.at_valid_location(board, unit):
                 print "spawn location was already occupied! -> Game over"
                 unit = None
         else:
@@ -144,7 +147,7 @@ class BoardManager:
             unit = None
         return unit
 
-    def at_valid_location(self, board, states, unit):
+    def at_valid_location(self, board, unit):
         for m in unit.members:
             if m.x < 0 or m.x >= board.width or m.y < 0 or m.y >= board.height:
                 print "moved out of the map -> invalid location"
@@ -153,15 +156,17 @@ class BoardManager:
             elif board.fields[m.x][m.y].full == True:
                 print "moved unit to occupied space -> invalid location"
                 return False
-            else:
-                print len(states)
-                unitSet = set()
-                for cell in unit.members:
-                    unitSet.add((cell.x,cell.y))
-                for state in states:
-                    if len(unitSet.symmetric_difference(state)) == 0:
-                        print "already visited -> invalid location"
-                        return False
+
+        return True
+
+    def already_visited(self, states, unit):
+        unitSet = set()
+        for cell in unit.members:
+            unitSet.add((cell.x,cell.y))
+        for state in states:
+            if len(unitSet.symmetric_difference(state)) == 0:
+                print "already visited -> error"
+                return False
 
         return True
 
