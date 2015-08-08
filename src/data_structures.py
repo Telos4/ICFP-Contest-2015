@@ -35,11 +35,27 @@ class BoardManager:
         # create empty board
         board = self.get_initial_board(game_number)
 
-        oldpaths = [ Path(['W'],board), Path(['E'],board), Path(['SW'],board), Path(['SE'],board), Path(['R+'],board), Path(['R-'],board)]
+        oldpaths = Queue.PriorityQueue()
+        oldpaths.put(Path(['W'],board))
+        oldpaths.put(Path(['E'],board))
+        oldpaths.put(Path(['SW'],board))
+        oldpaths.put(Path(['SE'],board))
+        oldpaths.put(Path(['R+'],board))
+        oldpaths.put(Path(['R-'],board))
 
         good_segments = []
 
-        generate_paths(oldpaths, good_segments)
+        for i in xrange(100):
+            result_path = generate_paths(oldpaths, good_segments)
+            r1 = result_path.get()
+            r2 = result_path.get()
+            oldpaths.put(r1)
+            oldpaths.put(r2)
+            print "best: \n" + r1.board.plot(r1.board.active_unit)
+            print "path: " + str(r1)
+            print "second best: \n" + r2.board.plot(r2.board.active_unit)
+            print "path: " + str(r2)
+            print "..."
 
 
         movement_sequence = ['E', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW',
@@ -106,11 +122,11 @@ class BoardManager:
                 if board.status == 'done':  # this means no more units are available for spawning
                     return board
 
-            if board.active_unit is not None:
-                print board.plot(board.active_unit)
-            else:
-                print str(board)
-            pass
+            # if board.active_unit is not None:
+            #     print board.plot(board.active_unit)
+            # else:
+            #     print str(board)
+            # pass
 
 
         return board
@@ -236,9 +252,9 @@ def clever_extend(path, good_segments):
     # l = 10 # max lookahead
     # number_of_moves = random.randint(1,l)
 
-    possible_moves = ['W', 'E', 'SW', 'SE', 'R+', 'R-']
+    possible_moves = ['W', 'E', 'SW', 'SE']#, 'R+', 'R-']
 
-    for i in xrange(6):
+    for i in xrange(4):
         extends.put(Path([possible_moves[i]], path.board))
 
     return extends
@@ -248,7 +264,8 @@ def generate_paths(oldpaths, good_segments):
     maxpaths = 100
 
     path_result = Queue.PriorityQueue()
-    for path in oldpaths:
+    while not oldpaths.empty():
+        path = oldpaths.get()
         extends = clever_extend(path, good_segments)
 
         if extends.empty():
