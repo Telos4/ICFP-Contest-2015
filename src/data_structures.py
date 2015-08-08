@@ -7,6 +7,7 @@ import lcd_generator as lcd
 import draw
 import Queue
 import random
+import astar
 try:
     import cv2
 except ImportError:
@@ -118,20 +119,21 @@ class BoardManager:
             if board.active_unit is not None:
                 m = board.plotcv(board.active_unit)
 
-                if m == ord('4'):
+                if m == ord('4') or m == ord('j'):
                     m = 'W'
-                elif m == ord('6'):
+                elif m == ord('6') or m == ord('k'):
                     m = 'E'
-                elif m == ord('1'):
+                elif m == ord('1') or m == ord('a'):
                     m = 'SW'
-                elif m == ord('3'):
+                elif m == ord('3') or m == ord('d'):
                     m = 'SE'
-                elif m == ord('7'):
+                elif m == ord('7') or m == ord('t'):
                     m = 'R+'
-                elif m == ord('9'):
+                elif m == ord('9') or m == ord('y') or m == ord('z'):
                     m = 'R-'
-                elif m == ord('5'):
-                    m = ' '
+                elif m == ord('5') or m == ord(' '):
+                    # m = ' '
+                    place_auto(self)
                 else:
                     break
 
@@ -192,6 +194,76 @@ class BoardManager:
 
         return False
 
+
+    # OL hack
+    def place_auto(self):
+        # board.active_unit.members == coords of tiles
+        # board.height-1 == bottom line
+        # board.field[i][j] == cell.x, .y, .full == True = occupied
+        reltile = relativePos(board.active_unit)
+        destination = None
+        success = False
+        for cell in reversed(board.field):
+            if not cell.full:
+                # test if other occupants of the current tile fit
+                for part in reltile.members:
+                    if board.field[cell.x + part.x, cell.y + part.y].full:
+                        success = True
+                        break
+                if success:
+                    destination = cell
+                    # all cells of current tile fit at current position
+                    break
+        if destination == None:
+            print("Could not find any destination!")
+            return None
+        
+        source = max(board.active_unit)
+        makeGraph(board)
+
+        return None
+    def makeGraph(board):
+        # am I doing this right?
+        graph = Graph()
+        """
+        graph.edges = {
+            (1,1): [(2,3)],
+            (2,3): [(1,1), (4,0), (2,5)],
+            (4,0): [(1,1)],
+            (2,5): [(6,6), (1,1)],
+            (6,6): [(2,3)]
+            }
+            """
+
+    def relativePos(member):
+        mymember = member
+        top = max(mymember) ## topmost coordinate
+
+        print "offset",top
+
+        for coords in mymember:
+            coords - top
+        return mymember
+
+"""
+def ol_test():
+    map_number = 0
+    datalist = [data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10,
+                data11, data12, data13, data14, data15, data16, data17, data18, data19, data20,
+                data21, data22, data23]
+
+    # test JSON parser
+    problem_dict = handlejson.parse_to_dictionary(datalist[map_number])
+
+    # create a boardmanager
+    boardmanager = data_structures.BoardManager(problem_dict)
+
+    boardmanager.simulation(map_number, 0)
+    boardmanager.board.active_unit = board.get_new_unit()
+    print boardmanager.board.active_unit
+    rel = boardmanager.relativePos(boardmanager.board.active_unit)
+    print rel
+"""
 
 class Path:
     def __init__(self, moves):
@@ -511,3 +583,5 @@ class Unit:
 
         return movedUnit
 
+if __name__ == "__main__":
+    ol_test()
