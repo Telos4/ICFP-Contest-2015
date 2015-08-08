@@ -164,7 +164,8 @@ class BoardManager:
                 moved_unit = board.active_unit.move(m)  # get location of unit after move
 
                 if board.at_valid_location(moved_unit):
-                    if self.already_visited(states, moved_unit):
+                    if board.already_visited(board.active_unit.states, moved_unit):
+                        print "error: already visited!"
                         break
                     else:
                         # move was valid -> unit is moved
@@ -205,17 +206,6 @@ class BoardManager:
             f.close()
 
         return board
-
-    def already_visited(self, states, unit):
-        unitSet = set()
-        for cell in unit.members:
-            unitSet.add((cell.x,cell.y))
-        for state in states:
-            if len(unitSet.symmetric_difference(state)) == 0:
-                print "already visited -> error"
-                return True
-
-        return False
 
 
 class Path:
