@@ -8,6 +8,7 @@ import draw
 import Queue
 import random
 import astar
+# from enum import Enum #python3
 try:
     import cv2
 except ImportError:
@@ -37,7 +38,7 @@ class BoardManager:
         board = self.get_initial_board(game_number)
 
 
-
+        """
         movement_sequence = ['E', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW',
                              'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE',
                              'SW', 'SE', 'SW', 'SE', 'SW', 'W', 'SE', 'SW', 'R+', 'R+', 'W', 'R-',
@@ -48,10 +49,12 @@ class BoardManager:
         board = self.calc_board_state(board, movement_sequence)
 
         print "board after movements: \n" + str(board)
+        """
         print "status: " + board.status
 
         board = self.get_initial_board(game_number)
         self.manual(board, map_number, game_number)
+
 
     def calc_board_state(self, board, movement_sequence):
         """
@@ -96,6 +99,148 @@ class BoardManager:
 
         return board
 
+
+    # OL hack
+    def place_auto(self):
+        # board.active_unit.members == coords of tiles
+        # board.height-1 == bottom line
+        # board.field[i][j] == cell.x, .y, .full == True = occupied
+        reltile = relativePos(self, board.active_unit)
+        destination = None
+        success = False
+        for cell in reversed(board.field):
+            if not cell.full:
+                # test if other occupants of the current tile fit
+                for part in reltile.members:
+                    if board.field[cell.x + part.x, cell.y + part.y].full:
+                        success = True
+                        break
+                if success:
+                    destination = cell
+                    # all cells of current tile fit at current position
+                    break
+        if destination == None:
+            print("Could not find any destination!")
+            return None
+        
+        source = max(board.active_unit)
+        graph = makeGraph(self, board)
+
+        source = convert_for_astar(self, source)
+        destination = convert_for_astar(self, destination)
+
+        print "calling a-star:",source,destination,graph
+
+        """
+        came_from, cost_sf = a_star_search(example_graph, (1,1), (6,6))
+        print came_from, cost_sf
+        # print first way only
+        for e in came_from:
+           print "go to",e
+           if e == (6,6): break
+        """
+
+        came_from, cost_sf = a_star_search(graph, source, destination)
+        print "called a-star:",came_from
+
+        return came_from, destination, cost_sf
+
+    def convert_for_astar(self, cell):
+        return (cell.x, cell.y)
+
+    # class Directions (Enum): # python3
+    class Directions:
+        LeftBottom  = 1
+        RightBottom = 2
+        Left        = 3
+        Right       = 4
+
+    def makeGraph(self, board):
+        # am I doing this right?
+        graph = Graph()
+        """
+        graph.edges = {
+            (1,1): [(2,3)],
+            (2,3): [(1,1), (4,0), (2,5)],
+            (4,0): [(1,1)],
+            (2,5): [(6,6), (1,1)],
+            (6,6): [(2,3)]
+            }
+            """
+
+        """
+        it is like:
+        * * *   0
+         * * *  1
+        * * *   2
+        """
+        dirs = []
+        for cell in board.fields:
+            if cell.y % 2 == 0:
+                if cell.x == 0:
+                    # no left
+                    dirs = [Directions.RightBottom, Directions.Right]
+                else:
+                    # as usual
+                    dirs = [Directions.LeftBottom, Directions.Left, Directions.RightBottom, Directions.Right]
+            else:
+                # cell.y % 2 == 1
+                if cell.y == board.width-1:
+                    # no right
+                    dirs = [Directions.LeftBottom, Directions.Left]
+                else:
+                    # as usual
+                    dirs = [Directions.LeftBottom, Directions.Left, Directions.RightBottom, Directions.Right]
+            # need yet to check for bottom row!
+            list_of_neighbours = []
+            for d in dirs:
+                if cell.y == board.height-1:
+                    # no bottom
+                    if d == Directions.LeftBottom or d == Directions.RightBottom: continue
+                if(d == Directions.LeftBottom):
+                    list_of_neighbours.append( (cell.x-1, cell.y+1) )
+                if(d == Directions.RightBottom):
+                    list_of_neighbours.append( (cell.x+1, cell.y+1) )
+                if(d == Directions.Left):
+                    list_of_neighbours.append( (cell.x-1, cell.y  ) )
+                if(d == Directions.Right):
+                    list_of_neighbours.append( (cell.x+1, cell.y  ) )
+
+                graph.edges += { convert_for_astar(cell) : list_of_neighbours }
+                
+        return graph
+
+    def relativePos(self, member):
+        mymember = member
+        top = max(mymember) ## topmost coordinate
+
+        print "offset",top
+
+        for coords in mymember:
+            coords - top
+        return mymember
+
+    """
+    def ol_test():
+    map_number = 0
+    datalist = [data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10,
+                data11, data12, data13, data14, data15, data16, data17, data18, data19, data20,
+                data21, data22, data23]
+
+    # test JSON parser
+    problem_dict = handlejson.parse_to_dictionary(datalist[map_number])
+
+    # create a boardmanager
+    boardmanager = data_structures.BoardManager(problem_dict)
+
+    boardmanager.simulation(map_number, 0)
+    boardmanager.board.active_unit = board.get_new_unit()
+    print boardmanager.board.active_unit
+    rel = boardmanager.relativePos(boardmanager.board.active_unit)
+    print rel
+    """
+
+
     def manual(self, board, map_number, game_number):
         """
         Simulate the game starting with the current board state and apply the movement sequence
@@ -133,7 +278,8 @@ class BoardManager:
                     m = 'R-'
                 elif m == ord('5') or m == ord(' '):
                     # m = ' '
-                    place_auto(self)
+                    print "starting auto-placer..."
+                    place_auto()
                 else:
                     break
 
@@ -194,76 +340,6 @@ class BoardManager:
 
         return False
 
-
-    # OL hack
-    def place_auto(self):
-        # board.active_unit.members == coords of tiles
-        # board.height-1 == bottom line
-        # board.field[i][j] == cell.x, .y, .full == True = occupied
-        reltile = relativePos(board.active_unit)
-        destination = None
-        success = False
-        for cell in reversed(board.field):
-            if not cell.full:
-                # test if other occupants of the current tile fit
-                for part in reltile.members:
-                    if board.field[cell.x + part.x, cell.y + part.y].full:
-                        success = True
-                        break
-                if success:
-                    destination = cell
-                    # all cells of current tile fit at current position
-                    break
-        if destination == None:
-            print("Could not find any destination!")
-            return None
-        
-        source = max(board.active_unit)
-        makeGraph(board)
-
-        return None
-    def makeGraph(board):
-        # am I doing this right?
-        graph = Graph()
-        """
-        graph.edges = {
-            (1,1): [(2,3)],
-            (2,3): [(1,1), (4,0), (2,5)],
-            (4,0): [(1,1)],
-            (2,5): [(6,6), (1,1)],
-            (6,6): [(2,3)]
-            }
-            """
-
-    def relativePos(member):
-        mymember = member
-        top = max(mymember) ## topmost coordinate
-
-        print "offset",top
-
-        for coords in mymember:
-            coords - top
-        return mymember
-
-"""
-def ol_test():
-    map_number = 0
-    datalist = [data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10,
-                data11, data12, data13, data14, data15, data16, data17, data18, data19, data20,
-                data21, data22, data23]
-
-    # test JSON parser
-    problem_dict = handlejson.parse_to_dictionary(datalist[map_number])
-
-    # create a boardmanager
-    boardmanager = data_structures.BoardManager(problem_dict)
-
-    boardmanager.simulation(map_number, 0)
-    boardmanager.board.active_unit = board.get_new_unit()
-    print boardmanager.board.active_unit
-    rel = boardmanager.relativePos(boardmanager.board.active_unit)
-    print rel
-"""
 
 class Path:
     def __init__(self, moves):
