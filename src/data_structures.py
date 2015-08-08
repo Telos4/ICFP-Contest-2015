@@ -476,6 +476,9 @@ class Unit:
         self.members = [Cell(m["x"], m["y"]) for m in unit_dict["members"]]  # members
         self.pivot = Cell(unit_dict["pivot"]["x"], unit_dict["pivot"]["y"])  # pivot cell
 
+        self.states = [] # list of sets of visited locations
+        self.startTracking = False
+
     def moveToSpawnPosition(self, map_width):
         minX = map_width - 1
         maxX = 0
@@ -491,9 +494,17 @@ class Unit:
         for i in range(int(floor((map_width - unit_width) / 2))):
             self = self.move('E')
 
+        self.startTracking = True
+
         return self
 
     def move(self, direction):
+        if self.startTracking == True:
+            unitSet = set()
+            for cell in self.members:
+                unitSet.add((cell.x,cell.y))
+            self.states.append(unitSet)
+
         movedUnit = deepcopy(self)
 
         if direction == 'W':
