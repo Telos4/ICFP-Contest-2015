@@ -246,6 +246,7 @@ class Board:
         6: east
         7: rotate counterclockwise
         9: rotate clockwise
+        q: exit
         """
         while not (k in [ord('1'),ord('3'),ord('4'),ord('5'),ord('6'),ord('7'),ord('9'),ord('q')] ):
             cv2.imshow('board', img)
