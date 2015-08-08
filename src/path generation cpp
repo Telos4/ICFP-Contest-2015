@@ -1,0 +1,77 @@
+#include<iostream>
+#include<queue>
+#include<string>
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+
+float minimum = 0.5f;
+int max_paths = 100;
+
+class path{
+public:
+  std::string moves;
+  float rate_est;
+
+  int rate(path& path){
+  // TODO !!! compute rate_est for the given path
+  };
+
+
+  bool operator()(path& path_1, path& path_2)
+  {
+    if(rate(path_1) > rate(path_2))
+      return true;
+    else
+      return false;
+  }
+};
+
+
+
+std::priority_queue<path> clever_extend(path p, std::priority_queue<path> good_segments){
+  srand (time(NULL));
+  std::priority_queue<path> extends;
+  int new_entries = rand() % 10 + 1;
+  for(int i = 0; i < 3; i++)
+  {
+    path dummy;
+    for(int j = 0; j < new_entries; j++)
+    {
+      dummy.moves.append(std::to_string(rand() % 6));  
+    }     
+    extends.push(dummy);
+  }
+  return extends;
+}
+
+
+
+std::priority_queue<path> generate_paths( std::priority_queue<path> old_paths, std::priority_queue<path> good_segments)
+{
+    std::priority_queue<path> paths_result;
+    while(! old_paths.empty())
+    {
+      path p = old_paths.top();
+      old_paths.pop();
+      std::priority_queue<path> extends( clever_extend(p, good_segments) );
+      while(! extends.empty())
+      {
+        path new_path;
+        new_path.moves = p.moves.append(extends.top().moves);
+        int rating = p.rate(new_path);
+        if(new_path.rate_est > minimum)
+          paths_result.push( new_path );
+      }
+    }   
+    /* TODO !!! 
+    while( paths_result.size() > max_paths)
+    {
+      don't let the number of paths exceed max_paths. kick the paths with a lower priority
+    }
+    */
+}
+
+int main()
+{  
+}
