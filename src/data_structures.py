@@ -32,12 +32,7 @@ class BoardManager:
         # create empty board
         board = deepcopy(self.initial_board)
 
-        movement_sequence = ['W', 'W', 'W', 'W', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'E', 'SE', 'W',
-                             'W', 'W', 'W', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'E', 'SE', 'E', 'E',
-                              'W', 'W', 'W', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'E', 'SE', 'E', 'E',
-                             'W', 'W', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'W',
-                             'W', 'W', 'W', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW',
-                             ]
+        movement_sequence = []
 
         # movement_sequence = ['E', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW',
         #                      'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE',
@@ -324,7 +319,7 @@ class Board:
         9: rotate clockwise
         q: exit
         """
-        while not (k in [ord('1'),ord('3'),ord('4'),ord('5'),ord('6'),ord('7'),ord('9'),ord('q')] ):
+        while not (k in [ord('1'),ord('3'),ord('4'),ord('5'),ord('6'),ord('7'),ord('9'),ord('q')]):
             cv2.imshow('board', img)
             k = cv2.waitKey(1)
 
