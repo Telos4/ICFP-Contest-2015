@@ -1,0 +1,1 @@
+movement_sequence = ['SW','SW','SW','SW','SW','SW','SW','SW','SW','SW','SW','SW','SW','SW','SW','SW','SE','SW','SW','SW','SW','SW','SW','SW','SE','SE','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W']
