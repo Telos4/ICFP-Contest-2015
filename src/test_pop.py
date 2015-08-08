@@ -76,18 +76,31 @@ print dt
 # 		handlejson.send_response(i, s, word, dt)
 
 
-testarray=[(1,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
-(3,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
-(6,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
-(7,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
-(8,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
-(9,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
-]
+# testarray=[(1,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
+# (3,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
+# (6,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
+# (7,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
+# (8,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
+# (9,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
+# ]
 
-for i,s in testarray:
-	print i, s
-	handlejson.send_response(i, allseeds[i],s,dt)
+# testarray=[(7,"ph'nglui mglw'nafh"),
+# (10,"cthulhu r'lyeh wgah'nagl fhtagn"),
+# (11,"cthulhu r'lyeh wgah'nagl fhtagn"),
+# (12,"cthulhu r'lyeh wgah'nagl fhtagn"),
+# (13,"cthulhu r'lyeh wgah'nagl fhtagn"),
+# (14,"ph'nglui mglw'nafh"),
+# (15,"ph'nglui mglw'nafh"),
+# (16,"ph'nglui mglw'nafh"),
+# (17,"ph'nglui mglw'nafh"),
+# ]
 
+# for i,s in testarray:
+# 	print i, s
+# 	handlejson.send_response(i, allseeds[i],s,dt)
+
+
+handlejson.send_response(0, [0], "i4advqi3ahhgggh44ghajilgai54ilhm4h4mlqddon 5 5b o5loll njmol ooonla llg nhmoaggnmo lolmzzveycoolqn5nmlnv5noghm5myen  4iaavmgn5nlgmjja442nl z1z5nj4nogjlmhln5jihh!hhaj4jiqgha4nag  55m2nl5gla5i4oeca44aggnjnou5ajihai44jai ahj5oo lnbyenl m on5l5monmja5mmnlombn5lml5am naooj4l5nhhhgg3!'4jhag30on5mo ohjj4nolla5j1mj4ihnln 4jh55 m l 5o2ymlmhoglnolno5mgmol2fyojajh1zv4i...3piihzvva''p0g4angalnlm5j54agljii4a 5hjg4llnlj55oi4j4jigzgipp4hajidjh'.l5ngag.g4noldvnmmg44 g45ghnhhimgn4hh5cylnj42ybyongngm cbe2hlnlohvmojilonj5oa5j  ogjiann 2mnfcega4gg''0rrrgh00!cebmn l5l2eozl m5o nf2c2l5nofc2lnybf2lcy2yfbf2bclnolo i qlm5zv1hh.3j0ihaz1ghh4ha0!3 n5no1na4ijjjg3pdz", dt)
 
 # handlejson.send_response( 2, allseeds[ 2], "cthulhu waits dreaming", dt)
 # handlejson.send_response( 4, allseeds[ 4], "r'lyeh", dt)
