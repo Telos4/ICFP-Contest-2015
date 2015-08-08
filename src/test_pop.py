@@ -1,4 +1,6 @@
+import datetime
 import handlejson
+import random
 
 pop_sure = ["necronomicon", "ei!", "ia! ia!"]
 
@@ -23,15 +25,33 @@ words_even_less_prob = ["derleth",
                         "ghatanothoa", "arlyeh", "elder things",
                         "great race"]
 
-added_to_test=['elder','things']
 
-
-worklist = words_for_sure + words_probable + words_even_less_prob + added_to_test
+worklist = words_for_sure + words_probable + words_even_less_prob
 print len(worklist)
 
-s = sorted(worklist,key=len)
+random.shuffle(worklist)
 
-for i,a in enumerate(s):
-	print 'sending',(i)%len(s),a.replace('-','')
-	handlejson.send_response(i, 0, a.replace('-',''))
+dt = datetime.datetime.now().time().isoformat()
+print dt
+for i,a in enumerate(worklist):
+	idx = (i)%len(worklist)
+	print 'sending',idx,a.replace('-',''), '\ttag:', dt
+	handlejson.send_response(i, 0, a.replace('-',''), dt)
 	print ''
+
+
+# print 'sending elder to 0'
+# handlejson.send_response(0, 0, 'elder')
+# print 'sending things to 1'
+# handlejson.send_response(1, 0, 'things')
+# print 'sending dagon to 2'
+# handlejson.send_response(2, 0, 'dagon')
+
+# requests = [(4,0,'necronomico'), (2,0,'dagon'), (20,0,'elder things')]
+
+# for a,b,c in requests:
+# 	print 'sending %s to %d, %d' % (c,a,b)
+# 	handlejson.send_response(a,b,c)
+# 	print ''
+
+

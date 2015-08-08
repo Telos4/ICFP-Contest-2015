@@ -4,7 +4,8 @@ from math import ceil
 from copy import deepcopy
 import string
 import lcd_generator as lcd
-
+import draw
+import cv2
 
 class BoardManager:
     def __init__(self, problem_dict):
@@ -65,6 +66,7 @@ class BoardManager:
 
         for m in movement_sequence:
             if active_unit is not None:
+                board.plotcv(active_unit)
                 # if there is an active unit, try moving it to new location
                 moved_unit = active_unit.move(m)  # get location of unit after move
 
@@ -192,6 +194,21 @@ class Board:
             s += '|\n'
         s += ''.join(['-' for i in xrange(self.width + 2)])
         return s
+
+    def plotcv(self, unit):
+        scale = 20
+        img = draw.drawBoard(self.width, self.height, scale)
+        for cell in self.filled:
+            draw.drawCell(img, (255,0,0), cell.x, cell.y, scale)
+
+        for cell in unit.members:
+            draw.drawCell(img, (0,0,255), cell.x, cell.y, scale)
+
+        draw.drawPivot(img, (0,255,0), unit.pivot.x, unit.pivot.y, scale)
+
+        while not (cv2.waitKey(1) & 0xFF == ord('q')):
+            cv2.imshow('board', img)
+
 
     def __str__(self):
         """

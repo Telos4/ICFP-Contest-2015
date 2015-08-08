@@ -12,13 +12,16 @@ while True:
 	capped = d[11:]
 	parsed = json.loads(capped)
 
+	# tags of all people
+	# sorted([ a['tags'] for a in parsed['data']['rankings'] ])
+
 	print '\n' * 30
-	print parsed['time']
+	print 'date of data:', parsed['time']
+	print 'nr of teams:', len(parsed['data']['rankings'])
 	print 'nr\trank\tscore\tpower_score\ttags'
 
 	globalscore = [ a for a in parsed['data']['rankings'] if 'Wagner' in a['team'] ][0]
 	print '-\t%s\t%s\t%s' % (globalscore['rank'],globalscore['score'],globalscore['power_score'])
-
 
 	for i, a in enumerate(parsed['data']['settings']):
 		localscore = [ b for b in a['rankings'] if 'Wagner' in b['team'] ][0]
