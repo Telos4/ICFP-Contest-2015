@@ -7,7 +7,10 @@ import lcd_generator as lcd
 import draw
 import Queue
 import random
-#import cv2
+try:
+    import cv2
+except ImportError:
+    print "opencv not found"
 
 class BoardManager:
     def __init__(self, problem_dict):
@@ -45,6 +48,9 @@ class BoardManager:
 
         print "board after movements: \n" + str(board)
         print "status: " + board.status
+
+        board = self.get_initial_board(game_number)
+        self.manual(board, map_number, game_number)
 
     def calc_board_state(self, board, movement_sequence):
         """
@@ -89,7 +95,7 @@ class BoardManager:
 
         return board
 
-    def apply_sequence(self, board, map_number, game_number):
+    def manual(self, board, map_number, game_number):
         """
         Simulate the game starting with the current board state and apply the movement sequence
         for the active unit. If the unit becomes stuck the next unit in queued_units runs the
@@ -139,7 +145,7 @@ class BoardManager:
                         break
                     else:
                         # move was valid -> unit is moved
-                        active_unit = moved_unit
+                        board.active_unit = moved_unit
                 else:
                     # move was invalid -> unit gets locked
                     board.lock_fields(board.active_unit)
@@ -149,7 +155,6 @@ class BoardManager:
                     states = []
 
             if board.active_unit is not None:
-                states = []
                 visited = set()
                 for cell in board.active_unit.members:
                     visited.add((cell.x, cell.y))
@@ -183,9 +188,9 @@ class BoardManager:
         for state in states:
             if len(unitSet.symmetric_difference(state)) == 0:
                 print "already visited -> error"
-                return False
+                return True
 
-        return True
+        return False
 
 
 class Path:

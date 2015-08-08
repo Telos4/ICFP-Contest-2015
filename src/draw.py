@@ -1,4 +1,7 @@
-#import cv2
+try:
+    import cv2
+except ImportError:
+    print "opencv not found"
 import numpy as np
 import os
 
