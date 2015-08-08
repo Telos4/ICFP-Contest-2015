@@ -154,14 +154,14 @@ print dt
 # 	handlejson.send_response(i, allseeds[i],s,dt)
 
 
-# for gid,sid,mvseq in all_movements.all_movements:
-# 	conv_mv_seq = convert_class_to_letters.convert_random(mvseq)
-# 	handlejson.send_response(gid, [allseeds[gid][sid]],conv_mv_seq,dt)
+for gid,sid,mvseq in all_movements.all_movements:
+	conv_mv_seq = convert_class_to_letters.convert_ilp(mvseq)
+	handlejson.send_response(gid, [allseeds[gid][sid]],conv_mv_seq,dt)
 
 
 # for i in range(0,8): handlejson.send_response(i, allseeds[i],"kyoto ni modoritai 4",dt)
-for i in range(12,25): handlejson.send_response(i, allseeds[i],"ithaqua",dt)
-for i in range(0,12): handlejson.send_response(i, allseeds[i],"trajectory",dt)
+# for i in range(12,25): handlejson.send_response(i, allseeds[i],"ithaqua",dt)
+# for i in range(0,12): handlejson.send_response(i, allseeds[i],"trajectory",dt)
 # for i in range(18,21): handlejson.send_response(i, allseeds[i],"hopeless",dt)
 # for i in range(21,22): handlejson.send_response(i, allseeds[i],"kawahira",dt)
 # for i in range(22,23): handlejson.send_response(i, allseeds[i],"niwasaki",dt)
