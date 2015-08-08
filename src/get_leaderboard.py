@@ -8,22 +8,23 @@ while True:
 	r = c.getresponse()
 	d = r.read()
 	c.close()
-	#print type(d)
-	#print d
 
 	capped = d[11:]
 	parsed = json.loads(capped)
 
-	#print parsed
-
 	print 'time of site:', parsed['time']
 
-	print 'main ranking:'
-
-	print [ a for a in parsed['data']['rankings'] if 'Wagner' in a['team'] ][0]
+	globalscore = [ a for a in parsed['data']['rankings'] if 'Wagner' in a['team'] ][0]
+	del globalscore['teamId']
+	del globalscore['team']
+	del globalscore['tags']
+	print 'main ranking:', globalscore
 
 	for i, a in enumerate(parsed['data']['settings']):
-		print i, [ b for b in a['rankings'] if 'Wagner' in b['team'] ][0]
+		localscore = [ b for b in a['rankings'] if 'Wagner' in b['team'] ][0]
+		del localscore['teamId']
+		del localscore['team']
+		print i, localscore
 
 	time.sleep(300)
 
