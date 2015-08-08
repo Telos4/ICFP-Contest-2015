@@ -1,5 +1,6 @@
 import datetime
 import handlejson
+import random
 
 pop_sure = ["necronomicon", "ei!", "ia! ia!"]
 
@@ -25,16 +26,17 @@ words_even_less_prob = ["derleth",
                         "great race"]
 
 
-worklist = pop_sure + words_for_sure + words_probable + words_even_less_prob
+worklist = words_for_sure + words_probable + words_even_less_prob
 print len(worklist)
 
-s = sorted(worklist,key=len)
+random.shuffle(worklist)
 
-print datetime.datetime.now().time().isoformat()
-for i,a in enumerate(s):
-	idx = (i)%len(s)
-	print 'sending',idx,a.replace('-','')
-	handlejson.send_response(i, 0, a.replace('-',''), str(idx))
+dt = datetime.datetime.now().time().isoformat()
+print dt
+for i,a in enumerate(worklist):
+	idx = (i)%len(worklist)
+	print 'sending',idx,a.replace('-',''), '\ttag:', dt
+	handlejson.send_response(i, 0, a.replace('-',''), dt)
 	print ''
 
 
