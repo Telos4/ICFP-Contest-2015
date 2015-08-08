@@ -1,0 +1,5 @@
+This is a nearly pure python project, but all the important files are written in python.
+
+You don't have to compile it and therefore the Makefile is omitted.
+
+The main parts of the whole program are not in one single file, rather they are distributed over many of them.

@@ -7,7 +7,7 @@ inp = { 'W' : ['p', '\'',  '!', '.', '0', '3'],
         'SE': ['l', 'm', 'n', 'o', ' ', '5'],
         'R-': ['d', 'q', 'r', 'v', 'z', '1'],
         'R+': ['k', 's', 't', 'u', 'w', 'x'],
-        }#' ' : ['\t', '\n', '\r', '-']} # let's also ignore '-'
+        ' ' : ['\t', '\n', '\r', '-']} # let's also ignore '-'
 
 
 all_known_phrases_of_power=['ei!','ia! ia!','necronomicon','yuggoth','house','dead',"cthulhu r'lyeh","wgah'nagl fhtagn"]
@@ -35,6 +35,7 @@ def convert_random(movement_sequence):
 
 
 def convert_ilp(movement_sequence):
+    movement_sequence = "".join(movement_sequence)
     all_known_phrases_of_power_in_class_form=[]
 
     for pop in all_known_phrases_of_power:
@@ -46,7 +47,7 @@ def convert_ilp(movement_sequence):
                     newrep += k
         all_known_phrases_of_power_in_class_form.append(newrep)
 
-    print all_known_phrases_of_power_in_class_form
+    #print all_known_phrases_of_power_in_class_form
 
 
     # index of all_known_phrases_of_power_in_class_form, start in movement_sequence, end in movement_sequence
@@ -60,7 +61,7 @@ def convert_ilp(movement_sequence):
             positions.append((i,start,start+len(rep)))
             start = start +1
 
-    print positions
+    #print positions
 
     try:
         import gurobipy
@@ -80,7 +81,7 @@ def convert_ilp(movement_sequence):
 
 
     m = gurobipy.Model()
-    #m.params.OutputFlag = 0
+    m.params.OutputFlag = 0
     X=[]
     Y=[]
     for i in range(len(positions)):
@@ -99,7 +100,7 @@ def convert_ilp(movement_sequence):
                 m.addConstr( Y[r] >= X[i] )
 
     m.update()
-    m.write('test.lp')
+    #m.write('test.lp')
     m.optimize()
     
 
@@ -117,10 +118,11 @@ def convert_ilp(movement_sequence):
         mstemp += movement_sequence[e:]
         movement_sequence = mstemp
 
-    print movement_sequence
 
-    for k in inp.keys():
+    for k in ['SW','SE','R-','R+','W','E']:
         movement_sequence = movement_sequence.replace(k,inp[k][0])
+
+    print movement_sequence
     return movement_sequence
 
 
