@@ -31,7 +31,24 @@ print len(worklist)
 
 s = sorted(worklist,key=len)
 
-for i,a in enumerate(s):
-	print 'sending',(i)%len(s),a.replace('-','')
-	handlejson.send_response(i, 0, a.replace('-',''))
+# for i,a in enumerate(s):
+# 	print 'sending',(i-1)%len(s),a.replace('-','')
+# 	handlejson.send_response(i, 0, a.replace('-',''))
+# 	print ''
+
+
+# print 'sending elder to 0'
+# handlejson.send_response(0, 0, 'elder')
+# print 'sending things to 1'
+# handlejson.send_response(1, 0, 'things')
+# print 'sending dagon to 2'
+# handlejson.send_response(2, 0, 'dagon')
+
+requests = [(4,0,'necronomico'), (2,0,'dagon'), (20,0,'elder things')]
+
+for a,b,c in requests:
+	print 'sending %s to %d, %d' % (c,a,b)
+	handlejson.send_response(a,b,c)
 	print ''
+
+
