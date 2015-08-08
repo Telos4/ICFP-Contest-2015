@@ -8,7 +8,7 @@ from data import *
 def main():
     print "ICFP 2015"
 
-    map_number = 10
+    map_number = 8
 
     if not os.path.exists('Movements'):
         os.makedirs('Movements')
