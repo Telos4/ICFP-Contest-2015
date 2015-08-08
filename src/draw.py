@@ -54,6 +54,7 @@ def drawPivot(img, color, width, height, scale):
 
     cv2.rectangle(img, (x+w/3,y+h/3), (x+w-w/3,y+h-h/3), color, thickness=cv2.cv.CV_FILLED)
 
+"""
 if __name__ == '__main__':
     parsedData = hj.parse_to_dictionary(data20)
     units = parsedData['units']
@@ -84,8 +85,8 @@ if __name__ == '__main__':
     drawPivot(img, (0,0,0), unit.pivot.x, unit.pivot.y, scale)
     
     cv2.imwrite('unit.png', img)
-
-    """
+"""
+"""
     datas = [data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23]
 
     for i in range(len(datas)):
@@ -126,4 +127,4 @@ if __name__ == '__main__':
 
         #while not (cv2.waitKey(1) & 0xFF == ord('q')):
             #cv2.imshow('test', img)
-    """
+"""
