@@ -108,13 +108,15 @@ class BoardManager:
                 print "no more units in queue!"
                 break
 
-        filename = 'Movements/movements_map' + str(map_number) + '_game' + str(game_number) + '.txt'
-        f = open(filename, 'w')
-        f.write('movement_sequence = [')
-        for i in range(len(movement_sequence)-1):
-            f.write('\'' + movement_sequence[i] + '\',')
-        f.write('\'' + movement_sequence[len(movement_sequence)-1] + '\']')
-        f.close()
+        answ = raw_input('save movements? (y/n)')
+        if answ == 'y':
+            filename = 'Movements/movements_map' + str(map_number) + '_game' + str(game_number) + '.txt'
+            f = open(filename, 'w')
+            f.write('movement_sequence = [')
+            for i in range(len(movement_sequence)-1):
+                f.write('\'' + movement_sequence[i] + '\',')
+            f.write('\'' + movement_sequence[len(movement_sequence)-1] + '\']')
+            f.close()
 
         return board
 
