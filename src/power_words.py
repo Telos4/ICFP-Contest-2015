@@ -17,7 +17,8 @@ words_for_sure = ["ei!", "ia! ia!", "r'lyeh", "yuggoth",
                   "necronomicon", "house", "dead", "cthulhu r'lyeh",
                   "wgah'nagl fhtagn"]
 
-words_probable = ["massachusetts", "boston", "cambridge", "gloucester",
+words_probable = ["the damned place must be honeycombed",
+                  "massachusetts", "boston", "cambridge", "gloucester",
                   "hadley", "haverhill", "ipswich", "marblehead",
                   "salem", "new hampshire",
                   "rhode island", "providence", "vermont",
