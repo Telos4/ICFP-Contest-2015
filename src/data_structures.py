@@ -7,6 +7,7 @@ import lcd_generator as lcd
 import draw
 import Queue
 import random
+import heapq
 try:
     import cv2
 except ImportError:
@@ -35,22 +36,18 @@ class BoardManager:
         # create empty board
         board = self.get_initial_board(game_number)
 
-        oldpaths = Queue.PriorityQueue()
-        oldpaths.put(Path(['W'],board))
-        oldpaths.put(Path(['E'],board))
-        oldpaths.put(Path(['SW'],board))
-        oldpaths.put(Path(['SE'],board))
-        oldpaths.put(Path(['R+'],board))
-        oldpaths.put(Path(['R-'],board))
+        oldpaths = [Path(['W'],board), Path(['E'],board), Path(['SW'],board), Path(['SE'],board)]
+        heapq.heapify(oldpaths)
 
         good_segments = []
 
-        for i in xrange(100):
+        for i in xrange(5):
             result_path = generate_paths(oldpaths, good_segments)
-            r1 = result_path.get()
-            r2 = result_path.get()
-            oldpaths.put(r1)
-            oldpaths.put(r2)
+            oldpaths = result_path
+
+            r1 = oldpaths[0]
+            r2 = oldpaths[1]
+
             print "best: \n" + r1.board.plot(r1.board.active_unit)
             print "path: " + str(r1)
             print "second best: \n" + r2.board.plot(r2.board.active_unit)
@@ -99,8 +96,8 @@ class BoardManager:
             moved_unit = board.active_unit.move(m)  # get location of unit after move
 
             if board.already_visited(board.active_unit.states, moved_unit):
-                print "error: already visited!"
-                board.status = 'fail'
+                #print "error: already visited!"
+                board.status = 'fail'   # invalid move occurred
                 board.move_score = -1000
                 board.power_score = -1000
             elif board.at_valid_location(moved_unit):
@@ -110,7 +107,7 @@ class BoardManager:
                 # move was invalid -> unit gets locked
                 board.lock_fields(board.active_unit)
 
-                print "Unit locked! New move score:   " + str(board.move_score)
+                #print "Unit locked! New move score:   " + str(board.move_score)
 
                 # get new active unit
                 board.active_unit = board.get_new_unit()
@@ -224,18 +221,19 @@ class BoardManager:
 
 
 class Path:
-    def __init__(self, moves, board):
+    def __init__(self, moves, board=None):
         self.moves = moves      # list of moves
         self.rate_est = 0.0
-        self.board = deepcopy(board)  # initial board state at the beginning of the path
+        self.board = deepcopy(board) if board is not None else None # initial board state at the beginning of the path
 
     def rate(self):
         # calculate end state for the path
+        assert self.board is not None, "error: self.board is None -> cannot predict state"
         end_state = BoardManager.calc_board_state(self.board, self.moves)
 
-        self.rate_est = end_state.move_score + len(self.moves)
+        self.rate_est = end_state.move_score #+ 10 * len(self.moves)
 
-    def __gt__(self, other):
+    def __lt__(self, other):
         return self.rate_est > other.rate_est
 
     def __add__(self, other):
@@ -247,15 +245,25 @@ class Path:
 
 
 def clever_extend(path, good_segments):
-    extends = Queue.PriorityQueue()
 
     # l = 10 # max lookahead
     # number_of_moves = random.randint(1,l)
 
+    extends = [ ]
+
     possible_moves = ['W', 'E', 'SW', 'SE']#, 'R+', 'R-']
 
-    for i in xrange(4):
-        extends.put(Path([possible_moves[i]], path.board))
+    for i in xrange(10):
+
+        number_of_additional_moves = random.randint(1, 10)
+        additonal_moves = []
+
+        for i in xrange(number_of_additional_moves):
+            additonal_moves.append(possible_moves[random.randint(0, 3)])
+
+        extends.append(Path(additonal_moves, None))
+
+    heapq.heapify(extends)
 
     return extends
 
@@ -263,24 +271,25 @@ def generate_paths(oldpaths, good_segments):
     threshold = 0.5
     maxpaths = 100
 
-    path_result = Queue.PriorityQueue()
-    while not oldpaths.empty():
-        path = oldpaths.get()
+    path_result = []
+    while not len(oldpaths) == 0:
+        print "print paths remaining = " + str(len(oldpaths))
+        path = heapq.heappop(oldpaths)
         extends = clever_extend(path, good_segments)
 
-        if extends.empty():
-            path_result.put(path)
+        if len(extends) == 0:
+            heapq.heappush(path_result, path)
 
-        while not extends.empty():
-            extended_path = extends.get()
+        while not len(extends) == 0:
+            extended_path = heapq.heappop(extends)
             p_new = path + extended_path
             p_new.rate()
 
             if p_new.rate_est > threshold:
-                path_result.put(p_new)
+                heapq.heappush(path_result, p_new)
 
-    while path_result.qsize() > maxpaths:
-        path_result.get()
+    while len(path_result) > maxpaths:
+        heapq.heappop(path_result)
 
     return path_result
 
@@ -345,18 +354,18 @@ class Board:
             unitSet.add((cell.x,cell.y))
         for state in states:
             if len(unitSet.symmetric_difference(state)) == 0:
-                print "already visited -> error"
+                #print "already visited -> error"
                 return True
         return False
 
     def at_valid_location(self, unit):
         for m in unit.members:
             if m.x < 0 or m.x >= self.width or m.y < 0 or m.y >= self.height:
-                print "moved out of the map -> invalid location"
+                #print "moved out of the map -> invalid location"
                 return False
             # check whether field is already occupied
             elif self.fields[m.x][m.y].full == True:
-                print "moved unit to occupied space -> invalid location"
+                #print "moved unit to occupied space -> invalid location"
                 return False
         return True
 
