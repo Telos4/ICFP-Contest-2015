@@ -1,0 +1,3 @@
+mapId = 0
+seedIndex = 0
+movement_sequence = ['R+','R+','R+','SW','SW','SW','SW','SW','W','W','SW','SW','SW','SW','SW','SW','SW','SW','SW','SW','SW','SW','SW','SE','SE','W','SW','SE','SE','SE','SE','SE','SE','SE','SE','W','W','W','W','W','W','W','E']
