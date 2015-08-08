@@ -35,6 +35,17 @@ def convert_random(movement_sequence):
 
 
 def convert_ilp(movement_sequence):
+    inp2 = { 'W' : ['p', '\'',  '!', '.', '0', '3'],
+        'E' : ['b', 'c', 'e', 'f', 'y', '2'],
+        'T': ['a', 'g', 'h', 'i', 'j', '4'],
+        'Q': ['l', 'm', 'n', 'o', ' ', '5'],
+        'R-': ['d', 'q', 'r', 'v', 'z', '1'],
+        'R+': ['k', 's', 't', 'u', 'w', 'x'],
+        ' ' : ['\t', '\n', '\r', '-']} # let's also ignore '-'
+
+
+    movement_sequence = [ x if x != 'SE' else 'Q' for x in movement_sequence]
+    movement_sequence = [ x if x != 'SW' else 'T' for x in movement_sequence]
     movement_sequence = "".join(movement_sequence)
     all_known_phrases_of_power_in_class_form=[]
 
@@ -119,7 +130,7 @@ def convert_ilp(movement_sequence):
         movement_sequence = mstemp
 
 
-    for k in ['SW','SE','R-','R+','W','E']:
+    for k in ['T','Q','R-','R+','W','E']:
         movement_sequence = movement_sequence.replace(k,inp[k][0])
 
     print movement_sequence
