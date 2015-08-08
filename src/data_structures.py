@@ -108,9 +108,10 @@ class BoardManager:
 
                     # get new active unit
                     active_unit = self.get_new_unit(board, queued_units)
+                    states = []
 
             if active_unit is not None:
-                states = []
+                #states = []
                 visited = set()
                 for cell in active_unit.members:
                     visited.add((cell.x, cell.y))
