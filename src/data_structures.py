@@ -80,9 +80,11 @@ class BoardManager:
                 elif m == ord('3'):
                     m = 'SE'
                 elif m == ord('7'):
-                    m = 'RCC'
+                    m = 'R+'
                 elif m == ord('9'):
-                    m = 'RC'
+                    m = 'R-'
+                elif m == ord('5'):
+                    m = ' '
                 else:
                     break
 
@@ -236,7 +238,16 @@ class Board:
         draw.drawPivot(img, (0,255,0), unit.pivot.x, unit.pivot.y, scale)
 
         k = '0'
-        while not (k in [ord('1'),ord('3'),ord('4'),ord('6'),ord('7'),ord('9'),ord('q')] ):
+        """
+        1: south-west
+        3: south-east
+        4: west
+        5: nothing
+        6: east
+        7: rotate counterclockwise
+        9: rotate clockwise
+        """
+        while not (k in [ord('1'),ord('3'),ord('4'),ord('5'),ord('6'),ord('7'),ord('9'),ord('q')] ):
             cv2.imshow('board', img)
             k = cv2.waitKey(1)
 
@@ -316,7 +327,7 @@ class Unit:
                     cell.x = cell.x + 1
                 cell.y = cell.y + 1
 
-        elif direction == 'RCC':  # rotate conter-clockwise
+        elif direction == 'R+':  # rotate conter-clockwise
             for cell in movedUnit.members:
                 upRight = movedUnit.pivot.y - cell.y
                 tempX = movedUnit.pivot.x
@@ -341,7 +352,7 @@ class Unit:
                 cell.x = newX
                 cell.y = newY
 
-        elif direction == 'RC':  # rotate clockwise
+        elif direction == 'R-':  # rotate clockwise
             for cell in movedUnit.members:
                 upRight = movedUnit.pivot.y - cell.y
                 tempX = movedUnit.pivot.x
