@@ -4,7 +4,8 @@ from math import ceil
 from copy import deepcopy
 import string
 import lcd_generator as lcd
-
+import draw
+import cv2
 
 class BoardManager:
     def __init__(self, problem_dict):
@@ -56,7 +57,13 @@ class BoardManager:
             # if there is currently no active unit we create a new unit
             active_unit = self.get_new_unit(board, queued_units)
 
+        scale = 20
+
         for m in movement_sequence:
+            img = draw.drawBoard(board.width, board.height, scale)
+            for cell in board.filled:
+                draw.drawCell(img, (255,0,0), cell.x, cell.y, scale)
+
             if active_unit is not None:
                 # if there is an active unit, try moving it to new location
                 moved_unit = active_unit.move(m)  # get location of unit after move
@@ -72,7 +79,11 @@ class BoardManager:
                     active_unit = self.get_new_unit(board, queued_units)
 
             if active_unit is not None:
-                 print board.plot(active_unit)
+                for cell in active_unit.members:
+                    draw.drawCell(img, (0,0,255), cell.x, cell.y, scale)
+                while not (cv2.waitKey(1) & 0xFF == ord('q')):
+                    cv2.imshow('board', img)
+                print board.plot(active_unit)
 
             if active_unit is None:
                 # there are no more active units -> stop
