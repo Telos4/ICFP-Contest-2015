@@ -74,4 +74,5 @@ std::priority_queue<path> generate_paths( std::priority_queue<path> old_paths, s
 
 int main()
 {  
+  return 0;
 }
