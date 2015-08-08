@@ -158,11 +158,18 @@ print dt
 # 	conv_mv_seq = convert_class_to_letters.convert_random(mvseq)
 # 	handlejson.send_response(gid, [allseeds[gid][sid]],conv_mv_seq,dt)
 
-for i in range(10):
-	handlejson.send_response(i, allseeds[i],"kitab al'azif",dt)
 
-for i in range(10,20):
-	handlejson.send_response(i, allseeds[i],"abdul alhazred",dt)
+# for i in range(0,8): handlejson.send_response(i, allseeds[i],"kyoto ni modoritai 4",dt)
+for i in range(12,25): handlejson.send_response(i, allseeds[i],"ithaqua",dt)
+for i in range(0,12): handlejson.send_response(i, allseeds[i],"trajectory",dt)
+# for i in range(18,21): handlejson.send_response(i, allseeds[i],"hopeless",dt)
+# for i in range(21,22): handlejson.send_response(i, allseeds[i],"kawahira",dt)
+# for i in range(22,23): handlejson.send_response(i, allseeds[i],"niwasaki",dt)
+# for i in range(23,25): handlejson.send_response(i, allseeds[i],"rotlast",dt)
+
+#for i in range(25,26): handlejson.send_response(i, allseeds[i],"hasuta4",dt)
+
+#for i in range(12,14): handlejson.send_response(i, allseeds[i],"wgah'nagl fhtagn",dt)
 
 #for filename in os.listdir('Movements'):
 # execfile('Movements/movements_map1_game0.txt')
