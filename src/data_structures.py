@@ -109,20 +109,22 @@ class BoardManager:
         destination = None
         success = False
         # print board.fields
-        for cell in reversed(board.fields):
-            if not cell.full:
-                # test if other occupants of the current tile fit
-                for part in reltile.members:
-                    if board.fields[cell.x + part.x, cell.y + part.y].full:
-                        success = True
+        for cells in reversed(board.fields):
+            for cell in cells:
+                if not cell.full:
+                    # test if other occupants of the current tile fit
+                    for part in reltile.members:
+                        if cell.x + part.x > board.width or cell.y + part.y > board.height: continue
+                        if board.fields[cell.x + part.x][cell.y + part.y].full:
+                            success = True
+                            break
+                        if success:
+                            destination = cell
+                        # all cells of current tile fit at current position
                         break
-                if success:
-                    destination = cell
-                    # all cells of current tile fit at current position
-                    break
-        if destination == None:
-            print("Could not find any destination!")
-            return None
+                    if destination == None:
+                        print("Could not find any destination!")
+                        return None
         
         source = max(board.active_unit)
         graph = self.makeGraph(board)
@@ -182,36 +184,38 @@ class BoardManager:
         * * *   2
         """
         dirs = []
-        for cell in board.fields:
-            if cell.y % 2 == 0:
-                if cell.x == 0:
-                    # no left
-                    dirs = [Directions.RightBottom, Directions.Right]
+        for cells in board.fields:
+            for cell in cells:
+                if cell.y % 2 == 0:
+                    if cell.x == 0:
+                        # no left
+                        dirs = [Directions.RightBottom, Directions.Right]
+                    else:
+                        # as usual
+                        dirs = [Directions.LeftBottom, Directions.Left, Directions.RightBottom, Directions.Right]
                 else:
-                    # as usual
-                    dirs = [Directions.LeftBottom, Directions.Left, Directions.RightBottom, Directions.Right]
-            else:
-                # cell.y % 2 == 1
-                if cell.y == board.width-1:
-                    # no right
-                    dirs = [Directions.LeftBottom, Directions.Left]
-                else:
-                    # as usual
-                    dirs = [Directions.LeftBottom, Directions.Left, Directions.RightBottom, Directions.Right]
-            # need yet to check for bottom row!
-            list_of_neighbours = []
-            for d in dirs:
-                if cell.y == board.height-1:
-                    # no bottom
-                    if d == Directions.LeftBottom or d == Directions.RightBottom: continue
-                if(d == Directions.LeftBottom):
-                    list_of_neighbours.append( (cell.x-1, cell.y+1) )
-                if(d == Directions.RightBottom):
-                    list_of_neighbours.append( (cell.x+1, cell.y+1) )
-                if(d == Directions.Left):
-                    list_of_neighbours.append( (cell.x-1, cell.y  ) )
-                if(d == Directions.Right):
-                    list_of_neighbours.append( (cell.x+1, cell.y  ) )
+                    # cell.y % 2 == 1
+                    if cell.y == board.width-1:
+                        # no right
+                        dirs = [Directions.LeftBottom, Directions.Left]
+                    else:
+                        # as usual
+                        dirs = [Directions.LeftBottom, Directions.Left, Directions.RightBottom, Directions.Right]
+
+                # need yet to check for bottom row!
+                list_of_neighbours = []
+                for d in dirs:
+                    if cell.y == board.height-1:
+                        # no bottom
+                        if d == Directions.LeftBottom or d == Directions.RightBottom: continue
+                        if(d == Directions.LeftBottom):
+                            list_of_neighbours.append( (cell.x-1, cell.y+1) )
+                        if(d == Directions.RightBottom):
+                            list_of_neighbours.append( (cell.x+1, cell.y+1) )
+                        if(d == Directions.Left):
+                            list_of_neighbours.append( (cell.x-1, cell.y  ) )
+                        if(d == Directions.Right):
+                            list_of_neighbours.append( (cell.x+1, cell.y  ) )
 
                 graph.edges += { self.convert_for_astar(cell) : list_of_neighbours }
                 
