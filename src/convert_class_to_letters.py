@@ -9,8 +9,26 @@ inp = { 'W' : ['p', '\'',  '!', '.', '0', '3'],
         'R+': ['k', 's', 't', 'u', 'w', 'x'],
         ' ' : ['\t', '\n', '\r', '-']} # let's also ignore '-'
 
+inp2 = { 'W' : ['p', '\'',  '!', '.', '0', '3'],
+        'E' : ['b', 'c', 'e', 'f', 'y', '2'],
+        'T': ['a', 'g', 'h', 'i', 'j', '4'],
+        'Q': ['l', 'm', 'n', 'o', ' ', '5'],
+        'R-': ['d', 'q', 'r', 'v', 'z', '1'],
+        'R+': ['k', 's', 't', 'u', 'w', 'x'],
+        ' ' : ['\t', '\n', '\r', '-']} # let's also ignore '-'
 
 all_known_phrases_of_power=['ei!','ia! ia!','necronomicon','yuggoth','house','dead',"cthulhu r'lyeh","wgah'nagl fhtagn"]
+
+all_known_phrases_of_power_in_class_form=[]
+for pop in all_known_phrases_of_power:
+    newrep=""
+    for letter in pop:
+        for k in inp2.keys():
+            data = inp2[k]
+            if letter in data:
+                newrep += k
+    all_known_phrases_of_power_in_class_form.append(newrep)
+
 
 def convert_random(movement_sequence):
     out = ""
@@ -20,33 +38,29 @@ def convert_random(movement_sequence):
         out += str(rep)
     return out
 
-def convert_ilp(movement_sequence):
-    inp2 = { 'W' : ['p', '\'',  '!', '.', '0', '3'],
-        'E' : ['b', 'c', 'e', 'f', 'y', '2'],
-        'T': ['a', 'g', 'h', 'i', 'j', '4'],
-        'Q': ['l', 'm', 'n', 'o', ' ', '5'],
-        'R-': ['d', 'q', 'r', 'v', 'z', '1'],
-        'R+': ['k', 's', 't', 'u', 'w', 'x'],
-        ' ' : ['\t', '\n', '\r', '-']} # let's also ignore '-'
+
+def _collision(a,b):
+    _,sa,ea=a
+    _,sb,eb=b
+    
+    if sa <= sb:
+        return sb < ea
+    else:
+        return sa < eb
 
 
+def _collision_list(l,a,positions):
+    for i in l:
+        if _collision(positions[i],a) == True:
+            return True
+    return False
+
+
+def _preprocess(movement_sequence):
     movement_sequence = [ x if x != 'SE' else 'Q' for x in movement_sequence]
     movement_sequence = [ x if x != 'SW' else 'T' for x in movement_sequence]
     movement_sequence = "".join(movement_sequence)
-    all_known_phrases_of_power_in_class_form=[]
-
-    for pop in all_known_phrases_of_power:
-        newrep=""
-        for letter in pop:
-            for k in inp2.keys():
-                data = inp2[k]
-                if letter in data:
-                    newrep += k
-        all_known_phrases_of_power_in_class_form.append(newrep)
-
-    #print all_known_phrases_of_power_in_class_form
-
-
+    
     # index of all_known_phrases_of_power_in_class_form, start in movement_sequence, end in movement_sequence
     positions=[]
     for i,rep in enumerate(all_known_phrases_of_power_in_class_form):
@@ -58,22 +72,27 @@ def convert_ilp(movement_sequence):
             positions.append((i,start,start+len(rep)))
             start = start +1
 
-    #print positions
+    return positions, movement_sequence
 
     
-
-
-    def collision(a,b):
-        _,sa,ea=a
-        _,sb,eb=b
+def _postprocess(retind,positions,movement_sequence):
+    for i in retind:
+        p,s,e = positions[i]
+        pp = all_known_phrases_of_power[p]
         
-        if sa <= sb:
-            return sb < ea
-        else:
-            return sa < eb
+        mstemp = movement_sequence[:s]
+        mstemp += pp
+        mstemp += movement_sequence[e:]
+        movement_sequence = mstemp
+
+    for k in ['T','Q','R-','R+','W','E']:
+        movement_sequence = movement_sequence.replace(k,inp2[k][0])
+
+    return movement_sequence
 
 
-
+def convert_ilp(movement_sequence):    
+    positions, movement_sequence = _preprocess(movement_sequence)
 
     try:
         import gurobipy
@@ -82,8 +101,7 @@ def convert_ilp(movement_sequence):
 
     m = gurobipy.Model()
     m.params.OutputFlag = 0
-    X=[]
-    Y=[]
+    X,Y=[],[]
     for i in range(len(positions)):
         X.append(m.addVar(vtype=gurobipy.GRB.BINARY, obj=-2*len(all_known_phrases_of_power[positions[i][0]]), name='X'+str(i)))
     for j in range(len(all_known_phrases_of_power)):
@@ -91,7 +109,7 @@ def convert_ilp(movement_sequence):
     m.update()
 
     for i,j in itertools.combinations(range(len(positions)), 2):
-        if collision(positions[i],positions[j]):
+        if _collision(positions[i],positions[j]):
             m.addConstr(X[i]+X[j]<=1)
     for r in range(len(all_known_phrases_of_power)):
         m.addConstr(gurobipy.quicksum( X[i] for i in range(len(positions)) if all_known_phrases_of_power_in_class_form[positions[i][0]] == all_known_phrases_of_power_in_class_form[r] ) >= Y[r])
@@ -103,92 +121,14 @@ def convert_ilp(movement_sequence):
     #m.write('test.lp')
     m.optimize()
     
+    retind = [ i for i in range(len(positions)) if X[i].x >= 0.8 ]
 
-    retind=[]
-    for i in range(len(positions)):
-        if X[i].x >= 0.8:
-            retind.append(i)
-
-    for i in retind:
-        p,s,e = positions[i]
-        pp = all_known_phrases_of_power[p]
-        
-        mstemp = movement_sequence[:s]
-        mstemp += pp
-        mstemp += movement_sequence[e:]
-        movement_sequence = mstemp
-
-
-    for k in ['T','Q','R-','R+','W','E']:
-        movement_sequence = movement_sequence.replace(k,inp2[k][0])
-
-    #print movement_sequence
-    return movement_sequence
-
-    
-
+    return _postprocess(retind,positions,movement_sequence)
 
 
 def convert_greedy(movement_sequence):
-    inp2 = { 'W' : ['p', '\'',  '!', '.', '0', '3'],
-        'E' : ['b', 'c', 'e', 'f', 'y', '2'],
-        'T': ['a', 'g', 'h', 'i', 'j', '4'],
-        'Q': ['l', 'm', 'n', 'o', ' ', '5'],
-        'R-': ['d', 'q', 'r', 'v', 'z', '1'],
-        'R+': ['k', 's', 't', 'u', 'w', 'x'],
-        ' ' : ['\t', '\n', '\r', '-']} # let's also ignore '-'
-
-
-    movement_sequence = [ x if x != 'SE' else 'Q' for x in movement_sequence]
-    movement_sequence = [ x if x != 'SW' else 'T' for x in movement_sequence]
-    movement_sequence = "".join(movement_sequence)
-    all_known_phrases_of_power_in_class_form=[]
-
-    for pop in all_known_phrases_of_power:
-        newrep=""
-        for letter in pop:
-            for k in inp2.keys():
-                data = inp2[k]
-                if letter in data:
-                    newrep += k
-        all_known_phrases_of_power_in_class_form.append(newrep)
-
-    #print all_known_phrases_of_power_in_class_form
-
-
-    # index of all_known_phrases_of_power_in_class_form, start in movement_sequence, end in movement_sequence
-    positions=[]
-    for i,rep in enumerate(all_known_phrases_of_power_in_class_form):
-        start = 0
-        while True:
-            start = movement_sequence.find(rep, start)
-            if start == -1:
-                break
-            positions.append((i,start,start+len(rep)))
-            start = start +1
-
-    #print positions
-
-    
-
-
-    def collision(a,b):
-        _,sa,ea=a
-        _,sb,eb=b
-        
-        if sa <= sb:
-            return sb < ea
-        else:
-            return sa < eb
-
-    def collision_list(l,a,positions):
-        for i in l:
-            if collision(positions[i],a) == True:
-                return True
-        return False
-
+    positions, movement_sequence = _preprocess(movement_sequence)
     retind=[]
-    #greedy: 300 bonus is best:
 
     for i,p in enumerate(positions):
         take = True
@@ -196,43 +136,11 @@ def convert_greedy(movement_sequence):
             if i!=j and p[0]==q[0]:
                 take = False
                 break
-        if take and collision_list(retind,p,positions) == False:
+        if take and _collision_list(retind,p,positions) == False:
             retind.append(i)
 
-    for p in [ p for p in positions if collision_list(retind,p,positions)==False ]:
-        if collision_list(retind,p,positions) == False:
+    for p in [ p for p in positions if _collision_list(retind,p,positions)==False ]:
+        if _collision_list(retind,p,positions) == False:
             retind.append(positions.index(p))
 
-
-    
-
-    for i in retind:
-        p,s,e = positions[i]
-        pp = all_known_phrases_of_power[p]
-        
-        mstemp = movement_sequence[:s]
-        mstemp += pp
-        mstemp += movement_sequence[e:]
-        movement_sequence = mstemp
-
-
-    for k in ['T','Q','R-','R+','W','E']:
-        movement_sequence = movement_sequence.replace(k,inp2[k][0])
-
-    #print movement_sequence
-    return movement_sequence
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return _postprocess(retind,positions,movement_sequence)
