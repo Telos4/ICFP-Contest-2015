@@ -5,6 +5,8 @@ from copy import deepcopy
 import string
 import lcd_generator as lcd
 import draw
+import Queue
+import random
 
 class BoardManager:
     def __init__(self, problem_dict):
@@ -36,22 +38,9 @@ class BoardManager:
                              'W', 'W', 'W', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW',
                              ]
 
-        # movement_sequence = ['E', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW',
-        #                      'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE',
-        #                      'SW', 'SE', 'SW', 'SE', 'SW', 'W', 'SE', 'SW', 'RC', 'RC', 'W', 'RCC']
         queued_units = self.queued_units[game_number]
 
-        board = self.apply_sequence(board, None, queued_units, movement_sequence)
-
-
-        # for unit_index in self.queued_units[game_number]:
-        #     # spawn unit
-        #     u = Unit(self.unit_dict[unit_index])
-        #     u = u.moveToSpawnPosition(board.width)
-        #     self.update_board(board, u)
-        #
-        #     print board
-        #     pass
+        self.apply_sequence(board, None, queued_units, movement_sequence)
 
     def apply_sequence(self, board, active_unit, queued_units, movement_sequence):
         """
@@ -87,7 +76,7 @@ class BoardManager:
                 print "no more units in queue!"
                 break
 
-        return board
+        return board, active_unit, queued_units, movement_sequence
 
     def get_new_unit(self, board, queued_units):
         if len(queued_units) > 0:
@@ -130,7 +119,7 @@ class BoardManager:
         """
         check if any rows are completely filled and delete them
         """
-        for j in xrange(board.height-1, 0, -1):
+        for j in xrange(board.height-1, -1, -1):
             # check if row is full
             if all([board.fields[i][j].full for i in xrange(board.width)]):
                 # delete the row
@@ -141,14 +130,86 @@ class BoardManager:
                 for k in xrange(j, 1, -1):
                     for i in xrange(board.width):
                         board.fields[i][k].full = board.fields[i][k-1].full
+
+                # update topmost layer separately
                 for i in xrange(board.width):
                     board.fields[i][0].full = False
 
+        # update list of filled cells on the board
         board.filled = []
         for i in xrange(board.width):
             for j in xrange(board.height):
                 if board.fields[i][j].full == True:
                     board.filled.append(Cell(i,j, full=True))
+
+
+class Path:
+    def __init__(self, moves):
+        self.moves = moves      # list of moves
+        self.rate_est = 0
+
+    def rate(self):
+        pass
+
+    def __gt__(self, other):
+        return self.rate_est > other.rate_est
+
+    def __add__(self, other):
+        return self.moves.append(other.moves)
+
+
+
+def clever_extend(path, good_segments):
+    extends = Queue.PriorityQueue()
+    l = 10 # lookahead
+    number_of_moves = random.randint(1,l)
+
+    for i in xrange(3):
+        moves = []
+        for j in xrange(number_of_moves):
+            moves.append()
+
+
+
+    pass
+
+def generate_paths(oldpaths, good_segments):
+    threshold = 0.5
+    maxpaths = 100
+
+    path_result = Queue.PriorityQueue()
+    for path in oldpaths:
+        extends = clever_extend(path, good_segments)
+
+        if extends.empty():
+            path_result.put(path)
+
+        while not extends.empty():
+            extended_path = extends.get()
+            p_new = path + extended_path
+            p_new.rate()
+
+            if p_new.rate_est > threshold:
+                path_result.put(p_new)
+
+    while path_result.qsize() > maxpaths:
+        path_result.get()
+
+#     std::priority_queue<path> clever_extend(path p, std::priority_queue<path> good_segments){
+#   srand (time(NULL));
+#   std::priority_queue<path> extends;
+#   int new_entries = rand() % 10 + 1;
+#   for(int i = 0; i < 3; i++)
+#   {
+#     path dummy;
+#     for(int j = 0; j < new_entries; j++)
+#     {
+#       dummy.moves.append(std::to_string(rand() % 6));
+#     }
+#     extends.push(dummy);
+#   }
+#   return extends;
+# }
 
 
 class Cell:
@@ -331,20 +392,3 @@ class Unit:
 
         return movedUnit
 
-        # def __str__(self):
-        #     mx = max([m.x ])
-        #     b = [[" " for i in xrange(size)] for j in xrange(size)]
-        #
-        #     for m in self.members:
-        #         b[m.x][m.y] = 'X'
-        #
-        #     b[self.pivot.x][self.pivot.y] = '.'
-        #
-        #
-        #     s = ""
-        #     for i in xrange(size):
-        #         for j in xrange(size):
-        #             s += b[i][j]
-        #         s += "\n"
-        #
-        #     return s
