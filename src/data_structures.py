@@ -71,10 +71,10 @@ class BoardManager:
 
             # if this fails, then we loose
             if board.status == 'fail':
-                board.move_score = 0
-                board.power_score = 0
+                board.move_score = -1000
+                board.power_score = -1000
                 return board
-            if board.status == 'done':
+            if board.status == 'done': # this means no more units are available for spawning
                 return board
 
         for m in movement_sequence:
@@ -84,9 +84,8 @@ class BoardManager:
             if board.already_visited(board.active_unit.states, moved_unit):
                 print "error: already visited!"
                 board.status = 'fail'
-                board.move_score = 0
-                board.power_score = 0
-                raise
+                board.move_score = -1000
+                board.power_score = -1000
             elif board.at_valid_location(moved_unit):
                 # move was valid -> unit is moved
                 board.active_unit = moved_unit
@@ -100,11 +99,11 @@ class BoardManager:
                 board.active_unit = board.get_new_unit()
 
                 # if this fails, or there are no more units return the board
-                if board.status == 'fail':  # this means
-                    board.move_score = 0
-                    board.power_score = 0
+                if board.status == 'fail':  # this means a unit was spawned at a locked location
+                    board.move_score = -1000
+                    board.power_score = -1000
                     return board
-                if board.status == 'done':
+                if board.status == 'done':  # this means no more units are available for spawning
                     return board
 
             if board.active_unit is not None:
