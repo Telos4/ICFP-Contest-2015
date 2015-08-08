@@ -132,6 +132,8 @@ class BoardManager:
                     m = 'R-'
                 elif m == ord('5'):
                     m = ' '
+                    movement_sequence.append(m)
+                    continue
                 else:
                     break
 
