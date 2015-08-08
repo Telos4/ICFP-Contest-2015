@@ -70,6 +70,7 @@ class BoardManager:
         print "board after movements: \n" + str(board)
         print "final score: " + str(board.move_score + board.power_score)
 
+    def playTetris(self, map_number, game_number):
         board = self.get_initial_board(game_number)
         self.manual(board, map_number, game_number)
 
@@ -212,12 +213,11 @@ class BoardManager:
         if answ == 'y':
             filename = 'Movements/movements_map' + str(map_number) + '_game' + str(game_number) + '.txt'
             f = open(filename, 'w')
-            f.write('mapId = ' + str(map_number) + '\n')
-            f.write('seedIndex = ' + str(game_number) + '\n')
-            f.write('movement_sequence = [')
+            f.write('(' + str(map_number) + ',' + str(game_number) + ',')
+            f.write('[')
             for i in range(len(movement_sequence)-1):
                 f.write('\'' + movement_sequence[i] + '\',')
-            f.write('\'' + movement_sequence[len(movement_sequence)-1] + '\']')
+            f.write('\'' + movement_sequence[len(movement_sequence)-1] + '\'])')
             f.close()
 
         return board
@@ -376,8 +376,8 @@ class Board:
         self.update_fields_after_lock()
 
         # update points
-        points += 100 * (1 + self.ls) * self.ls / 2
-        line_bonus = floor((self.ls_old - 1) * points / 10) if self.ls_old > 1 else 0
+        points += 100 * (1 + self.ls) * self.ls / 2.0
+        line_bonus = floor((self.ls_old - 1) * points / 10.0) if self.ls_old > 1 else 0
 
         self.move_score += points + line_bonus
 
