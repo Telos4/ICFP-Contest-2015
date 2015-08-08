@@ -29,7 +29,8 @@ allseeds={0:[0],
 20:[0],
 21:[0],
 22:[0],
-23:[0]}
+23:[0],
+24:[18]}
 
 
 pop_sure = ["necronomicon", "ei!", "ia! ia!",'yuggoth']
@@ -153,9 +154,12 @@ print dt
 # 	handlejson.send_response(i, allseeds[i],s,dt)
 
 
-for gid,sid,mvseq in all_movements.all_movements:
-	conv_mv_seq = convert_class_to_letters.convert_random(mvseq)
-	handlejson.send_response(gid, [allseeds[gid][sid]],conv_mv_seq,dt)
+# for gid,sid,mvseq in all_movements.all_movements:
+# 	conv_mv_seq = convert_class_to_letters.convert_random(mvseq)
+# 	handlejson.send_response(gid, [allseeds[gid][sid]],conv_mv_seq,dt)
+
+for i in range(25):
+	handlejson.send_response(i, allseeds[i],'vancouver',dt)
 
 #for filename in os.listdir('Movements'):
 # execfile('Movements/movements_map1_game0.txt')
