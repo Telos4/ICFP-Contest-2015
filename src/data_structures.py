@@ -166,7 +166,8 @@ class BoardManager:
         """
         for j in xrange(board.height-1, -1, -1):
             # check if row is full
-            if all([board.fields[i][j].full for i in xrange(board.width)]):
+            # while because downshifted row can be full too...
+            while all([board.fields[i][j].full for i in xrange(board.width)]):
                 # delete the row
                 for i in xrange(board.width):
                     board.fields[i][j].full = False
@@ -179,7 +180,6 @@ class BoardManager:
                 # update topmost layer separately
                 for i in xrange(board.width):
                     board.fields[i][0].full = False
-                j = j+1 #necessary if several rows are full
 
         # update list of filled cells on the board
         board.filled = []
