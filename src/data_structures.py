@@ -47,10 +47,10 @@ class BoardManager:
         board = self.calc_board_state(board, movement_sequence)
 
         print "board after movements: \n" + str(board)
-        print "status: " + board.status
+        print "final score: " + str(board.move_score + board.power_score)
 
-        board = self.get_initial_board(game_number)
-        self.manual(board, map_number, game_number)
+        #board = self.get_initial_board(game_number)
+        #self.manual(board, map_number, game_number)
 
     def calc_board_state(self, board, movement_sequence):
         """
@@ -64,7 +64,11 @@ class BoardManager:
             board.active_unit = board.get_new_unit()
 
             # if this fails, then we loose
-            if board.status == 'fail' or board.status == 'done':
+            if board.status == 'fail':
+                board.move_score = 0
+                board.power_score = 0
+                return board
+            if board.status == 'done':
                 return board
 
         for m in movement_sequence:
@@ -78,18 +82,23 @@ class BoardManager:
                 # move was invalid -> unit gets locked
                 board.lock_fields(board.active_unit)
 
+                print "Unit locked! New move score:   " + str(board.move_score)
+
                 # get new active unit
                 board.active_unit = board.get_new_unit()
 
                 # if this fails, or there are no more units return the board
-                if board.status == 'fail' or board.status == 'done':
+                if board.status == 'fail':
+                    board.move_score = 0
+                    board.power_score = 0
+                    return board
+                if board.status == 'done':
                     return board
 
             if board.active_unit is not None:
                 print board.plot(board.active_unit)
             else:
                 print str(board)
-
             pass
 
 
@@ -196,12 +205,15 @@ class BoardManager:
 
 
 class Path:
-    def __init__(self, moves):
+    def __init__(self, moves, board):
         self.moves = moves      # list of moves
         self.rate_est = 0.0
+        self.board = board  # initial board state at the beginning of the path
 
     def rate(self):
-        # calculate end position for the current path
+        # calculate end state for the path
+        end_state = BoardManager.calc_board_state(self.board, self.moves)
+
         pass
 
     def __gt__(self, other):
@@ -279,6 +291,11 @@ class Board:
         self.unit_dict = unit_dict
         self.queued_units = queued_units
 
+        self.move_score = 0.0
+        self.power_score = 0.0
+        self.ls = 0     # number of lines cleared with current unit
+        self.ls_old = 0 # number of lines cleared with previous unit
+
         for f in self.filled:
             self.fields[f.x][f.y] = f
 
@@ -312,19 +329,31 @@ class Board:
         """
         lock the fields of the given board for the members of the unit
         """
+        points = 0
         for m in unit.members:
             if self.fields[m.x][m.y].full == True:
                 print "error: field was already locked! this should not have happend!"
                 raise
             self.fields[m.x][m.y].full = True
             self.filled.append(self.fields[m.x][m.y])
+            points += 1
 
         self.update_fields_after_lock()
+
+        # update points
+        points += 100 * (1 + self.ls) * self.ls / 2
+        line_bonus = floor((self.ls_old - 1) * points / 10) if self.ls_old > 1 else 0
+
+        self.move_score += points + line_bonus
+
+        self.ls_old = self.ls
+        self.ls = 0
 
     def update_fields_after_lock(self):
         """
         check if any rows are completely filled and delete them
         """
+        self.ls = 0
         for j in xrange(self.height-1, -1, -1):
             # check if row is full
             # while because downshifted row can be full too...
@@ -341,6 +370,8 @@ class Board:
                 # update topmost layer separately
                 for i in xrange(self.width):
                     self.fields[i][0].full = False
+
+                self.ls += 1 # count number of deleted rows
 
         # update list of filled cells on the board
         self.filled = []
