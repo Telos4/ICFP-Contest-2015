@@ -3,7 +3,8 @@ from math import floor
 from math import ceil
 from copy import deepcopy
 import string
-import  lcd_generator as lcd
+import lcd_generator as lcd
+
 
 class BoardManager:
     def __init__(self, problem_dict):
@@ -20,7 +21,7 @@ class BoardManager:
 
         self.unit_dict = problem_dict['units']
 
-        self.l = 10 # prediction length
+        self.l = 10  # prediction length
 
     def simulation(self, game_number):
         assert game_number < len(self.queued_units), "error: no such game"
@@ -28,7 +29,9 @@ class BoardManager:
         # create empty board
         board = self.initial_board
 
-        movement_sequence = ['E', 'SE', 'W', 'SE', 'SW', 'RC', 'RC', 'W', 'RCC']
+        movement_sequence = ['E', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW',
+                             'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE',
+                             'SW', 'SE', 'SW', 'SE', 'SW', 'W', 'SE', 'SW', 'RC', 'RC', 'W', 'RCC']
         queued_units = self.queued_units[game_number]
 
         board = self.apply_sequence(board, None, queued_units, movement_sequence)
@@ -49,12 +52,13 @@ class BoardManager:
         for the active unit. If the unit becomes stuck the next unit in queued_units runs the
         movement sequence, and so on
         """
-        for m in movement_sequence:
-            if active_unit is None:
-                # if there is currently no active unit we create a new unit
-                active_unit = self.get_new_unit(board, queued_units)
+        if active_unit is None:
+            # if there is currently no active unit we create a new unit
+            active_unit = self.get_new_unit(board, queued_units)
 
+        for m in movement_sequence:
             if active_unit is not None:
+                # if there is an active unit, try moving it to new location
                 moved_unit = active_unit.move(m)  # get location of unit after move
 
                 if self.at_valid_location(board, moved_unit):
@@ -66,12 +70,14 @@ class BoardManager:
 
                     # get new active unit
                     active_unit = self.get_new_unit(board, queued_units)
-            else:
+
+            if active_unit is not None:
+                 print board.plot(active_unit)
+
+            if active_unit is None:
                 # there are no more active units -> stop
                 print "no more units in queue!"
                 break
-
-            print board
 
         return board
 
@@ -80,6 +86,9 @@ class BoardManager:
             # when there are still units in the queue we create the next unit
             unit = Unit(self.unit_dict[queued_units.pop()])
             unit = unit.moveToSpawnPosition(board.width)
+            if not self.at_valid_location(board, unit):
+                print "spawn location was already occupied! -> Game over"
+                unit = None
         else:
             # when there are no more units we return None
             unit = None
@@ -103,10 +112,12 @@ class BoardManager:
                 raise
             board.fields[m.x][m.y].full = True
 
+
 class Cell:
     """
     representation of a single cell on the board
     """
+
     def __init__(self, x, y, full=False):
         self.x = x
         self.y = y
@@ -118,31 +129,47 @@ class Cell:
         else:
             return ' '
 
+
 class Board:
     """
     representation of the board
     """
+
     def __init__(self, width, height, filled):
         self.width = width
         self.height = height
-        self.fields = [[Cell(i,j) for j in xrange(self.height)] for i in xrange(self.width)]
+        self.fields = [[Cell(i, j) for j in xrange(self.height)] for i in xrange(self.width)]
         self.filled = [Cell(f["x"], f["y"], full=True) for f in filled]
         for f in self.filled:
             self.fields[f.x][f.y] = f
+
+    def plot(self, unit):
+        s = ''.join(['-' for i in xrange(self.width + 2)])
+        s += '\n'
+        for j in xrange(self.height):
+            s += '|'
+            for i in xrange(self.width):
+                if (i,j) in [(m.x,m.y) for m in unit.members]:
+                    s += 'u'
+                else:
+                    s += str(self.fields[i][j])
+            s += '|\n'
+        s += ''.join(['-' for i in xrange(self.width + 2)])
+        return s
 
     def __str__(self):
         """
         basic ascii output for debugging
         :return:
         """
-        s = ''.join(['-' for i in xrange(self.width+2)])
+        s = ''.join(['-' for i in xrange(self.width + 2)])
         s += '\n'
         for j in xrange(self.height):
             s += '|'
             for i in xrange(self.width):
                 s += str(self.fields[i][j])
             s += '|\n'
-        s += ''.join(['-' for i in xrange(self.width+2)])
+        s += ''.join(['-' for i in xrange(self.width + 2)])
         return s
 
 
@@ -151,8 +178,8 @@ class Unit:
         """
         :param unit_dict: dictionary generated from JSON representation for a single unit
         """
-        self.members = [Cell(m["x"],m["y"]) for m in unit_dict["members"]]  # members
-        self.pivot = Cell(unit_dict["pivot"]["x"], unit_dict["pivot"]["y"]) # pivot cell
+        self.members = [Cell(m["x"], m["y"]) for m in unit_dict["members"]]  # members
+        self.pivot = Cell(unit_dict["pivot"]["x"], unit_dict["pivot"]["y"])  # pivot cell
 
     def moveToSpawnPosition(self, map_width):
         minX = map_width - 1
@@ -163,10 +190,10 @@ class Unit:
                 minX = cell.x
             if cell.x > maxX:
                 maxX = cell.x
-        
+
         unit_width = maxX - minX + 1
         # unit spawns in the middle of the first row
-        for i in range( int(floor((map_width - unit_width) / 2)) ):
+        for i in range(int(floor((map_width - unit_width) / 2))):
             self = self.move('E')
 
         return self
@@ -204,14 +231,14 @@ class Unit:
                     cell.x = cell.x + 1
                 cell.y = cell.y + 1
 
-        elif direction == 'RCC': # rotate conter-clockwise
+        elif direction == 'RCC':  # rotate conter-clockwise
             for cell in movedUnit.members:
                 upRight = movedUnit.pivot.y - cell.y
                 tempX = movedUnit.pivot.x
                 if movedUnit.pivot.y % 2 == 0:
                     tempX = tempX + int(floor(upRight / 2.0))
                 else:
-                    tempX =  tempX + int(ceil(upRight / 2.0))
+                    tempX = tempX + int(ceil(upRight / 2.0))
                 right = cell.x - tempX
 
                 newY = movedUnit.pivot.y - upRight
@@ -221,7 +248,7 @@ class Unit:
                     newX = movedUnit.pivot.x - int(floor(upRight / 2.0))
 
                 newY = newY - right
-                if (newY+right) % 2 == 0:
+                if (newY + right) % 2 == 0:
                     newX = newX + int(floor(right / 2.0))
                 else:
                     newX = newX + int(ceil(right / 2.0))
@@ -229,19 +256,19 @@ class Unit:
                 cell.x = newX
                 cell.y = newY
 
-        elif direction == 'RC': # rotate clockwise
+        elif direction == 'RC':  # rotate clockwise
             for cell in movedUnit.members:
                 upRight = movedUnit.pivot.y - cell.y
                 tempX = movedUnit.pivot.x
                 if movedUnit.pivot.y % 2 == 0:
                     tempX = tempX + int(floor(upRight / 2.0))
                 else:
-                    tempX =  tempX + int(ceil(upRight / 2.0))
+                    tempX = tempX + int(ceil(upRight / 2.0))
                 right = cell.x - tempX
 
                 newX = movedUnit.pivot.x + upRight
                 newY = movedUnit.pivot.y + right
-                if (newY-right) % 2 == 0:
+                if (newY - right) % 2 == 0:
                     newX = newX + int(floor(right / 2.0))
                 else:
                     newX = newX + int(ceil(right / 2.0))
@@ -251,20 +278,20 @@ class Unit:
 
         return movedUnit
 
-    # def __str__(self):
-    #     mx = max([m.x ])
-    #     b = [[" " for i in xrange(size)] for j in xrange(size)]
-    #
-    #     for m in self.members:
-    #         b[m.x][m.y] = 'X'
-    #
-    #     b[self.pivot.x][self.pivot.y] = '.'
-    #
-    #
-    #     s = ""
-    #     for i in xrange(size):
-    #         for j in xrange(size):
-    #             s += b[i][j]
-    #         s += "\n"
-    #
-    #     return s
+        # def __str__(self):
+        #     mx = max([m.x ])
+        #     b = [[" " for i in xrange(size)] for j in xrange(size)]
+        #
+        #     for m in self.members:
+        #         b[m.x][m.y] = 'X'
+        #
+        #     b[self.pivot.x][self.pivot.y] = '.'
+        #
+        #
+        #     s = ""
+        #     for i in xrange(size):
+        #         for j in xrange(size):
+        #             s += b[i][j]
+        #         s += "\n"
+        #
+        #     return s
