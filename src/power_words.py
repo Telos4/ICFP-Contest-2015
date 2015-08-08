@@ -15,21 +15,32 @@ inv_map = {e: k for k, v in inp.items() for e in v}
 """
 words of power go in lowercase because of matching
 """
-words_for_sure = ["ei!", "ia! ia!", "r'lyeh", "yuggoth"]
+words_for_sure = ["ei!", "ia! ia!", "r'lyeh", "yuggoth", "necronomicon"]
 
-words_probable = ["cthulhu", "dagon", 
+words_probable = ["massachusetts", "boston", "cambridge", "gloucester",
+                  "hadley", "haverhill", "ipswich", "marblehead",
+                  "salem", "new hampshire",
+                  "rhode island", "providence", "vermont",
+                  "brattleboro", "townshend",
+                  "cthulhu", "dagon",
                   "rhan-tegoth-cthulhu fthagn-ei! ei! ei! ei!-rhan-teogth.",
                   "rhan-tegoth rhan-tegoth!",
                   "ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn",
                   "h. p. lovecraft", "azathoth", "chaugnar faugn",
-                  "shoggoths", "necronomicon", "sarnath",
-                  "in his house at r'lyeh dead cthulhu waits dreaming."]
+                  "shoggoths", "lilith", "xllth",
+                  "in his house at r'lyeh dead cthulhu waits dreaming",
+                  "watch me in the sky close by the daemon-star",
+                  "that throb down in the ground", "democritus", "sarnath",
+                  "god! if you could see what i am seeing!", "oida!",
+                  "fata viam invenient", "marvells of science",
+                  "ygnaiih . . . ygnaiih . . . thflthkh'ngha . . . yog-sothoth . . .",
+                  "ygnaiih... ygnaiih... thflthkh'ngha... yog-sothoth..."]
 
 words_even_less_prob = ["derleth",
                         "zhar", "lloigor", "cyaegha", "nyogtha",
                         "tsathoggua", "aphoom-zhah", "cthugha",
-                        "dagon","ghatanothoa",
-                        "mother hydra","zoth-ommog", "gatanozoa",
+                        "dagon", "ghatanothoa",
+                        "mother hydra", "zoth-ommog", "gatanozoa",
                         "ghatanothoa", "arlyeh", "elder things",
                         "great race"]
 
