@@ -13,39 +13,95 @@ class BoardManager:
         print self.initial_board
 
         # create list of units to spawn
-        self.unit_indizes = [lcd.generate_random_sequence(seed, problem_dict['sourceLength'],
+        self.queued_units = [lcd.generate_random_sequence(seed, problem_dict['sourceLength'],
                                                           len(problem_dict['units'])) for seed in
                              problem_dict['sourceSeeds']]
-        print self.unit_indizes
+        print self.queued_units
 
         self.unit_dict = problem_dict['units']
 
         self.l = 10 # prediction length
 
     def simulation(self, game_number):
-        assert game_number < len(self.unit_indizes), "error: no such game"
+        assert game_number < len(self.queued_units), "error: no such game"
 
         # create empty board
         board = self.initial_board
 
-        for unit_index in self.unit_indizes[game_number]:
-            # spawn unit
-            u = Unit(self.unit_dict[unit_index])
-            u = u.moveToSpawnPosition(board.width)
-            self.update_board(board, u)
+        movement_sequence = ['E', 'SE', 'W', 'SE', 'SW', 'RC', 'RC', 'W', 'RCC']
+        queued_units = self.queued_units[game_number]
+
+        board = self.apply_sequence(board, None, queued_units, movement_sequence)
+
+
+        # for unit_index in self.queued_units[game_number]:
+        #     # spawn unit
+        #     u = Unit(self.unit_dict[unit_index])
+        #     u = u.moveToSpawnPosition(board.width)
+        #     self.update_board(board, u)
+        #
+        #     print board
+        #     pass
+
+    def apply_sequence(self, board, active_unit, queued_units, movement_sequence):
+        """
+        Simulate the game starting with the current board state and apply the movement sequence
+        for the active unit. If the unit becomes stuck the next unit in queued_units runs the
+        movement sequence, and so on
+        """
+        for m in movement_sequence:
+            if active_unit is None:
+                # if there is currently no active unit we create a new unit
+                active_unit = self.get_new_unit(board, queued_units)
+
+            if active_unit is not None:
+                moved_unit = active_unit.move(m)  # get location of unit after move
+
+                if self.at_valid_location(board, moved_unit):
+                    # move was valid -> unit is moved
+                    active_unit = moved_unit
+                else:
+                    # move was invalid -> unit gets locked
+                    self.lock_fields(board, active_unit)
+
+                    # get new active unit
+                    active_unit = self.get_new_unit(board, queued_units)
+            else:
+                # there are no more active units -> stop
+                print "no more units in queue!"
+                break
 
             print board
-            pass
 
+        return board
 
-    def update_board(self, board, unit):
+    def get_new_unit(self, board, queued_units):
+        if len(queued_units) > 0:
+            # when there are still units in the queue we create the next unit
+            unit = Unit(self.unit_dict[queued_units.pop()])
+            unit = unit.moveToSpawnPosition(board.width)
+        else:
+            # when there are no more units we return None
+            unit = None
+        return unit
+
+    def at_valid_location(self, board, unit):
+        for m in unit.members:
+            # check whether field is already occupied
+            if board.fields[m.x][m.y].full == True:
+                print "moved unit to occupied space -> invalid location"
+                return False
+        return True
+
+    def lock_fields(self, board, unit):
+        """
+        lock the fields of the given board for the members of the unit
+        """
         for m in unit.members:
             if board.fields[m.x][m.y].full == True:
-                print "moved unit to occupied space -> stuck"
-            else:
-                board.fields[m.x][m.y].full = True
-                board.filled.append(board.fields[m.x][m.y])
-                print "moved unit to empty space -> ok"
+                print "error: field was already locked! this should not have happend!"
+                raise
+            board.fields[m.x][m.y].full = True
 
 class Cell:
     """
