@@ -1,6 +1,8 @@
 import datetime
 import handlejson
 import random
+import os
+import convert_class_to_letters
 
 allseeds={0:[0],
 1:[0],
@@ -118,35 +120,42 @@ print dt
 #handlejson.send_response(0, [0], "a4gji1rvp0gih4jg44jg4laaj4h 5hajlginnoqdd nm552nnnn5 m jooonnl5nhoo o am g lmhh4l nonllvz1ycc5 r5ooo5  ql5 ga55eenomolnah4r445mmhajahi0'mlqzq ojanogao i mmaijlhnomgigkaim4hpp mm  mcomiiij0i4oomd55y2bfaghjnlagmloo5rqhjgiimmmmybfjgja00!jhg4jihm cyb5lm5uhhgigjaahgg4ll n555immo loghmnnl4j4gh5g4a4mng1drnil5hhjol4ollo 55lammg4hgjn4 mn5hg4gmlgh4ij45lnnrddccbfonov115 nonr1rjo 5ajjhiglmmj5ni4no5m4iiagdajghggjghja44aghigilha5ivjghllngjaa''g44gj5 iigjohn5nbbll nn5odo4hmnlooocb5o4ojgj  y5224at4iiii  ogoaghglmyb mlgjmh4 lznhnlb2ere5ooon lmo nagh.pvagjailc2fqc5nggn4a4igg aao5vc5lnhhih'!g olgjhjpj4am pii55j0.'i43.'h445 oy5n5 52ld4q4qghhini1a4hby5r h4", dt)
 
 testarray=[
-(0,"a4gji1rvp0gih4jg44jg4laaj4h 5hajlginnoqdd nm552nnnn5 m jooonnl5nhoo o am g lmhh4l nonllvz1ycc5 r5ooo5  ql5 ga55eenomolnah4r445mmhajahi0'mlqzq ojanogao i mmaijlhnomgigkaim4hpp mm  mcomiiij0i4oomd55y2bfaghjnlagmloo5rqhjgiimmmmybfjgja00!jhg4jihm cyb5lm5uhhgigjaahgg4ll n555immo loghmnnl4j4gh5g4a4mng1drnil5hhjol4ollo 55lammg4hgjn4 mn5hg4gmlgh4ij45lnnrddccbfonov115 nonr1rjo 5ajjhiglmmj5ni4no5m4iiagdajghggjghja44aghigilha5ivjghllngjaa''g44gj5 iigjohn5nbbll nn5odo4hmnlooocb5o4ojgj  y5224at4iiii  ogoaghglmyb mlgjmh4 lznhnlb2ere5ooon lmo nagh.pvagjailc2fqc5nggn4a4igg aao5vc5lnhhih'!g olgjhjpj4am pii55j0.'i43.'h445 oy5n5 52ld4q4qghhini1a4hby5r h4"),
-(1,"dead"),
+(0,"ei!"),
+#(1,"ei!"),
 (2,"ei!"),
 (3,"yuggoth"),
-(4,"wgah'nagl fhtagn"),
+(4,"house"),
 (5,"ia! ia!"),
-(6,"wa"),
-(7,"wgah'nagl fhtagn"),
-(8,"wgah'nagl fhtagn"),
-(9,"wgah'nagl fhtagn"),
-(10,"wgah'nagl fhtagn"),
+(6,"ei!"),
+(7,"necronomicon"),
+(8,"ei!"),
+(9,"ei!"),
+(10,"dead"),
 (11,"cthulhu r'lyeh"),
-(12,"wgah'nagl fhtagn"),
-(13,"house"),
-(14,"wgah'nagl fhtagn"),
-(15,"wgah'nagl fhtagn"),
-(16,"wgah'nagl fhtagn"),
-(17,"wgah'nagl fhtagn"),
-(18,"wgah'nagl fhtagn"),
+(12,"ei!"),
+(13,"necronomicon"),
+(14,"ei!"),
+(15,"cthulhu r'lyeh"),
+(16,"ei!"),
+(17,"ei!"),
+(18,"ei!"),
 (19,"agajaha4j4j4ajihoigh4j4 m40gjhha4al oaaaaiim lilolj4jaim3jghigio5n !olnmooggh4oggh4  oal5o44aihai 5ogg55 4iijj5j4.4i4ha5lnmo4!aa444jlmlmaj.4aihigmlmlmmlggg44momogg5 ih4jgan l ogjl4jjaja44j4om 3gia4ijia4l5 m!hjhjjjaiajggln4ihjaajgiiloalhj4hhgi4ijin5ooll iighijga45nlo....p.p0p'3p330!0'p0!..'!.''03..3efyceybyyfyefy2bcyccb2ef2b2eb2yfffc0.."),
 (20,"necronomicon"),
-(21,"wgah'nagl fhtagn"),
-(22,"wgah'nagl fhtagn"),
-(23,"wgah'nagl fhtagn"),
+(21,"ei!"),
+(22,"ei!"),
+(23,"ei!"),
 ]
 
 for i,s in testarray:
 	print i, s
 	handlejson.send_response(i, allseeds[i],s,dt)
+
+
+
+#for filename in os.listdir('Movements'):
+# execfile('Movements/movements_map1_game0.txt')
+# conv_mv_seq = convert_class_to_letters.convert_random(movement_sequence)
+# handlejson.send_response(mapId, [allseeds[mapId][seedIndex]],conv_mv_seq,dt)
 
 
 
