@@ -113,7 +113,7 @@ class BoardManager:
                 print "no more units in queue!"
                 break
 
-        filename = 'movements_map' + str(map_number) + '_game' + str(game_number) + '.txt'
+        filename = 'Movements/movements_map' + str(map_number) + '_game' + str(game_number) + '.txt'
         f = open(filename, 'w')
         f.write('movement_sequence = [')
         for i in range(len(movement_sequence)-1):
