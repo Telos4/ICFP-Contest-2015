@@ -30,6 +30,8 @@ allseeds={0:[0],
 
 pop_sure = ["necronomicon", "ei!", "ia! ia!",'yuggoth']
 
+pop_never = ["elder things"]
+
 # tested and seems not to be pops
 # words_probable = ["cthulhu", "dagon", 
 #                   "rhan-tegoth-cthulhu fthagn-ei! ei! ei! ei!-rhan-teogth.",
@@ -48,22 +50,37 @@ words_even_less_prob = ["derleth",
                         "tsathoggua", "aphoom-zhah", "cthugha",
                         "dagon","ghatanothoa",
                         "mother hydra","zoth-ommog", "gatanozoa",
-                        "ghatanothoa", "arlyeh", "elder things",
+                        "ghatanothoa", "arlyeh",
                         "great race"]
 
 
-worklist = words_for_sure + words_probable + words_even_less_prob
-random.shuffle(worklist)
-print len(worklist), worklist
+# worklist = words_for_sure + words_probable + words_even_less_prob
+# random.shuffle(worklist)
+# print len(worklist), worklist
 
 dt = datetime.datetime.now().time().isoformat()
 print dt
-for i,a in enumerate(worklist):
-	idx = (i)%len(worklist)
-	print 'sending',idx,a.replace('-',''), '\ttag:', dt, '\ton seeds',allseeds[i]
-	for s in allseeds[i]:
-		handlejson.send_response(i, s, a.replace('-',''), dt)
-		print ''
+# for i,a in enumerate(worklist):
+# 	idx = (i)%len(worklist)
+# 	word = a.replace('-',' ')
+# 	print 'sending',idx,word, '\ttag:', dt, '\ton seeds',allseeds[i]
+# 	for s in allseeds[i]:
+# 		handlejson.send_response(i, s, word, dt)
+# 		print ''
+
+# next_word = "ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"
+# word = "in his house at r'lyeh dead cthulhu waits dreaming."
+# for i in range(24):
+# 	for s in allseeds[i]:
+# 		print 'sending', i,s,word
+# 		handlejson.send_response(i, s, word, dt)
+
+
+handlejson.send_response(13, 0, "in his house at r'lyeh dead cthulhu waits", dt)
+handlejson.send_response(15, 0, "in his house at r'lyeh dead cthulhu", dt)
+handlejson.send_response(20, 0, "in his house at r'lyeh dead", dt)
+
+
 
 
 # print 'sending elder to 0'
