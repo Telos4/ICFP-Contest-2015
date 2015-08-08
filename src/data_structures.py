@@ -11,6 +11,11 @@ import random
 
 class BoardManager:
     def __init__(self, problem_dict):
+        # create the board
+        self.initial_board = Board(problem_dict['width'], problem_dict['height'], problem_dict['filled'])
+
+        print self.initial_board
+
         # create list of units to spawn
         self.queued_units = [lcd.generate_random_sequence(seed, problem_dict['sourceLength'],
                                                           len(problem_dict['units'])) for seed in
@@ -21,7 +26,6 @@ class BoardManager:
         self.width = problem_dict['width']
         self.height = problem_dict['height']
         self.filled = problem_dict['filled']
-
 
     def get_initial_board(self, game_number):
         board = Board(self.width, self.height, self.filled, self.unit_dict, self.queued_units[game_number])
@@ -100,6 +104,12 @@ class BoardManager:
             # if there is currently no active unit we create a new unit
             active_unit = self.get_new_unit(board, queued_units)
 
+            states = []
+            visited = set()
+            for cell in active_unit.members:
+                visited.add((cell.x, cell.y))
+            states.append(visited)
+
         movement_sequence = []
 
         #for m in movement_sequence:
@@ -130,17 +140,27 @@ class BoardManager:
                 moved_unit = active_unit.move(m)  # get location of unit after move
 
                 if self.at_valid_location(board, moved_unit):
-                    # move was valid -> unit is moved
-                    active_unit = moved_unit
+                    if self.already_visited(states, moved_unit):
+                        break
+                    else:
+                        # move was valid -> unit is moved
+                        active_unit = moved_unit
                 else:
                     # move was invalid -> unit gets locked
                     self.lock_fields(board, active_unit)
 
                     # get new active unit
                     active_unit = self.get_new_unit(board, queued_units)
+                    states = []
 
             if active_unit is not None:
-                 print board.plot(active_unit)
+                states = []
+                visited = set()
+                for cell in active_unit.members:
+                    visited.add((cell.x, cell.y))
+                states.append(visited)
+
+                print board.plot(active_unit)
 
             if active_unit is None:
                 # there are no more active units -> stop
@@ -151,6 +171,8 @@ class BoardManager:
         if answ == 'y':
             filename = 'Movements/movements_map' + str(map_number) + '_game' + str(game_number) + '.txt'
             f = open(filename, 'w')
+            f.write('mapId = ' + str(map_number) + '\n')
+            f.write('seedIndex = ' + str(game_number) + '\n')
             f.write('movement_sequence = [')
             for i in range(len(movement_sequence)-1):
                 f.write('\'' + movement_sequence[i] + '\',')
@@ -183,6 +205,17 @@ class BoardManager:
             elif board.fields[m.x][m.y].full == True:
                 print "moved unit to occupied space -> invalid location"
                 return False
+        return True
+
+    def already_visited(self, states, unit):
+        unitSet = set()
+        for cell in unit.members:
+            unitSet.add((cell.x,cell.y))
+        for state in states:
+            if len(unitSet.symmetric_difference(state)) == 0:
+                print "already visited -> error"
+                return False
+
         return True
 
     def lock_fields(self, board, unit):

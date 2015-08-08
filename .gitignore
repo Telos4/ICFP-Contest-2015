@@ -6,3 +6,7 @@
 .#*
 *.py#
 .DS_STORE
+Texts/en.*
+Texts/txt/*
+Texts/html/*
+
