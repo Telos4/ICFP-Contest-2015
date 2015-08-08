@@ -365,7 +365,7 @@ class Board:
                     self.fields[i][j].full = False
 
                 # move all of the above rows one cell down
-                for k in xrange(j, 1, -1):
+                for k in xrange(j, 0, -1):
                     for i in xrange(self.width):
                         self.fields[i][k].full = self.fields[i][k-1].full
 
