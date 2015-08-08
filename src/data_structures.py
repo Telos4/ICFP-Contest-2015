@@ -122,6 +122,7 @@ class BoardManager:
                 print "error: field was already locked! this should not have happend!"
                 raise
             board.fields[m.x][m.y].full = True
+            board.filled.append(board.fields[m.x][m.y])
 
 
 class Cell:
