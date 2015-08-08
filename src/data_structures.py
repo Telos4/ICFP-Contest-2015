@@ -207,23 +207,24 @@ class Unit:
         elif direction == 'RCC': # rotate conter-clockwise
             for cell in movedUnit.members:
                 upRight = movedUnit.pivot.y - cell.y
-                right = movedUnit.pivot.x - cell.x
+                tempX = movedUnit.pivot.x
                 if movedUnit.pivot.y % 2 == 0:
-                    right = right + int(floor(upRight / 2))
+                    tempX = tempX + int(floor(upRight / 2.0))
                 else:
-                    right =  right + int(ceil(upRight / 2))
+                    tempX =  tempX + int(ceil(upRight / 2.0))
+                right = cell.x - tempX
 
                 newY = movedUnit.pivot.y - upRight
                 if movedUnit.pivot.y % 2 == 0:
-                    newX = movedUnit.pivot.x - int(ceil(upRight / 2))
+                    newX = movedUnit.pivot.x - int(ceil(upRight / 2.0))
                 else:
-                    newX = movedUnit.pivot.x - int(floor(upRight / 2))
+                    newX = movedUnit.pivot.x - int(floor(upRight / 2.0))
 
-                newY = newY + right
-                if (newY-right) % 2 == 0:
-                    newX = newX + int(floor(right / 2))
+                newY = newY - right
+                if (newY+right) % 2 == 0:
+                    newX = newX + int(floor(right / 2.0))
                 else:
-                    newX = newX + int(ceil(right / 2))
+                    newX = newX + int(ceil(right / 2.0))
 
                 cell.x = newX
                 cell.y = newY
@@ -231,18 +232,19 @@ class Unit:
         elif direction == 'RC': # rotate clockwise
             for cell in movedUnit.members:
                 upRight = movedUnit.pivot.y - cell.y
-                right = movedUnit.pivot.x - cell.x
+                tempX = movedUnit.pivot.x
                 if movedUnit.pivot.y % 2 == 0:
-                    right = right + int(floor(upRight / 2))
+                    tempX = tempX + int(floor(upRight / 2.0))
                 else:
-                    right =  right + int(ceil(upRight / 2))
+                    tempX =  tempX + int(ceil(upRight / 2.0))
+                right = cell.x - tempX
 
                 newX = movedUnit.pivot.x + upRight
                 newY = movedUnit.pivot.y + right
                 if (newY-right) % 2 == 0:
-                    newX = newX + int(floor(right / 2))
+                    newX = newX + int(floor(right / 2.0))
                 else:
-                    newX = newX + int(ceil(right / 2))
+                    newX = newX + int(ceil(right / 2.0))
 
                 cell.x = newX
                 cell.y = newY
