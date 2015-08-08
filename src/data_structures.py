@@ -28,7 +28,7 @@ class BoardManager:
         assert game_number < len(self.queued_units), "error: no such game"
 
         # create empty board
-        board = self.initial_board
+        board = deepcopy(self.initial_board)
 
         movement_sequence = ['W', 'W', 'W', 'W', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'E', 'SE', 'W',
                              'W', 'W', 'W', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'E', 'SE', 'E', 'E',
