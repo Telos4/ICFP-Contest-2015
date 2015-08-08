@@ -29,9 +29,16 @@ class BoardManager:
         # create empty board
         board = self.initial_board
 
-        movement_sequence = ['E', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW',
-                             'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE',
-                             'SW', 'SE', 'SW', 'SE', 'SW', 'W', 'SE', 'SW', 'RC', 'RC', 'W', 'RCC']
+        movement_sequence = ['W', 'W', 'W', 'W', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'E', 'SE', 'W',
+                             'W', 'W', 'W', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'E', 'SE', 'E', 'E',
+                              'W', 'W', 'W', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'E', 'SE', 'E', 'E',
+                             'W', 'W', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'W',
+                             'W', 'W', 'W', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW',
+                             ]
+
+        # movement_sequence = ['E', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW',
+        #                      'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE',
+        #                      'SW', 'SE', 'SW', 'SE', 'SW', 'W', 'SE', 'SW', 'RC', 'RC', 'W', 'RCC']
         queued_units = self.queued_units[game_number]
 
         board = self.apply_sequence(board, None, queued_units, movement_sequence)
@@ -96,8 +103,11 @@ class BoardManager:
 
     def at_valid_location(self, board, unit):
         for m in unit.members:
+            if m.x < 0 or m.x >= board.width or m.y < 0 or m.y >= board.height:
+                print "moved out of the map -> invalid location"
+                return False
             # check whether field is already occupied
-            if board.fields[m.x][m.y].full == True:
+            elif board.fields[m.x][m.y].full == True:
                 print "moved unit to occupied space -> invalid location"
                 return False
         return True
@@ -112,6 +122,31 @@ class BoardManager:
                 raise
             board.fields[m.x][m.y].full = True
             board.filled.append(board.fields[m.x][m.y])
+
+        self.update_fields_after_lock(board)
+
+    def update_fields_after_lock(self, board):
+        """
+        check if any rows are completely filled and delete them
+        """
+        for j in xrange(board.height-1, 0, -1):
+            # check if row is full
+            if all([board.fields[i][j].full for i in xrange(board.width)]):
+                # delete the row
+                for i in xrange(board.width):
+                    board.fields[i][j].full = False
+
+                # move all of the above rows one cell down
+                for k in xrange(j, 1, -1):
+                    for i in xrange(board.width):
+                        board.fields[i][k].full = board.fields[i][k-1].full
+                for i in xrange(board.width):
+                    board.fields[i][0].full = False
+
+        board.filled = []
+        for i in xrange(board.width):
+            for j in xrange(board.height):
+                board.filled.append(Cell(i,j, full=True))
 
 
 class Cell:

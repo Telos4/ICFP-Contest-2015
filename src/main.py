@@ -8,7 +8,7 @@ def main():
     print "ICFP 2015"
 
     # test JSON parser
-    problem_dict = handlejson.parse_to_dictionary(data.data7)
+    problem_dict = handlejson.parse_to_dictionary(data.data19)
 
     # create a boardmanager
     boardmanager = data_structures.BoardManager(problem_dict)
