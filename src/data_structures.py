@@ -11,11 +11,6 @@ import random
 
 class BoardManager:
     def __init__(self, problem_dict):
-        # create the board
-        self.initial_board = Board(problem_dict['width'], problem_dict['height'], problem_dict['filled'])
-
-        print self.initial_board
-
         # create list of units to spawn
         self.queued_units = [lcd.generate_random_sequence(seed, problem_dict['sourceLength'],
                                                           len(problem_dict['units'])) for seed in
@@ -31,7 +26,7 @@ class BoardManager:
         board = Board(self.width, self.height, self.filled, self.unit_dict, self.queued_units[game_number])
         return board
 
-    def simulation(self, game_number):
+    def simulation(self, map_number, game_number):
         assert game_number < self.number_of_games, "error: no such game"
 
         # create empty board
@@ -94,19 +89,19 @@ class BoardManager:
 
         return board
 
-    def apply_sequence(self, board, active_unit, queued_units, movement_sequence, map_number, game_number):
+    def apply_sequence(self, board, map_number, game_number):
         """
         Simulate the game starting with the current board state and apply the movement sequence
         for the active unit. If the unit becomes stuck the next unit in queued_units runs the
         movement sequence, and so on
         """
-        if active_unit is None:
+        if board.active_unit is None:
             # if there is currently no active unit we create a new unit
-            active_unit = self.get_new_unit(board, queued_units)
+            board.active_unit = board.get_new_unit()
 
             states = []
             visited = set()
-            for cell in active_unit.members:
+            for cell in board.active_unit.members:
                 visited.add((cell.x, cell.y))
             states.append(visited)
 
@@ -114,8 +109,8 @@ class BoardManager:
 
         #for m in movement_sequence:
         while True:
-            if active_unit is not None:
-                m = board.plotcv(active_unit)
+            if board.active_unit is not None:
+                m = board.plotcv(board.active_unit)
 
                 if m == ord('4'):
                     m = 'W'
@@ -137,9 +132,9 @@ class BoardManager:
                 movement_sequence.append(m)
 
                 # if there is an active unit, try moving it to new location
-                moved_unit = active_unit.move(m)  # get location of unit after move
+                moved_unit = board.active_unit.move(m)  # get location of unit after move
 
-                if self.at_valid_location(board, moved_unit):
+                if board.at_valid_location(moved_unit):
                     if self.already_visited(states, moved_unit):
                         break
                     else:
@@ -147,22 +142,22 @@ class BoardManager:
                         active_unit = moved_unit
                 else:
                     # move was invalid -> unit gets locked
-                    self.lock_fields(board, active_unit)
+                    board.lock_fields(board.active_unit)
 
                     # get new active unit
-                    active_unit = self.get_new_unit(board, queued_units)
+                    board.active_unit = board.get_new_unit()
                     states = []
 
-            if active_unit is not None:
+            if board.active_unit is not None:
                 states = []
                 visited = set()
-                for cell in active_unit.members:
+                for cell in board.active_unit.members:
                     visited.add((cell.x, cell.y))
                 states.append(visited)
 
-                print board.plot(active_unit)
+                print board.plot(board.active_unit)
 
-            if active_unit is None:
+            if board.active_unit is None:
                 # there are no more active units -> stop
                 print "no more units in queue!"
                 break
@@ -181,32 +176,6 @@ class BoardManager:
 
         return board
 
-    def get_new_unit(self, board, queued_units):
-        if len(queued_units) > 0:
-            # when there are still units in the queue we create the next unit
-            unit = Unit(self.unit_dict[queued_units.pop()])
-            unit = unit.moveToSpawnPosition(board.width)
-            if not self.at_valid_location(board, unit):
-                print "spawn location was already occupied! -> Game over"
-                board.state = 'fail'
-                unit = None
-        else:
-            board.state = 'done'
-            # when there are no more units we return None
-            unit = None
-        return unit
-
-    def at_valid_location(self, board, unit):
-        for m in unit.members:
-            if m.x < 0 or m.x >= board.width or m.y < 0 or m.y >= board.height:
-                print "moved out of the map -> invalid location"
-                return False
-            # check whether field is already occupied
-            elif board.fields[m.x][m.y].full == True:
-                print "moved unit to occupied space -> invalid location"
-                return False
-        return True
-
     def already_visited(self, states, unit):
         unitSet = set()
         for cell in unit.members:
@@ -217,47 +186,6 @@ class BoardManager:
                 return False
 
         return True
-
-    def lock_fields(self, board, unit):
-        """
-        lock the fields of the given board for the members of the unit
-        """
-        for m in unit.members:
-            if board.fields[m.x][m.y].full == True:
-                print "error: field was already locked! this should not have happend!"
-                raise
-            board.fields[m.x][m.y].full = True
-            board.filled.append(board.fields[m.x][m.y])
-
-        self.update_fields_after_lock(board)
-
-    def update_fields_after_lock(self, board):
-        """
-        check if any rows are completely filled and delete them
-        """
-        for j in xrange(board.height-1, -1, -1):
-            # check if row is full
-            # while because downshifted row can be full too...
-            while all([board.fields[i][j].full for i in xrange(board.width)]):
-                # delete the row
-                for i in xrange(board.width):
-                    board.fields[i][j].full = False
-
-                # move all of the above rows one cell down
-                for k in xrange(j, 1, -1):
-                    for i in xrange(board.width):
-                        board.fields[i][k].full = board.fields[i][k-1].full
-
-                # update topmost layer separately
-                for i in xrange(board.width):
-                    board.fields[i][0].full = False
-
-        # update list of filled cells on the board
-        board.filled = []
-        for i in xrange(board.width):
-            for j in xrange(board.height):
-                if board.fields[i][j].full == True:
-                    board.filled.append(Cell(i,j, full=True))
 
 
 class Path:
