@@ -35,6 +35,11 @@ class BoardManager:
         # create empty board
         board = self.get_initial_board(game_number)
 
+        oldpaths = [ Path(['W'],board), Path(['E'],board), Path(['SW'],board), Path(['SE'],board), Path(['R+'],board), Path(['R-'],board)]
+
+        good_segments = []
+
+        generate_paths(oldpaths, good_segments)
 
 
         movement_sequence = ['E', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW', 'SE', 'SW',
@@ -52,7 +57,8 @@ class BoardManager:
         board = self.get_initial_board(game_number)
         self.manual(board, map_number, game_number)
 
-    def calc_board_state(self, board, movement_sequence):
+    @staticmethod
+    def calc_board_state(board, movement_sequence):
         """
         Calculate final board state for a given movement sequence
         :param board:
@@ -75,7 +81,13 @@ class BoardManager:
             # if there is an active unit, try moving it to new location
             moved_unit = board.active_unit.move(m)  # get location of unit after move
 
-            if board.at_valid_location(moved_unit):
+            if board.already_visited(board.active_unit.states, moved_unit):
+                print "error: already visited!"
+                board.status = 'fail'
+                board.move_score = 0
+                board.power_score = 0
+                raise
+            elif board.at_valid_location(moved_unit):
                 # move was valid -> unit is moved
                 board.active_unit = moved_unit
             else:
@@ -88,7 +100,7 @@ class BoardManager:
                 board.active_unit = board.get_new_unit()
 
                 # if this fails, or there are no more units return the board
-                if board.status == 'fail':
+                if board.status == 'fail':  # this means
                     board.move_score = 0
                     board.power_score = 0
                     return board
@@ -210,19 +222,22 @@ class Path:
     def __init__(self, moves, board):
         self.moves = moves      # list of moves
         self.rate_est = 0.0
-        self.board = board  # initial board state at the beginning of the path
+        self.board = deepcopy(board)  # initial board state at the beginning of the path
 
     def rate(self):
         # calculate end state for the path
         end_state = BoardManager.calc_board_state(self.board, self.moves)
 
-        pass
+        self.rate_est = end_state.move_score + len(self.moves)
 
     def __gt__(self, other):
         return self.rate_est > other.rate_est
 
     def __add__(self, other):
-        return self.moves.append(other.moves)
+        return Path(self.moves + other.moves, self.board)
+
+    def __str__(self):
+        return "moves: " + str(self.moves) + "\nrating: " + str(self.rate_est)
 
 
 
@@ -235,7 +250,7 @@ def clever_extend(path, good_segments):
     possible_moves = ['W', 'E', 'SW', 'SE', 'R+', 'R-']
 
     for i in xrange(6):
-        extends.put(Path(possible_moves[i]))
+        extends.put(Path([possible_moves[i]], path.board))
 
     return extends
 
@@ -260,6 +275,8 @@ def generate_paths(oldpaths, good_segments):
 
     while path_result.qsize() > maxpaths:
         path_result.get()
+
+    return path_result
 
 class Cell:
     """
@@ -315,6 +332,16 @@ class Board:
             # when there are no more units we return None
             unit = None
         return unit
+
+    def already_visited(self, states, unit):
+        unitSet = set()
+        for cell in unit.members:
+            unitSet.add((cell.x,cell.y))
+        for state in states:
+            if len(unitSet.symmetric_difference(state)) == 0:
+                print "already visited -> error"
+                return True
+        return False
 
     def at_valid_location(self, unit):
         for m in unit.members:
