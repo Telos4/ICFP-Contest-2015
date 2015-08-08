@@ -8,8 +8,9 @@ def parse_to_dictionary(s):
     except ValueError:
         raise ValueError('your string was invalid, it cannot be parsed to python: ' + s)
 
-def send_response(problemid_int, seed_int, solution_str, tag_str_or_none=None):
-    subprocess.call(['curl','--user',':hi4a3Ue84FtxUGqVQWla3aoBU9AMUphhm9KuscMIOFQ=','-X','POST','-H','Content-Type: application/json','-d',_create_response(problemid_int, seed_int, solution_str, tag_str_or_none),'https://davar.icfpcontest.org/teams/206/solutions'])
+def send_response(problemid_int, seed_array_int, solution_str, tag_str_or_none=None):
+    for s in seed_array_int:
+        subprocess.call(['curl','--user',':hi4a3Ue84FtxUGqVQWla3aoBU9AMUphhm9KuscMIOFQ=','-X','POST','-H','Content-Type: application/json','-d',_create_response(problemid_int, s, solution_str, tag_str_or_none),'https://davar.icfpcontest.org/teams/206/solutions'])
 
 def _create_response(problemid_int, seed_int, solution_str, tag_str_or_none=None):
     return _create_response_from_dic({'problemId':problemid_int,'seed':seed_int,'tag':tag_str_or_none,'solution':solution_str})

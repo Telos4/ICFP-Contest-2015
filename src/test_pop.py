@@ -76,10 +76,28 @@ print dt
 # 		handlejson.send_response(i, s, word, dt)
 
 
-handlejson.send_response(13, 0, "in his house at r'lyeh dead cthulhu waits", dt)
-handlejson.send_response(15, 0, "in his house at r'lyeh dead cthulhu", dt)
-handlejson.send_response(20, 0, "in his house at r'lyeh dead", dt)
+testarray=[(1,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
+(3,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
+(6,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
+(7,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
+(8,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
+(9,"ph'nglui mglw'nafh cthulhu r'lyeh wgah'nagl fhtagn"),
+]
 
+for i,s in testarray:
+	print i, s
+	handlejson.send_response(i, allseeds[i],s,dt)
+
+
+# handlejson.send_response( 2, allseeds[ 2], "cthulhu waits dreaming", dt)
+# handlejson.send_response( 4, allseeds[ 4], "r'lyeh", dt)
+# handlejson.send_response( 5, allseeds[ 5], "cthulhu", dt)
+# handlejson.send_response(11, allseeds[11], "dreaming", dt)
+# handlejson.send_response(12, allseeds[12], "dead cthulhu waits", dt)
+# handlejson.send_response(13, allseeds[13], "house", dt)
+# handlejson.send_response(15, allseeds[15], "in his house at r'lyeh", dt)
+# handlejson.send_response(20, allseeds[20], "at r'lyeh dead", dt)
+#handlejson.send_response(19, 0, "agajaha4j4j4ajihoigh4j4 m40gjhha4al oaaaaiim lilolj4jaim3jghigio5n !olnmooggh4oggh4  oal5o44aihai 5ogg55 4iijj5j4.4i4ha5lnmo4!aa444jlmlmaj.4aihigmlmlmmlggg44momogg5 ih4jgan l ogjl4jjaja44j4om 3gia4ijia4l5 m!hjhjjjaiajggln4ihjaajgiiloalhj4hhgi4ijin5ooll iighijga45nlo....p.p0p'3p330!0'p0!..'!.''03..3efyceybyyfyefy2bcyccb2ef2b2eb2yfffc0..", dt)
 
 
 
