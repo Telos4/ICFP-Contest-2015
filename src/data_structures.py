@@ -5,7 +5,6 @@ from copy import deepcopy
 import string
 import lcd_generator as lcd
 import draw
-import cv2
 
 class BoardManager:
     def __init__(self, problem_dict):
@@ -148,7 +147,8 @@ class BoardManager:
         board.filled = []
         for i in xrange(board.width):
             for j in xrange(board.height):
-                board.filled.append(Cell(i,j, full=True))
+                if board.fields[i][j].full == True:
+                    board.filled.append(Cell(i,j, full=True))
 
 
 class Cell:
