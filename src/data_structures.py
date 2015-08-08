@@ -98,10 +98,10 @@ class BoardManager:
 
                 if self.at_valid_location(board, moved_unit):
                     if self.already_visited(states, moved_unit):
+                        break
+                    else:
                         # move was valid -> unit is moved
                         active_unit = moved_unit
-                    else:
-                        break
                 else:
                     # move was invalid -> unit gets locked
                     self.lock_fields(board, active_unit)
@@ -111,7 +111,6 @@ class BoardManager:
                     states = []
 
             if active_unit is not None:
-                #states = []
                 visited = set()
                 for cell in active_unit.members:
                     visited.add((cell.x, cell.y))
@@ -170,9 +169,9 @@ class BoardManager:
         for state in states:
             if len(unitSet.symmetric_difference(state)) == 0:
                 print "already visited -> error"
-                return False
+                return True
 
-        return True
+        return False
 
     def lock_fields(self, board, unit):
         """
