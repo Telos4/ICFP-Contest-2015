@@ -176,7 +176,7 @@ class Unit:
 
         if direction == 'W':
             movedUnit.pivot.x = movedUnit.pivot.x - 1
-            for cell in moved.members:
+            for cell in movedUnit.members:
                 cell.x = cell.x - 1
 
         elif direction == 'E':
