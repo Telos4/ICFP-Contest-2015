@@ -175,6 +175,7 @@ class BoardManager:
                         board.fields[i][k].full = board.fields[i][k-1].full
                 for i in xrange(board.width):
                     board.fields[i][0].full = False
+                j = j+1 #necessary if several rows are full
 
         board.filled = []
         for i in xrange(board.width):
