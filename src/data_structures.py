@@ -5,6 +5,7 @@ from copy import deepcopy
 import string
 import lcd_generator as lcd
 import draw
+import cv2
 
 class BoardManager:
     def __init__(self, problem_dict):
@@ -63,9 +64,30 @@ class BoardManager:
             # if there is currently no active unit we create a new unit
             active_unit = self.get_new_unit(board, queued_units)
 
-        for m in movement_sequence:
+        movement_sequence = []
+
+        #for m in movement_sequence:
+        while True:
             if active_unit is not None:
-                board.plotcv(active_unit)
+                m = board.plotcv(active_unit)
+
+                if m == ord('4'):
+                    m = 'W'
+                elif m == ord('6'):
+                    m = 'E'
+                elif m == ord('1'):
+                    m = 'SW'
+                elif m == ord('3'):
+                    m = 'SE'
+                elif m == ord('7'):
+                    m = 'RCC'
+                elif m == ord('9'):
+                    m = 'RC'
+                else:
+                    break
+
+                movement_sequence.append(m)
+
                 # if there is an active unit, try moving it to new location
                 moved_unit = active_unit.move(m)  # get location of unit after move
 
@@ -86,6 +108,13 @@ class BoardManager:
                 # there are no more active units -> stop
                 print "no more units in queue!"
                 break
+
+        f = open('movements.txt', 'w')
+        f.write('movement_sequence = [')
+        for i in range(len(movement_sequence)-1):
+            f.write('\'' + movement_sequence[i] + '\',')
+        f.write('\'' + movement_sequence[len(movement_sequence)-1] + '\']')
+        f.close()
 
         return board
 
@@ -206,9 +235,12 @@ class Board:
 
         draw.drawPivot(img, (0,255,0), unit.pivot.x, unit.pivot.y, scale)
 
-        while not (cv2.waitKey(1) & 0xFF == ord('q')):
+        k = '0'
+        while not (k in [ord('1'),ord('3'),ord('4'),ord('6'),ord('7'),ord('9'),ord('q')] ):
             cv2.imshow('board', img)
+            k = cv2.waitKey(1)
 
+        return k
 
     def __str__(self):
         """
