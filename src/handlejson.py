@@ -8,6 +8,10 @@ def parse_to_dictionary(s):
     except ValueError:
         raise ValueError('your string was invalid, it cannot be parsed to python: ' + s)
 
+def get_dictionary_of_all_solutions():
+    data = subprocess.Popen(['curl','--user',':hi4a3Ue84FtxUGqVQWla3aoBU9AMUphhm9KuscMIOFQ=','-X','GET','https://davar.icfpcontest.org/teams/206/solutions'], stdout=subprocess.PIPE).communicate()[0]
+    return json.loads(data)    
+
 def send_response(problemid_int, seed_array_int, solution_str, tag_str_or_none=None):
     for s in seed_array_int:
         subprocess.call(['curl','--user',':hi4a3Ue84FtxUGqVQWla3aoBU9AMUphhm9KuscMIOFQ=','-X','POST','-H','Content-Type: application/json','-d',_create_response(problemid_int, s, solution_str, tag_str_or_none),'https://davar.icfpcontest.org/teams/206/solutions'])

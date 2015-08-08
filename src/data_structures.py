@@ -67,6 +67,7 @@ class BoardManager:
         print "board after movements: \n" + str(board)
         print "final score: " + str(board.move_score + board.power_score)
 
+    def playTetris(self, map_number, game_number):
         board = self.get_initial_board(game_number)
         self.manual(board, map_number, game_number)
 
@@ -209,12 +210,11 @@ class BoardManager:
         if answ == 'y':
             filename = 'Movements/movements_map' + str(map_number) + '_game' + str(game_number) + '.txt'
             f = open(filename, 'w')
-            f.write('mapId = ' + str(map_number) + '\n')
-            f.write('seedIndex = ' + str(game_number) + '\n')
-            f.write('movement_sequence = [')
+            f.write('(' + str(map_number) + ',' + str(game_number) + ',')
+            f.write('[')
             for i in range(len(movement_sequence)-1):
                 f.write('\'' + movement_sequence[i] + '\',')
-            f.write('\'' + movement_sequence[len(movement_sequence)-1] + '\']')
+            f.write('\'' + movement_sequence[len(movement_sequence)-1] + '\'])')
             f.close()
 
         return board

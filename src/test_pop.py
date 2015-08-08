@@ -48,7 +48,7 @@ pop_never = ["elder things"]
 
 words_for_sure = ["r'lyeh"]
 
-words_probable = [ "aleister crowley", "sarnath", "in his house at r'lyeh dead cthulhu waits dreaming."]
+words_probable = [ "thelema", "aleister crowley", "sarnath", "in his house at r'lyeh dead cthulhu waits dreaming."]
 
 words_even_less_prob = ["derleth",
                         "zhar", "lloigor", "cyaegha", "nyogtha",
@@ -155,14 +155,21 @@ print dt
 
 
 # for gid,sid,mvseq in all_movements.all_movements:
-# 	conv_mv_seq = convert_class_to_letters.convert_random(mvseq)
+# 	conv_mv_seq = convert_class_to_letters.convert_ilp(mvseq)
 # 	handlejson.send_response(gid, [allseeds[gid][sid]],conv_mv_seq,dt)
 
-for i in range(10):
-	handlejson.send_response(i, allseeds[i],"kitab al'azif",dt)
 
-for i in range(10,20):
-	handlejson.send_response(i, allseeds[i],"abdul alhazred",dt)
+for i in range(0,25): handlejson.send_response(i, allseeds[i],"ei!",dt)
+# for i in range(12,25): handlejson.send_response(i, allseeds[i],"ithaqua",dt)
+# for i in range(0,12): handlejson.send_response(i, allseeds[i],"trajectory",dt)
+# for i in range(18,21): handlejson.send_response(i, allseeds[i],"hopeless",dt)
+# for i in range(21,22): handlejson.send_response(i, allseeds[i],"kawahira",dt)
+# for i in range(22,23): handlejson.send_response(i, allseeds[i],"niwasaki",dt)
+# for i in range(23,25): handlejson.send_response(i, allseeds[i],"rotlast",dt)
+
+#for i in range(25,26): handlejson.send_response(i, allseeds[i],"hasuta4",dt)
+
+#for i in range(12,14): handlejson.send_response(i, allseeds[i],"wgah'nagl fhtagn",dt)
 
 #for filename in os.listdir('Movements'):
 # execfile('Movements/movements_map1_game0.txt')
