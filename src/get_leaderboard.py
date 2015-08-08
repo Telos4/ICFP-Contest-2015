@@ -2,6 +2,8 @@ import httplib
 import json
 import time
 
+oldtime = None
+
 while True:
 	c = httplib.HTTPSConnection('davar.icfpcontest.org')
 	c.request('GET','/rankings.js')
@@ -15,6 +17,12 @@ while True:
 	# tags of all people
 	# sorted([ a['tags'] for a in parsed['data']['rankings'] ])
 
+
+	if oldtime != parsed['time']:
+		print '\n'*5 + 'NEW DATA '*200 +'\n'*5
+		time.sleep(2)
+		oldtime = parsed['time']
+
 	print '\n' * 30
 	print 'date of data:', parsed['time']
 	print 'nr of teams:', len(parsed['data']['rankings'])
@@ -27,4 +35,4 @@ while True:
 		localscore = [ b for b in a['rankings'] if 'Wagner' in b['team'] ][0]
 		print '%s\t%s\t%s\t%s\t%s' % (i, localscore['rank'], localscore['score'], localscore['power_score'], localscore['tags'])
 
-	time.sleep(300)
+	time.sleep(120)
