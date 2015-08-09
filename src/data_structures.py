@@ -14,6 +14,11 @@ try:
 except ImportError:
     print "opencv not found"
 import power_words
+import os
+import sys
+from data import *
+import handlejson
+
 
 class BoardManager:
     def __init__(self, problem_dict):
@@ -130,11 +135,11 @@ class BoardManager:
                 if board.status == 'done':  # this means no more units are available for spawning
                     return board
 
-            # if board.active_unit is not None:
-            #     print board.plot(board.active_unit)
-            # else:
-            #     print str(board)
-            # pass
+            if board.active_unit is not None:
+                print board.plot(board.active_unit)
+            else:
+                print str(board)
+            pass
 
 
         return board
@@ -620,3 +625,31 @@ class Unit:
 
         return movedUnit
 
+def fake():
+    map_number = 2
+    s = map_number
+    p = 0
+
+    if not os.path.exists('Movements'):
+        os.makedirs('Movements')
+
+    datalist = [data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10,
+                data11, data12, data13, data14, data15, data16, data17, data18, data19, data20,
+                data21, data22, data23, data24]
+
+    # test JSON parser
+    problem_dict = handlejson.parse_to_dictionary(datalist[map_number])
+
+
+
+    # create a boardmanager
+    boardmanager = BoardManager(problem_dict)
+
+
+    # boardmanager.path_generation(p)
+
+    r = boardmanager.calc_board_state(boardmanager.get_initial_board(s), sys.argv[1])
+    print "sim says:",r.move_score
+
+if __name__ == "__main__":
+    fake()
