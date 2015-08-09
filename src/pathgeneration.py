@@ -62,13 +62,18 @@ class PathManager:
 
         heapq.heapify(paths)
 
-        for i in xrange(2000):
+        for i in xrange(1000):
+            print "run " + str(i+1)
             paths = self.generate_new_paths(paths, None)
             p1 = paths[-1]
             #p2 = paths[-2]
             self.saved_boards[p1.board_at_end].fill2DArray(self.working_board)
             print self.working_board.plot(p1.active_unit)
+            print "path length = " + str(len(p1.moves))
             print "____________________________________"
+
+        p = paths[-1]
+        print "best path: " + str(p)
 
 
     def clever_extend(self, path, good_segments):
@@ -79,11 +84,11 @@ class PathManager:
 
         possible_moves = ['W', 'E', 'SW', 'SE', 'R+', 'R-']
 
+        number_of_additional_paths = 10
 
+        for i in xrange(number_of_additional_paths):
 
-        for i in xrange(5):
-
-            number_of_additional_moves = random.randint(1, 10)
+            number_of_additional_moves = random.randint(1, 5)
             additonal_moves = []
 
             for i in xrange(number_of_additional_moves):
@@ -98,7 +103,7 @@ class PathManager:
 
     def generate_new_paths(self, oldpaths, good_segments):
         threshold = 0
-        maxpaths = 10
+        maxpaths = 25
 
         path_result = []
         while not len(oldpaths) == 0:
@@ -136,13 +141,17 @@ class Path:
         self.path_manager = path_manager
 
         self.rating = None
+        self.move_score = 0
+
         self.board_at_end = None
 
     def generate_and_rate(self):
         # generate end state of the board for the path
         move_score, final_board = self.generate_end_state()
 
-        self.rating = Path.calculate_rating(self.moves, move_score, final_board, self.active_unit)
+        self.move_score = move_score
+
+        self.rating = Path.calculate_rating(self.moves, self.move_score, final_board, self.active_unit)
 
         if self.rating >= 0:
             # calculate hash of final board
@@ -244,10 +253,11 @@ class Path:
         p_new = Path(self.path_manager, self.moves + other.moves, self.board_at_start, other.active_unit, other.index_active_unit)
         p_new.board_at_end = other.board_at_end
         p_new.rating = self.rating + other.rating
+        p_new.move_score = self.move_score + other.move_score
         return p_new
 
     def __str__(self):
-        return "moves: " + str(self.moves) + "\nrating: " + str(self.rate_est)
+        return "moves: " + str(self.moves) + "\nrating: " + str(self.rating) + "\nmove_score: " + str(self.move_score)
 
 class Board:
     """
