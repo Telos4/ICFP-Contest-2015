@@ -72,17 +72,26 @@ def path_from_word(w):
         print "NOPE", w, m
         return None
     _m = "".join(map(str, m))
-    print "word", w, _m
+    # print "word", w, _m
     return m
 
+"""
 def flatten_words(words):
     words = [item if isinstance(item, str) else "".join(item) for item in words ]
-
+"""
     
 # convert power words from input to ngrams
 def remember_power_words(words):
-    words = flatten_words(words)
+    words = map(lambda word: "".join(map(str, word)), words)
+    print "remembering", words
     return ngram.NGram(words)
+
+# https://stackoverflow.com/questions/9114402/regexp-finding-longest-common-prefix-of-two-strings
+def common_prefix(a,b):
+  i = 0
+  for i, (x, y) in enumerate(zip(a,b)):
+    if x!=y: break
+  return a[:i]
 
 """
 for each, say, 3 characters in the path search for a fitting word of
@@ -104,19 +113,29 @@ def search_prefix(ngrams, path):
 
         candidate = ngrams.find(possible)
         if candidate == None: continue
-        print "candidate:", candidate
-        wops.append((candidate,k))
+        pre = common_prefix("".join(map(str, path[k:])), candidate)
+        if len(pre) < 1: continue
+        print "candidate:", candidate, "at offset", k, "common prefix there:", pre
+        # "--> (",path[max(0,k-2):k], ")", path[k], "(", path[min(len(path),k+1):min(len(path),k+3)], ")"
+        wops.append((candidate,k,pre))
         
     if len(wops) < 1:
         print "nothing found"
         return None
 
+    """
     # pick the largest w.o.p.
     theword = None
     ranked = map(lambda (x,k): [x,len(x),k], wops)
     theword, l, offset = max(ranked, key=operator.itemgetter(1))
 
     return theword, offset, path[0:offset], path[offset+1:]
+    """
+
+    # return all candidates? 
+    # return first, adapt path (not here), repeat?
+    
+    return wops
 
 def test():
     # search_prefix(None, "asdfghjmk,.")
@@ -154,6 +173,7 @@ def main():
     ng = remember_power_words(converted_words)
 
     print "searching..."
+    """
     res = search_prefix(ng, path)
     if not res == None:
         word, path, offset, _ = res
@@ -163,6 +183,15 @@ def main():
     if not word == None:
         print "found word of power:", word, "the prefix is", path,
         "at offset", offset
+    """
+    wops = search_prefix(ng, path)
+
+    """
+    if wops == None: return
+
+    largest, off = max(wops, key=lambda (x,y,z): len(x) + len(z))
+    print "largest word with largest prefix is", largest, "at offset", off
+    """
 
 if __name__ == "__main__":
     main()
