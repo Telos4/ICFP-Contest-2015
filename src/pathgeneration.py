@@ -55,19 +55,20 @@ class PathManager:
         paths = []
         for p in paths_init:
             p.generate_and_rate()
-            if p.rating >= self.threshold:
+            if p.rating >= 0:
                 paths.append(p)
         for p in paths:
             assert p.board_at_end is not None, "error: board at end is none"
 
-        heapq.heapify(paths_init)
+        heapq.heapify(paths)
 
         for i in xrange(5):
             paths = self.generate_new_paths(paths, None)
-            p1 = paths[0]
-            p2 = paths[1]
+            p1 = paths[-1]
+            p2 = paths[-2]
             self.saved_boards[p1.board_at_end].fill2DArray(self.working_board)
             print self.working_board.plot(p1.active_unit)
+            print "____________________________________"
 
 
     def clever_extend(self, path, good_segments):
@@ -82,7 +83,7 @@ class PathManager:
 
         for i in xrange(10):
 
-            number_of_additional_moves = random.randint(1, 10)
+            number_of_additional_moves = random.randint(1, 25)
             additonal_moves = []
 
             for i in xrange(number_of_additional_moves):
@@ -97,7 +98,7 @@ class PathManager:
 
     def generate_new_paths(self, oldpaths, good_segments):
         threshold = 0.5
-        maxpaths = 100
+        maxpaths = 50
 
         path_result = []
         while not len(oldpaths) == 0:
@@ -140,7 +141,7 @@ class Path:
 
         self.rating = Path.calculate_rating(self.moves, move_score, final_board)
 
-        if self.rating > self.path_manager.threshold:
+        if self.rating >= 0:
             # calculate hash of final board
             self.board_at_end = final_board.generate_hash()     # generate and save hash value of board at end
             if not self.path_manager.saved_boards.has_key(self.board_at_end):
@@ -155,7 +156,7 @@ class Path:
 
     @ staticmethod
     def calculate_rating(moves, move_score, final_board):
-        r = move_score + len(moves) # + rate(final_board)
+        r = move_score #+ len(moves) # + rate(final_board)
         return r
 
 
@@ -179,7 +180,7 @@ class Path:
         :return:
         """
         move_score = 0
-        #print "-------------------------------------------------"
+        print "-------------------------------------------------"
 
         if self.active_unit is None:
             # if there is currently no active unit we create a new unit
@@ -190,7 +191,8 @@ class Path:
             else:
                 self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
                 #self.active_unit.moveToSpawnPosition(working_board.width)
-
+        if not working_board.at_valid_location(self.active_unit):
+            return move_score
 
         for m in self.moves:
             # if there is an active unit, try moving it to new location
@@ -218,6 +220,8 @@ class Path:
                     return move_score
                 else:
                     self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
+                    if not working_board.at_valid_location(self.active_unit):
+                        return move_score
                     #self.active_unit.moveToSpawnPosition(working_board.width)
 
         return move_score
@@ -230,7 +234,7 @@ class Path:
     #     self.rate_est = end_state.move_score #+ 10 * len(self.moves)
 
     def __lt__(self, other):
-        return self.rating > other.rating
+        return self.rating < other.rating
 
     def __add__(self, other):
         assert self.path_manager == other.path_manager, "error: pathmanager sind nicht gleich!!"
