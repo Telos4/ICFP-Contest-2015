@@ -6,6 +6,19 @@ import convert_class_to_letters
 import random
 import time
 
+class color:
+	PURPLE = '\033[95m'
+	CYAN = '\033[96m'
+	DARKCYAN = '\033[36m'
+	BLUE = '\033[94m'
+	GREEN = '\033[92m'
+	YELLOW = '\033[93m'
+	RED = '\033[91m'
+	BOLD = '\033[1m'
+	UNDERLINE = '\033[4m'
+	END = '\033[0m'
+
+
 allseeds={0:[0],
 1:[0],
 2:[0, 679, 13639, 13948, 29639, 15385, 16783, 23862, 25221, 23027],
@@ -57,7 +70,7 @@ def secondpart(inputstring):
 	a = handlejson.get_dictionary_of_all_solutions()
 	b = [ i for i in a if i['solution'] == inputstring ]
 
-	print b
+	#print b
 
 	return b[0]['score']
 
@@ -68,7 +81,7 @@ listofstrings=[]
 
 while True:
 	for i in range(4):
-		l = random.choice(range(5,6))
+		l = random.choice(range(10,11))
 		#req = "".join([random.choice("abcdefghijklmnopqrstuvwxyz012345'!. ") for j in range(l) ])
 		req = "".join([random.choice("pbaldk") for j in range(l) ])
 		
@@ -81,7 +94,7 @@ while True:
 
 		listofstrings.append((g,s,inputstring,score,None))
 
-		print listofstrings
+	print listofstrings
 		
 	while len( [ i for i in listofstrings if i[4] == None ] ) >= 1:
 		time.sleep(20)
@@ -93,6 +106,12 @@ while True:
 			listofstrings.remove((g,s,inputstring,score,None))
 			listofstrings.append((g,s,inputstring,score,ret))
 
-			print listofstrings
+		print listofstrings
+
+
+	diff = [ i for i in listofstrings if i[3] == i[4] ]
+
+	print color.RED,diff,color.END
+
 
 
