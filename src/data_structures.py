@@ -12,6 +12,7 @@ try:
     import cv2
 except ImportError:
     print "opencv not found"
+import power_words
 
 class BoardManager:
     def __init__(self, problem_dict):
@@ -213,7 +214,6 @@ class BoardManager:
 
         return board
 
-
 class Path:
     def __init__(self, moves, board=None):
         self.moves = moves      # list of moves
@@ -236,6 +236,14 @@ class Path:
     def __str__(self):
         return "moves: " + str(self.moves) + "\nrating: " + str(self.rate_est)
 
+class PhraseOfPower:
+    # str: phrase of power in 'readable' form (provided by program-arguments)
+    def __init__(self, str):
+        self.move_sequence = power_words.reverse_matching(str)
+
+        self.width = 0
+        self.height = 0
+        self.count
 
 
 def clever_extend(path, good_segments):
