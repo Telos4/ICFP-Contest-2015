@@ -457,7 +457,7 @@ class Board:
         s += ''.join(['-' for i in xrange(self.width + 2)])
         return s
 
-    def plotcv(self, unit):
+    def plotcv(self, unit, id, seed):
         scale = 20
         img = draw.drawBoard(self.width, self.height, scale)
         for cell in self.filled:
@@ -468,8 +468,8 @@ class Board:
 
         draw.drawPivot(img, (0,255,0), unit.pivot.x, unit.pivot.y, scale)
 
-        #name = 'Maps/Map_24_part2/' + str(id) + '.png'
-        #cv2.imwrite(name, img)
+        name = 'Maps/Map_24_Units/' + str(id) + '.png'
+        cv2.imwrite(name, img)
 
         k = '0'
         """
@@ -482,9 +482,9 @@ class Board:
         9: rotate clockwise
         q: exit
         """
-        while not (k in [ord('1'),ord('3'),ord('4'),ord('5'),ord('6'),ord('7'),ord('9'),ord('q')]):
-            cv2.imshow('board', img)
-            k = cv2.waitKey(1)
+        #while not (k in [ord('1'),ord('3'),ord('4'),ord('5'),ord('6'),ord('7'),ord('9'),ord('q')]):
+            #cv2.imshow('board', img)
+            #k = cv2.waitKey(1)
 
         return k
 
