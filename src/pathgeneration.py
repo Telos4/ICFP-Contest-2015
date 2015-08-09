@@ -55,14 +55,14 @@ class PathManager:
         paths = []
         for p in paths_init:
             p.generate_and_rate()
-            if p.move_score >= 0:
+            if p.move_score >= 0 and p.spawnLocationBlocked == False:
                 paths.append(p)
         for p in paths:
             assert p.board_at_end is not None, "error: board at end is none"
 
         heapq.heapify(paths)
 
-        for i in xrange(20):
+        for i in xrange(50):
             print "run " + str(i+1)
             paths = self.generate_new_paths(paths, None)
             p1 = paths[-1]
@@ -101,7 +101,7 @@ class PathManager:
             new_path = Path(self, additonal_moves, path.board_at_end, path.active_unit, path.index_active_unit)
             new_path.generate_and_rate()
 
-            if new_path.move_score >= 0.0:  # only append new path if it does not fail
+            if new_path.move_score >= 0.0 and new_path.spawnLocationBlocked == False:  # only append new path if it does not fail
                 extends.append(new_path)
         heapq.heapify(extends)
 
@@ -116,6 +116,10 @@ class PathManager:
         while not len(oldpaths) == 0:
             #print "print paths remaining = " + str(len(oldpaths))
             path = heapq.heappop(oldpaths)
+            if path.spawnLocationBlocked or path.noMoreUnits:
+                # path already results in terminating board state
+                continue
+
             extends = self.clever_extend(path, good_segments)
 
             if len(extends) == 0:
@@ -229,7 +233,7 @@ class Path:
             else:
                 self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
                 #self.active_unit.moveToSpawnPosition(working_board.width)
-        if not working_board.at_valid_location(self.active_unit):
+        if working_board.at_valid_location(self.active_unit) == False:
             self.spawnLocationBlocked = True
             return move_score
 
@@ -260,10 +264,11 @@ class Path:
                 self.index_active_unit += 1
                 if self.index_active_unit == len(unit_queue):
                     #print "no more unites available -> finnished"
+                    self.noMoreUnits = True
                     return move_score
                 else:
                     self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
-                    if not working_board.at_valid_location(self.active_unit):
+                    if working_board.at_valid_location(self.active_unit) == False:
                         self.spawnLocationBlocked = True
                         return move_score # filled cells at spawn location
                     #self.active_unit.moveToSpawnPosition(working_board.width)
