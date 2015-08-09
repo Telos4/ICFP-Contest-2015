@@ -22,37 +22,14 @@ class SimpleBoard:
                 if board[i][j].full == True:
                     self.filledCells.append(ds.Cell(i,j, True))
 
-    def get2DArray(self):
-        # workingBoard: 2D-array to be filled according to self.filledCells
-        workingBoard = []
-        row = []
-
-        for j in range(self.height):
-            for i in range(self.width):
-                row.append(ds.Cell(i,j,False))
-            workingBoard.append(row)
-            row = []
-
+    def fill2D(self, workingBoard):
         for cell in self.filledCells:
             workingBoard[cell.x][cell.y].full = True
-
-        return workingBoard
-
-def hash_board(board):
-    p1 = 53
-    p2 = 101
-    hash = 0
-    for x in len(board):
-        for y in len(board[x]):
-            if board[x][y].full == True:
-                hash += x * p1 + y * p2
-    return hash
-
-
+            
 class PathManager:
     def __init__(self, initial_board):
         self.working_board = None
-        self.saved_boards = []      # hash table of SimpleBoards
+        self.saved_boards = {}      # hash table of SimpleBoards
 
         self.threshold = 0.5
 
@@ -132,15 +109,27 @@ class Path:
         r = move_score + len(moves) # + rate(final_board)
         return r
 
+
+
     def generate_end_state(self):
         # get board state at start of the path
         b = self.path_manager.get_board(self.board_at_start)
         b.fill2DArray(self.path_manager.working_board)  # fill working board
 
-        # apply the movement sequence to the working board
-        move_score = self.path_manager.apply_moves(self.moves, self.active_unit, self.index_active_unit)
+        move_score = self.apply_moves(self.path_manager.working_board, self.path_manager.unit_queue)
 
         return move_score, self.path_manager.working_board
+
+    def apply_moves(self, working_board, unit_queue):
+
+        return move_score
+
+    # def rate(self):
+    #     # calculate end state for the path
+    #     assert self.board is not None, "error: self.board is None -> cannot predict state"
+    #     end_state = BoardManager.calc_board_state(self.board, self.moves)
+    #
+    #     self.rate_est = end_state.move_score #+ 10 * len(self.moves)
 
     def __lt__(self, other):
         return self.rating > other.rating

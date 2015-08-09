@@ -28,7 +28,7 @@ class BoardManager:
         self.filled = problem_dict['filled']
 
     def get_initial_board(self, game_number):
-        board = Board(self.width, self.height, self.filled, self.unit_dict, self.queued_units[game_number])
+        board = Board(self.width, self.height, self.filled, self.unit_dict, self.queued_units[game_number][:]) # copy list of units
         return board
 
     def simulation(self, map_number, game_number):
