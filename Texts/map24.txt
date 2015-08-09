@@ -1,0 +1,12 @@
+ICFP2015-.0.-5...c.--...-...0..5..--.....---.P5--..1-I-.F.---..--..--.-.-.---.-....-.0....2-..-.-.-I-.0.--.--...-2...----...P---...------0-F.------5-...F-..
+
+replace all chars and shot - with ' ':
+        -. .- ... .- ... ... .. .. -......  ..  .. .. ..- ..-- ..--..--. . .- -. .... . .... -.. . .- -. .- . . -- ... ..
+is
+NASASSII?IIIU??EANHEHDEANAEEMSI
+
+using more arbitrary separators trying to fix unknown codings:
+        -. .- ... .- ... ... .. .. - .. ....  ..  .. .. ..- .. -- .. -- .. -- . . .- -. .... . .... -.. . .- -. .- . . -- ... ..
+
+NASASSIITIHIIIUIMIMIMEEANHEHDEANAEEMSI
+
