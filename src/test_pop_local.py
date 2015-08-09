@@ -10,26 +10,27 @@ pop_mov=[ convert_class_to_letters.convert_back_letter_to_classes(i) for i in po
 #print pop, pop_mov
 
 #allmoves = list(itertools.product(pop,repeat=2))
-allmoves = list(itertools.permutations(range(len(pop)),3))
+nr=6
+allmoves = list(itertools.permutations(range(len(pop)),nr))
 #print allmoves
 
+
+bestmoves=[]
 for gameid in range(25):
 	gamedata = data.datas[gameid]
 	bm = data_structures.BoardManager(handlejson.parse_to_dictionary(gamedata))
 
 	for seedid in range(len(bm.queued_units)):
-		# bestmove=(0,[])
 
 		for currentmove in allmoves:
 			testmove = [ b for a in currentmove for b in pop_mov[a] ]
-
 			score = bm.calc_board_state(bm.get_initial_board(seedid),testmove).move_score
-
 			if score >= 0:
 				print gameid, seedid,'the move',currentmove,'=',testmove,'yields',score,'points'
-				# if score > bestmove[0]:
-				# 	bestmove=(score,testmove)
+				bestmoves.append((gameid,seedid,currentmove,testmove,score))
+				break
 
-		# print 'bestmove',bestmove
-
-
+print bestmoves
+f = open('bestmoves_'+str(nr)+'.txt','w')
+f.write(str(bestmoves))
+f.close()
