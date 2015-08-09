@@ -419,7 +419,7 @@ print dt
 
 
 
-lines = open('../Texts/HPLtitles.txt').readlines()
+lines = open('words.txt').readlines()
 
 # print lines 
 
@@ -432,7 +432,7 @@ for l in lines:
 	else:
 		g,s = a
 		l = l.lower()
-		for i in ["-",'"',",",";","(",")","?",":","\97","\85","\96","\92","\97","\e9","\f1"]:
+		for i in ["-",'"',",",";","(",")","?",":","\97","\85","\96","\92","\97","\e9","\f1","[","]"]:
 			l = l.replace(i,"")
 		# try:
 		# 	handlejson._create_response(0,0,l)

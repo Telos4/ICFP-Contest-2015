@@ -3,6 +3,8 @@ import handlejson
 import check_word
 import data
 import convert_class_to_letters
+import random
+import time
 
 allseeds={0:[0],
 1:[0],
@@ -30,32 +32,25 @@ allseeds={0:[0],
 23:[0],
 24:[18]}
 
-def firstpart(inputstring,g=None,s=None):
-
-	if type(inputstring) == str:
-		inputstring_mv = convert_class_to_letters.convert_back_letter_to_classes(inputstring)
+def firstpart(inputstring):
+	inputstring_mv = convert_class_to_letters.convert_back_letter_to_classes(inputstring)
 
 
-	if g == None or s == None
-		a = check_word.possibleid(inputstring_mv)
-		if a == None:
-			print "no map and seed to execute"
-			return
-		g,s = a
-
-	print "evaluating on mapid",g,"and seedid",s
+	
+	a = check_word.possibleid(inputstring_mv)
+	if a == None:
+		return None
+	g,s = a
 
 	bm = data_structures.BoardManager(handlejson.parse_to_dictionary(data.datas[g]))
 	score = bm.calc_board_state(bm.get_initial_board(s),inputstring_mv).move_score
-	print "our score is", score
 
 	if score <0:
-		print "we have an error"
-		return
+		return None
 
 	handlejson.send_response(g,[allseeds[g][s]],inputstring,'qwe')
 
-	print "request sent"
+	return (g,s,inputstring,score)
 
 
 def secondpart(inputstring):
@@ -63,3 +58,41 @@ def secondpart(inputstring):
 	b = [ i for i in a if i['solution'] == inputstring ]
 
 	print b
+
+	return b[0]['score']
+
+
+
+listofstrings=[]
+
+
+while True:
+	for i in range(4):
+		l = random.choice(range(5,6))
+		#req = "".join([random.choice("abcdefghijklmnopqrstuvwxyz012345'!. ") for j in range(l) ])
+		req = "".join([random.choice("pbaldk") for j in range(l) ])
+		
+		a = firstpart(req)
+
+		if a == None:
+			continue
+
+		g,s,inputstring,score = a
+
+		listofstrings.append((g,s,inputstring,score,None))
+
+		print listofstrings
+		
+	while len( [ i for i in listofstrings if i[4] == None ] ) >= 1:
+		time.sleep(20)
+		for a in [ i for i in listofstrings if i[4] == None ]:
+			g,s,inputstring,score,_ = a
+			ret = secondpart(inputstring)
+			if ret == None:
+				continue
+			listofstrings.remove((g,s,inputstring,score,None))
+			listofstrings.append((g,s,inputstring,score,ret))
+
+			print listofstrings
+
+
