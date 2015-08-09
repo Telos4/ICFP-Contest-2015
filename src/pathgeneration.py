@@ -18,7 +18,7 @@ class SimpleBoard:
         self.height = height
         self.filledCells = filledCells
 
-    def fill2DArray(self, workingBoard):
+    def fill2D(self, workingBoard):
         # workingBoard: 2D-array to be filled according to self.filledCells
         col = []
 
@@ -51,15 +51,20 @@ class Path:
         # generate end state of the board for the path
         self.generate_end_state()
 
+
+
     def generate_end_state(self):
         # get board state at start of the path
         b = self.path_manager.get_board(self.board_at_start)
         b.fill2D(self.path_manager.working_board)
 
-        move_score = apply_moves(self.path_manager, self.moves, self.active_unit, self.index_active_unit)
+        move_score = self.apply_moves(self.path_manager.working_board, self.path_manager.unit_queue)
 
         return move_score
 
+    def apply_moves(self, working_board, unit_queue):
+
+        return move_score
 
     # def rate(self):
     #     # calculate end state for the path
