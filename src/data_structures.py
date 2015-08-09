@@ -527,7 +527,7 @@ class Unit:
         unit_width = maxX - minX + 1
 
         # unit spawns in the middle of the first row
-        offset = int(floor((map_width - unit_width) / 2))
+        offset = int(floor((map_width - unit_width) / 2)) - minX
 
         for cell in self.members:
             cell.x += offset

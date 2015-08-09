@@ -55,21 +55,21 @@ class PathManager:
         paths = []
         for p in paths_init:
             p.generate_and_rate()
-            if p.rating >= 0:
+            if p.move_score >= 0:
                 paths.append(p)
         for p in paths:
             assert p.board_at_end is not None, "error: board at end is none"
 
         heapq.heapify(paths)
 
-        for i in xrange(500):
+        for i in xrange(1000):
             print "run " + str(i+1)
             paths = self.generate_new_paths(paths, None)
             p1 = paths[-1]
             #p2 = paths[-2]
             self.saved_boards[p1.board_at_end].fill2DArray(self.working_board)
             print self.working_board.plot(p1.active_unit)
-            print "path length = " + str(len(p1.moves))
+            print "best path: " + str(p1)
             print "____________________________________"
 
         p = paths[-1]
@@ -91,12 +91,14 @@ class PathManager:
             number_of_additional_moves = random.randint(1, 5)
             additonal_moves = []
 
-            for i in xrange(number_of_additional_moves):
+            for j in xrange(number_of_additional_moves):
                 additonal_moves.append(possible_moves[random.randint(0, 5)])
 
             new_path = Path(self, additonal_moves, path.board_at_end, path.active_unit, path.index_active_unit)
             new_path.generate_and_rate()
-            extends.append(new_path)
+
+            if new_path.move_score >= 0.0:  # only append new path if it does not fail
+                extends.append(new_path)
         heapq.heapify(extends)
 
         return extends
@@ -120,7 +122,7 @@ class PathManager:
                 #
 
 
-                if extended_path.rating >= threshold:
+                if extended_path.rating > self.threshold:
                     p_new = path + extended_path
                     heapq.heappush(path_result, p_new)
 
@@ -178,9 +180,12 @@ class Path:
             if filledCellsInRow > maxFilledCellsInRow:
                 maxFilledCellsInRow = filledCellsInRow
 
-        rate_board = maxFilledCellsInRow * 1.5
+        rate_board = maxFilledCellsInRow * 2.0
+        rate_board += 1000.0 * final_board.ls_old
 
-        r = move_score + active_unit.pivot.y + rate_board
+        #print rate_board
+
+        r = move_score + rate_board  + active_unit.pivot.y
         return r
 
 
@@ -205,7 +210,8 @@ class Path:
         """
         move_score = 0
         #print "-------------------------------------------------"
-
+        #print "initial board state: "
+        #print working_board.plot(self.active_unit)
         if self.active_unit is None:
             # if there is currently no active unit we create a new unit
             self.index_active_unit += 1
@@ -222,15 +228,19 @@ class Path:
             # if there is an active unit, try moving it to new location
             moved_unit = self.active_unit.move(m)  # get location of unit after move
 
+            #print "before move"
             #print working_board.plot(self.active_unit)
 
             if working_board.already_visited(self.active_unit.states, moved_unit):
                 #print "error: already visited!"
-                move_score = -1000
+                move_score = -100000000
                 return move_score
             elif working_board.at_valid_location(moved_unit):
                 # move was valid -> unit is moved
                 self.active_unit = moved_unit
+
+                # print "after move"
+                # print working_board.plot(self.active_unit)
             else:
                 # move was invalid -> unit gets locked
                 move_score = working_board.lock_fields(self.active_unit)
@@ -357,7 +367,7 @@ class Board:
             # while because downshifted row can be full too...
             while all([self.fields[y][x].full for x in xrange(self.width)]):
                 # delete the row
-                for j in xrange(self.width):
+                for x in xrange(self.width):
                     self.fields[y][x].full = False
 
                 # move all of the above rows one cell down
@@ -379,7 +389,12 @@ class Board:
                 s += '|'
                 for x in xrange(self.width):
                     if (x,y) in [(m.x,m.y) for m in unit.members]:
-                        s += 'u'
+                        if (x,y) == (unit.pivot.x, unit.pivot.y):
+                            s += 'U'
+                        else:
+                            s += 'u'
+                    elif (x,y) == (unit.pivot.x, unit.pivot.y):
+                        s += '.'
                     else:
                         s += str(self.fields[y][x])
                 s += '|\n'
