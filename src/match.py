@@ -17,8 +17,16 @@ h1 = np.bincount(a_.ravel(),minlength=256)
 
 v = h1[0]
 
+#print v
+# magic for map 8-1
+if   v == 42299: print "-"
+elif v == 43559: print "."
+else:            print " "
+
+"""
+# magic for map 24
 if   v == 43478: print "."
 elif v == 42638: print " longdash "
 elif v == 43058: print " shortdash "
 else: print " "
-
+"""
