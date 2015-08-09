@@ -42,19 +42,32 @@ class PathManager:
 
         self.threshold = 0.5
 
+        random.seed(0)
+
     def run(self):
-        paths = [Path(self, ['W'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
+        paths_init = [Path(self, ['W'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
             Path(self, ['E'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
             Path(self, ['SW'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
             Path(self, ['SE'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
             Path(self, ['R+'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
             Path(self, ['R-'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0)]
-        heapq.heapify(paths)
+
+        paths = []
+        for p in paths_init:
+            p.generate_and_rate()
+            if p.rating >= self.threshold:
+                paths.append(p)
+        for p in paths:
+            assert p.board_at_end is not None, "error: board at end is none"
+
+        heapq.heapify(paths_init)
 
         for i in xrange(5):
             paths = self.generate_new_paths(paths, None)
             p1 = paths[0]
             p2 = paths[1]
+            self.saved_boards[p1.board_at_end].fill2DArray(self.working_board)
+            print self.working_board.plot(p1.active_unit)
 
 
     def clever_extend(self, path, good_segments):
@@ -65,6 +78,8 @@ class PathManager:
 
         possible_moves = ['W', 'E', 'SW', 'SE']#, 'R+', 'R-']
 
+
+
         for i in xrange(10):
 
             number_of_additional_moves = random.randint(1, 10)
@@ -74,6 +89,7 @@ class PathManager:
                 additonal_moves.append(possible_moves[random.randint(0, 3)])
 
             new_path = Path(self, additonal_moves, path.board_at_end, path.active_unit, path.index_active_unit)
+            new_path.generate_and_rate()
             extends.append(new_path)
         heapq.heapify(extends)
 
@@ -94,10 +110,11 @@ class PathManager:
 
             while not len(extends) == 0:
                 extended_path = heapq.heappop(extends)
-                p_new = path + extended_path
-                p_new.rate()
+                #
 
-                if p_new.rate_est > threshold:
+
+                if extended_path.rating > threshold:
+                    p_new = path + extended_path
                     heapq.heappush(path_result, p_new)
 
         while len(path_result) > maxpaths:
@@ -114,18 +131,27 @@ class Path:
 
         self.path_manager = path_manager
 
+        self.rating = None
+        self.board_at_end = None
+
+    def generate_and_rate(self):
         # generate end state of the board for the path
         move_score, final_board = self.generate_end_state()
 
         self.rating = Path.calculate_rating(self.moves, move_score, final_board)
 
-        if self.rating > path_manager.threshold:
+        if self.rating > self.path_manager.threshold:
             # calculate hash of final board
             self.board_at_end = final_board.generate_hash()     # generate and save hash value of board at end
-            if path_manager.saved_boards[self.board_at_end] is not None:
-                path_manager.saved_boards[self.board_at_end] = SimpleBoard(final_board)
+            if not self.path_manager.saved_boards.has_key(self.board_at_end):
+                self.path_manager.saved_boards[self.board_at_end] = SimpleBoard(final_board)
             else:
-                print "board already exists!"
+                #print "board already exists!"
+                pass
+        else:
+            #print "path is bad!"
+            pass
+
 
     @ staticmethod
     def calculate_rating(moves, move_score, final_board):
@@ -136,6 +162,8 @@ class Path:
 
     def generate_end_state(self):
         # get board state at start of the path
+        if self.board_at_start is None:
+            print "is none"
         b = self.path_manager.saved_boards[self.board_at_start]
         b.fill2DArray(self.path_manager.working_board)  # fill working board
 
@@ -151,6 +179,7 @@ class Path:
         :return:
         """
         move_score = 0
+        #print "-------------------------------------------------"
 
         if self.active_unit is None:
             # if there is currently no active unit we create a new unit
@@ -160,11 +189,14 @@ class Path:
                 return move_score
             else:
                 self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
-                self.active_unit.moveToSpawnPosition(working_board.width)
+                #self.active_unit.moveToSpawnPosition(working_board.width)
+
 
         for m in self.moves:
             # if there is an active unit, try moving it to new location
             moved_unit = self.active_unit.move(m)  # get location of unit after move
+
+            #print working_board.plot(self.active_unit)
 
             if working_board.already_visited(self.active_unit.states, moved_unit):
                 #print "error: already visited!"
@@ -186,7 +218,7 @@ class Path:
                     return move_score
                 else:
                     self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
-                    self.active_unit.moveToSpawnPosition(working_board.width)
+                    #self.active_unit.moveToSpawnPosition(working_board.width)
 
         return move_score
 
@@ -202,7 +234,10 @@ class Path:
 
     def __add__(self, other):
         assert self.path_manager == other.path_manager, "error: pathmanager sind nicht gleich!!"
-        return Path(self.path_manager, self.moves + other.moves, self.board_at_end, self.active_unit, self.index_active_unit)
+        p_new = Path(self.path_manager, self.moves + other.moves, self.board_at_start, other.active_unit, other.index_active_unit)
+        p_new.board_at_end = other.board_at_end
+        p_new.rating = self.rating + other.rating
+        return p_new
 
     def __str__(self):
         return "moves: " + str(self.moves) + "\nrating: " + str(self.rate_est)
@@ -304,3 +339,28 @@ class Board:
                     self.fields[i][0].full = False
 
                 self.ls += 1 # count number of deleted rows        return "moves: " + str(self.moves) + "\nrating: " + str(self.rating)
+
+    def plot(self, unit):
+        if unit is not None:
+            s = ''.join(['-' for i in xrange(self.width + 2)])
+            s += '\n'
+            for j in xrange(self.height):
+                s += '|'
+                for i in xrange(self.width):
+                    if (i,j) in [(m.x,m.y) for m in unit.members]:
+                        s += 'u'
+                    else:
+                        s += str(self.fields[i][j])
+                s += '|\n'
+            s += ''.join(['-' for i in xrange(self.width + 2)])
+
+        else:
+            s = ''.join(['-' for i in xrange(self.width + 2)])
+            s += '\n'
+            for j in xrange(self.height):
+                s += '|'
+                for i in xrange(self.width):
+                    s += str(self.fields[i][j])
+                s += '|\n'
+            s += ''.join(['-' for i in xrange(self.width + 2)])
+        return s
