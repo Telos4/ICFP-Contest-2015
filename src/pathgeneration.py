@@ -145,6 +145,7 @@ class Path:
             if working_board.already_visited(self.active_unit.states, moved_unit):
                 #print "error: already visited!"
                 move_score = -1000
+                return move_score
             elif working_board.at_valid_location(moved_unit):
                 # move was valid -> unit is moved
                 self.active_unit = moved_unit
