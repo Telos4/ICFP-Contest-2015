@@ -8,7 +8,7 @@ from data import *
 def main():
     print "ICFP 2015"
 
-    map_number = 8
+    map_number = 5
 
     if not os.path.exists('Movements'):
         os.makedirs('Movements')
@@ -24,8 +24,8 @@ def main():
     boardmanager = data_structures.BoardManager(problem_dict)
 
     for game_number in range(len(boardmanager.queued_units)):
-        boardmanager.simulation(map_number, game_number)
-        #boardmanager.playTetris(map_number, game_number)
+        #boardmanager.simulation(map_number, game_number)
+        boardmanager.playTetris(map_number, game_number)
 
 
 if __name__ == "__main__":
