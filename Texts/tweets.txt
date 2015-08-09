@@ -1,0 +1,84 @@
+The 18th annual @icfp_conference Programming Contest site is live.  The contest will take place 7-9 Aug 2015.  http://icfpcontest.org  
+This is worrisome... http://spectrum.ieee.org/tech-talk/computing/hardware/googles-first-quantum-computer-will-build-on-dwaves-approach … 
+http://www.theguardian.com/technology/2014/feb/22/robots-google-ray-kurzweil-terminator-singularity-artificial-intelligence … 
+The Turing Squad is thin on the ground. AS2H2 is now recruiting!
+R1 O0 P1 Q1 P1 O0 N0 N0 P1 R1 Q1 P1 O0 P1 Q1 R1 P1 N0 N0 Q1 S1 N1 T1 S1 R1 P1 R1 Q1 P1 O0 O0 P1 Q1 R1 P1 N0 N0
+AS2H2 takes no position on the applicability of particular programming languages to our rather specialized problem domain.
+When we give tours at Galois, a common question is, "Why is there a watermelon there?"
+That damned agro-industrial complex! If only they knew... http://www.ars.usda.gov/News/docs.htm?docid=15572#public … 
+אין זיין הויז בייַ ר'ליעה טויט קטהולהו ווייץ דרימינג.
+Our linguists inform us that the text we sent in our previous tweet is of Yiddish origin.
+Less than 5 hours to go... enough for a nap, if we could ever sleep again after the things we've seen. Perhaps we'll do the laundry instead.
+And we are…. live. http://www.icfpcontest.org  And they are… listening.
+Email icfpcontest2015@gmail.com (or tweet to @ICFPContest2015, for public disclosure) if you have questions, comments, or exhortations.
+While the standard evaluation system is an x86 Linux box, @galois has expertise in every development platform ever, so use any PL you like.
+We are investigating team Rabbit House’s regular scoring in excess of 8M. At least it isn’t 10^63… that would be… powerfully frightening.
+.@galois personnel running @ICFPContest2015 are now listening in #icfp-contest on http://irc.freenode.net  .
+.@galois is a growing excited company.  The future begins tomorrow!
+.@machinaut Yes, rotating a 180 degree symmetrical unit by 180 degrees causes an error.
+.@machinaut The Old Ones care not for mitigating factors such as rotational symmetry.
+AS2H2 has posted some clarifications and rule updates on http://icfpcontest.org/  
+. Twitter-length summaries follow.
+CLARIFICATION: A sequence of commands that continues after the game ends is an error, and results in a score of 0 points.
+CLARIFICATION: The sequence of random numbers to be used for unit selection is computed from all generator states, including the seed.
+We are enjoying watching contestants search for power phrases, but the Deep Ones discourage cutting & pasting from Wikipedia.
+.@smn_theorem Yes. However, we advise against submitting multiple solutions for the _same_ problem and seed in the same POST.
+A friendly reminder from AS2H2: power phrase invocations are not included in lightning round scoring...
+Contest organizers are monitoring the IRC channel (freenode, #icfp-contest) as galois_joey, galois_kiniry, galois_yav, and galois_dmz.
+As of noon PST, we have 205 teams and over 20,000 submissions. The Old Ones may take notice.
+AS2H2 has posted more clarifications and rule updates on http://icfpcontest.org/  
+. Twitter-length summaries follow.
+CLARIFICATION: The command line parameter "-p" is a power word, as a string. To quote, or not to quote, is shell-dependent.
+CLARIFICATION: Programs that are killed for violating resource limits (during final judging) will earn scores of 0 for their runs.
+CLARIFICATION: Scores on a problem leaderboard are _averages_ of the scores across all seeds for the problem.
+.@atzensepp Yes, it is allowed to reuse code from Internet resources if its license allows for such use.
+.@imos Specific information on evaluation hardware is unavailable. However, we are currently discussing multiple cores. Stay tuned.
+AS2H2 has posted more clarifications and rule updates on http://icfpcontest.org  
+. Twitter-length summaries follow.
+CLARIFICATION: There is no fixed constraint on board sizes. There is also no fixed constraint on unit sizes.
+CHANGE: A command line flag has been added to indicate the number of cores available to a program, for teams that want to parallelize.
+CLARIFICATION: We will not provide precise information about resource limits, but guarantee that teams can use their languages of choice.
+.@podmostom null means that the solution has not yet been scored. 0 means that it was scored and received 0 points.
+.@imos See the 2015-08-07 21:00 UTC clarification on http://www.icfpcontest.org
+.@podmostom With threats of otherworldly violence. I.e., disqualification for abuse.
+.@Temple_Gates Azathoth and Other Horrors will consume your children for your abuse of our leaderboard. https://davar.icfpcontest.org/leader_board.html …
+.@im_aqk All filled rows on the board are cleared when a piece is locked.
+NOTIFICATION: A sample play for board 6, seed 0 is now found at http://www.icfpcontest.org
+The main contest page has been updated to indicate organizers' IRC presence - #icfp-contest at http://irc.freenode.net 
+.@nya3jp You may assume that distinct problems have distinct IDs.
+With less than four hours to go in the lightning division, 260 teams are registered and over 76,000 solutions have been submitted.
+.@vixentael when judging the lightning division, we will evaluate the source code submissions corresponding to the top scores.
+.@vixentael recall that lightning division scoring does not consider phrases of power.
+.@iwiwi similar to evaluating the full contest submissions, we will score the submitted solutions to determine the top lightning entries...
+.@iwiwi ...we will then build and run them to ensure that they generate solutions. Lightning judging will use only the provided problems.
+.@vixentael @iwiwi we intend to score both submitted and generated solutions, but it is not strictly required that they be identical.
+.@vixentael @iwiwi should we have questions after running the submitted source code, we have ways of finding you.
+It has come to the attention of ██████████ that there is considerable risk of an unintentional summoning event in Vancouver in September.
+Because Vancouver borders their domain, ██████████ have invoked the Benthic treaty and demanded extra precautions.
+More information will be available as the situation evolves.
+There is a disturbence in the ether. A push from beyond is about to transmutate the contest webpages. The lightning has cleared.
+The lightning has indeed cleared. Peering into the clouds, we see 280 teams and nearly 142,000 invocations to keep us all safe.
+Power phrases must be pronounced precisely, and in their original tongue---not in isomorphism thereof.
+.@sanityinc @vixentael you are correct... One file name per "-f".
+It has come to our attention that participants have submitted many solutions using seeds that were not provided by AS2H2...
+...Unfortunately, this has caused elements of the scoring system evaluating those solutions to be swallowed by the gibbering darkness.
+We are taking actions to mitigate this issue by filtering out such unsafe solutions. We hope to have the leaderboard back online soon.
+Note that repeatedly submitting solutions with unapproved seeds may lead to... consequences. For you, and anyone within a 10-mile radius.
+.@etandel We intend to make all artifacts public after the contest.
+.@xlerb An excellent tip. Always good to have more than one tool at hand when fighting back the darkness.
+We have restored the leaderboard to what we believe to be full functionality. There may still be some residual quirkiness from its ordeal.
+Please alert us to any oddities you notice with the reconstituted leaderboard.
+A valid, sample command sequence for problem 6, seed 0 has been posted to http://icfpcontest.org/  . More samples may be forthcoming later.
+.@Calvyn82 The board underreports power phrases for some old submissions, though the scores should be correct. Resubmit if you are nervous.
+.@edoardoo If you report some details about the anomaly by email, we will dispatch an agent to investigate.
+An analysis of the davar invoked so far shows that 14 of 18 phrases of power have been discovered... but no more than 9 by any single team.
+The formless spawn have transformed one of the undiscovered words of power, reshaping it in the image of their master!
+A bug causing the leaderboard to sometimes report twice the expected score has been fixed. More details on http://icfpcontest.org  soon.
+Wrt -t’s max. The contest results will be announced on 1 September at 17:45 PST. We do not have a spare flux capacitor. You do the math.
+.@ICFPContest2015 Hints for the remaining handful of davar will be forthcoming. Prepare yourselves for madness.
+800 developers, 300 teams, 900,000 solutions submitted thus far. That’s over 425MB of davar. Well done, recruits!
+.@TT_Kilew Choose wisely. The fate of the world is in your hands.
+.@n12o Still having fun? Wait until the Deep Ones begin scratching at your door.
+Early 20th century astronomers were wrong, given the discoveries of New Horizons.  It is not Yuggoth.
+What’s worse, according to them, we cannot even continue to call it “Planet 10”. Laugh-a while you can, monkeyboy!
+Conway. Cocke. Hopcroft. Backus. Is Bigboote pronounced "big-booty", or "bigboo-tay”? In any case, it is a powerful name.
