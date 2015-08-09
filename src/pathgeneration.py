@@ -98,7 +98,7 @@ class Path:
 
         if self.rating > path_manager.threshold:
             # calculate hash of final board
-            self.board_at_end = hash_board(final_board)
+            self.board_at_end = final_board.generate_hash()     # generate and save hash value of board at end
             if path_manager.saved_boards[self.board_at_end] is not None:
                 path_manager.saved_boards[self.board_at_end] = SimpleBoard(final_board)
             else:
@@ -198,6 +198,17 @@ class Board:
 
         for f in filled:
             self.fields[f.x][f.y].full = True
+
+    def generate_hash(self):
+        p1 = 53
+        p2 = 101
+
+        hashvalue = 0
+        for i in self.height:
+            for j in self.width:
+                if self.fields[i][j].full == True:
+                    hashvalue += i * p1 + j * p2
+        return hashvalue
 
     def already_visited(self, states, unit):
         unitSet = set()
