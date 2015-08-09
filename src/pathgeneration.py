@@ -12,7 +12,27 @@ import data_structures as ds
 
 import power_words
 
+class SimpleBoard:
+    def __init__(self, width, height, filledCells):
+        self.width = width
+        self.height = height
+        self.filledCells = filledCells
 
+    def get2DArray(self):
+        # workingBoard: 2D-array to be filled according to self.filledCells
+        workingBoard = []
+        row = []
+
+        for j in range(self.height):
+            for i in range(self.width):
+                row.append(ds.Cell(i,j,False))
+            workingBoard.append(row)
+            row = []
+
+        for cell in self.filledCells:
+            workingBoard[cell.x][cell.y].full = True
+
+        return workingBoard
 class PathManager:
     def __init__(self, initial_board):
         self.working_board = None

@@ -338,7 +338,7 @@ class Board:
     def get_new_unit(self):
         if len(self.queued_units) > 0:
             # when there are still units in the queue we create the next unit
-            unit = Unit(self.unit_dict[self.queued_units.pop()])
+            unit = Unit(self.unit_dict[self.queued_units.pop(0)])
             unit = unit.moveToSpawnPosition(self.width)
             if not self.at_valid_location(unit):
                 #print "spawn location was already occupied! -> Game over"
