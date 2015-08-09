@@ -17,10 +17,11 @@ class SimpleBoard:
         self.width = board.width
         self.height = board.height
         self.filledCells = []
-        for i in xrange(self.width):
-            for j in xrange(self.height):
-                if board.fields[i][j].full == True:
-                    self.filledCells.append(ds.Cell(i,j, True))
+        for y in xrange(self.height):
+            for x in xrange(self.width):
+                if board.fields[y][x].full == True:
+                    self.filledCells.append(ds.Cell(x,y, True))
+        print "done"
 
     def fill2DArray(self, workingBoard):
         for i in xrange(workingBoard.height):
@@ -28,7 +29,7 @@ class SimpleBoard:
                 workingBoard.fields[i][j].full = False
 
         for cell in self.filledCells:
-            workingBoard.fields[cell.x][cell.y].full = True
+            workingBoard.fields[cell.y][cell.x].full = True
             
 class PathManager:
     def __init__(self, initial_board, unit_queue, units):
@@ -62,7 +63,7 @@ class PathManager:
 
         heapq.heapify(paths)
 
-        for i in xrange(1000):
+        for i in xrange(100):
             print "run " + str(i+1)
             paths = self.generate_new_paths(paths, None)
             p1 = paths[-1]
@@ -266,7 +267,7 @@ class Board:
     def __init__(self, width, height, filled):
         self.width = width
         self.height = height
-        self.fields = [[ds.Cell(i, j) for j in xrange(self.height)] for i in xrange(self.width)]
+        self.fields = [[ds.Cell(x, y) for x in xrange(self.width)] for y in xrange(self.height)]
 
         self.move_score = 0.0
         self.power_score = 0.0
@@ -274,6 +275,9 @@ class Board:
         self.ls_old = 0 # number of lines cleared with previous unit
 
         self.filled = [ds.Cell(f["x"], f["y"], full=True) for f in filled]
+
+        for f in self.filled:
+            self.fields[f.y][f.x] = f
 
     def generate_hash(self):
         p1 = 53
@@ -302,7 +306,7 @@ class Board:
                 #print "moved out of the map -> invalid location"
                 return False
             # check whether field is already occupied
-            elif self.fields[m.x][m.y].full == True:
+            elif self.fields[m.y][m.x].full == True:
                 #print "moved unit to occupied space -> invalid location"
                 return False
         return True
@@ -313,10 +317,10 @@ class Board:
         """
         points = 0
         for m in unit.members:
-            if self.fields[m.x][m.y].full == True:
+            if self.fields[m.y][m.x].full == True:
                 print "error: field was already locked! this should not have happend!"
                 raise
-            self.fields[m.x][m.y].full = True
+            self.fields[m.y][m.x].full = True
             points += 1
 
         self.update_fields_after_lock()
@@ -337,46 +341,46 @@ class Board:
         check if any rows are completely filled and delete them
         """
         self.ls = 0
-        for j in xrange(self.height-1, -1, -1):
+        for i in xrange(self.height-1, -1, -1):
             # check if row is full
             # while because downshifted row can be full too...
-            while all([self.fields[i][j].full for i in xrange(self.width)]):
+            while all([self.fields[i][j].full for j in xrange(self.width)]):
                 # delete the row
-                for i in xrange(self.width):
+                for j in xrange(self.width):
                     self.fields[i][j].full = False
 
                 # move all of the above rows one cell down
-                for k in xrange(j, 0, -1):
-                    for i in xrange(self.width):
-                        self.fields[i][k].full = self.fields[i][k-1].full
+                for k in xrange(i, 0, -1):
+                    for j in xrange(self.width):
+                        self.fields[k][j].full = self.fields[k-1][j].full
 
                 # update topmost layer separately
-                for i in xrange(self.width):
-                    self.fields[i][0].full = False
+                for j in xrange(self.width):
+                    self.fields[0][j].full = False
 
                 self.ls += 1 # count number of deleted rows        return "moves: " + str(self.moves) + "\nrating: " + str(self.rating)
 
     def plot(self, unit):
         if unit is not None:
-            s = ''.join(['-' for i in xrange(self.width + 2)])
+            s = ''.join(['-' for j in xrange(self.width + 2)])
             s += '\n'
-            for j in xrange(self.height):
+            for y in xrange(self.height):
                 s += '|'
-                for i in xrange(self.width):
-                    if (i,j) in [(m.x,m.y) for m in unit.members]:
+                for x in xrange(self.width):
+                    if (x,y) in [(m.x,m.y) for m in unit.members]:
                         s += 'u'
                     else:
-                        s += str(self.fields[i][j])
+                        s += str(self.fields[y][x])
                 s += '|\n'
-            s += ''.join(['-' for i in xrange(self.width + 2)])
+            s += ''.join(['-' for j in xrange(self.width + 2)])
 
         else:
-            s = ''.join(['-' for i in xrange(self.width + 2)])
+            s = ''.join(['-' for j in xrange(self.width + 2)])
             s += '\n'
-            for j in xrange(self.height):
+            for y in xrange(self.height):
                 s += '|'
-                for i in xrange(self.width):
-                    s += str(self.fields[i][j])
+                for x in xrange(self.width):
+                    s += str(self.fields[y][x])
                 s += '|\n'
-            s += ''.join(['-' for i in xrange(self.width + 2)])
+            s += ''.join(['-' for j in xrange(self.width + 2)])
         return s
