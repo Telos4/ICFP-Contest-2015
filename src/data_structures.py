@@ -468,6 +468,9 @@ class Board:
 
         draw.drawPivot(img, (0,255,0), unit.pivot.x, unit.pivot.y, scale)
 
+        #name = 'Maps/Map_24_part2/' + str(id) + '.png'
+        #cv2.imwrite(name, img)
+
         k = '0'
         """
         1: south-west

@@ -21,7 +21,6 @@ class SimpleBoard:
             for x in xrange(self.width):
                 if board.fields[y][x].full == True:
                     self.filledCells.append(ds.Cell(x,y, True))
-        print "done"
 
     def fill2DArray(self, workingBoard):
         for y in xrange(workingBoard.height):
@@ -63,7 +62,7 @@ class PathManager:
 
         heapq.heapify(paths)
 
-        for i in xrange(100):
+        for i in xrange(500):
             print "run " + str(i+1)
             paths = self.generate_new_paths(paths, None)
             p1 = paths[-1]
@@ -107,8 +106,9 @@ class PathManager:
         maxpaths = 25
 
         path_result = []
+        print "number of old paths: " + str(len(oldpaths))
         while not len(oldpaths) == 0:
-            print "print paths remaining = " + str(len(oldpaths))
+            #print "print paths remaining = " + str(len(oldpaths))
             path = heapq.heappop(oldpaths)
             extends = self.clever_extend(path, good_segments)
 
@@ -169,7 +169,18 @@ class Path:
 
     @ staticmethod
     def calculate_rating(moves, move_score, final_board, active_unit):
-        r = move_score + active_unit.pivot.y # + rate(final_board)
+        maxFilledCellsInRow = 0
+        for y in xrange(final_board.height):
+            filledCellsInRow = 0
+            for x in xrange(final_board.width):
+                if final_board.fields[y][x].full:
+                    filledCellsInRow += 1
+            if filledCellsInRow > maxFilledCellsInRow:
+                maxFilledCellsInRow = filledCellsInRow
+
+        rate_board = maxFilledCellsInRow * 1.5
+
+        r = move_score + active_unit.pivot.y + rate_board
         return r
 
 
