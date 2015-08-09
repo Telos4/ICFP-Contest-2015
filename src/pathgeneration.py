@@ -24,9 +24,9 @@ class SimpleBoard:
         print "done"
 
     def fill2DArray(self, workingBoard):
-        for i in xrange(workingBoard.height):
-            for j in xrange(workingBoard.width):
-                workingBoard.fields[i][j].full = False
+        for y in xrange(workingBoard.height):
+            for x in xrange(workingBoard.width):
+                workingBoard.fields[y][x].full = False
 
         for cell in self.filledCells:
             workingBoard.fields[cell.y][cell.x].full = True
@@ -284,10 +284,10 @@ class Board:
         p2 = 101
 
         hashvalue = 0
-        for i in xrange(self.height):
-            for j in xrange(self.width):
-                if self.fields[i][j].full == True:
-                    hashvalue += i * p1 + j * p2
+        for y in xrange(self.height):
+            for x in xrange(self.width):
+                if self.fields[y][x].full == True:
+                    hashvalue += x * p1 + y * p2
         return hashvalue
 
     def already_visited(self, states, unit):
@@ -341,28 +341,28 @@ class Board:
         check if any rows are completely filled and delete them
         """
         self.ls = 0
-        for i in xrange(self.height-1, -1, -1):
+        for y in xrange(self.height-1, -1, -1):
             # check if row is full
             # while because downshifted row can be full too...
-            while all([self.fields[i][j].full for j in xrange(self.width)]):
+            while all([self.fields[y][x].full for x in xrange(self.width)]):
                 # delete the row
                 for j in xrange(self.width):
-                    self.fields[i][j].full = False
+                    self.fields[y][x].full = False
 
                 # move all of the above rows one cell down
-                for k in xrange(i, 0, -1):
-                    for j in xrange(self.width):
-                        self.fields[k][j].full = self.fields[k-1][j].full
+                for k in xrange(y, 0, -1):
+                    for x in xrange(self.width):
+                        self.fields[k][x].full = self.fields[k-1][x].full
 
                 # update topmost layer separately
-                for j in xrange(self.width):
-                    self.fields[0][j].full = False
+                for x in xrange(self.width):
+                    self.fields[0][x].full = False
 
                 self.ls += 1 # count number of deleted rows        return "moves: " + str(self.moves) + "\nrating: " + str(self.rating)
 
     def plot(self, unit):
         if unit is not None:
-            s = ''.join(['-' for j in xrange(self.width + 2)])
+            s = ''.join(['-' for x in xrange(self.width + 2)])
             s += '\n'
             for y in xrange(self.height):
                 s += '|'
@@ -372,15 +372,15 @@ class Board:
                     else:
                         s += str(self.fields[y][x])
                 s += '|\n'
-            s += ''.join(['-' for j in xrange(self.width + 2)])
+            s += ''.join(['-' for x in xrange(self.width + 2)])
 
         else:
-            s = ''.join(['-' for j in xrange(self.width + 2)])
+            s = ''.join(['-' for x in xrange(self.width + 2)])
             s += '\n'
             for y in xrange(self.height):
                 s += '|'
                 for x in xrange(self.width):
                     s += str(self.fields[y][x])
                 s += '|\n'
-            s += ''.join(['-' for j in xrange(self.width + 2)])
+            s += ''.join(['-' for x in xrange(self.width + 2)])
         return s
