@@ -154,9 +154,21 @@ print dt
 # 	handlejson.send_response(i, allseeds[i],s,dt)
 
 
-for gid,sid,mvseq in all_movements.all_movements_computer_gen:
-	conv_mv_seq = convert_class_to_letters.convert_ilp(mvseq)
-	handlejson.send_response(gid, [allseeds[gid][sid]],conv_mv_seq,dt)
+
+#0 0 the move (0, 1, 2, 3, 4, 5, 6) = ['E', 'SW', 'W', 'SW', 'SW', 'W', 'SE', 'SW', 'SW', 'W', 'SE', 'E', 'E', 'R-', 'SE', 'SE', 'SE', 'SE', 'SW', 'E', 'SE', 'SE', 'E', 'R+', 'SW', 'SW', 'SE', 'R+', 'SW', 'SW', 'SE', 'R+', 'R+', 'E', 'R-', 'E', 'SW', 'R-', 'E', 'R+', 'SW', 'R+', 'SE', 'SW', 'R+', 'SE', 'R-', 'W', 'SE', 'E', 'E', 'SW'] yields 11.0 points
+### ERROR IN SIMULATION
+
+#0 0 the move (0, 1, 2) = ['E', 'SW', 'W', 'SW', 'SW', 'W', 'SE', 'SW', 'SW', 'W', 'SE', 'E', 'E', 'R-', 'SE', 'SE', 'SE', 'SE', 'SW', 'E', 'SE', 'SE'] yields 3.0 points
+
+mvseq = ['E', 'SW', 'W', 'SW', 'SW', 'W', 'SE', 'SW', 'SW', 'W', 'SE', 'E', 'E', 'R-', 'SE', 'SE', 'SE', 'SE', 'SW', 'E', 'SE', 'SE']
+conv_mv_seq = convert_class_to_letters.convert_greedy(mvseq)
+print conv_mv_seq
+handlejson.send_response(0, [allseeds[0][0]],conv_mv_seq,dt)
+
+
+# for gid,sid,mvseq in all_movements.all_movements_computer_gen:
+# 	conv_mv_seq = convert_class_to_letters.convert_ilp(mvseq)
+# 	handlejson.send_response(gid, [allseeds[gid][sid]],conv_mv_seq,dt)
 
 
 

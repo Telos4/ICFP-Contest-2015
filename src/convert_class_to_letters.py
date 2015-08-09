@@ -13,8 +13,8 @@ inp2 = { 'W' : ['p', '\'',  '!', '.', '0', '3'],
         'E' : ['b', 'c', 'e', 'f', 'y', '2'],
         'T': ['a', 'g', 'h', 'i', 'j', '4'],
         'Q': ['l', 'm', 'n', 'o', ' ', '5'],
-        'R-': ['d', 'q', 'r', 'v', 'z', '1'],
-        'R+': ['k', 's', 't', 'u', 'w', 'x'],
+        'Y': ['d', 'q', 'r', 'v', 'z', '1'],
+        'X': ['k', 's', 't', 'u', 'w', 'x'],
         ' ' : ['\t', '\n', '\r', '-']} # let's also ignore '-'
 
 all_known_phrases_of_power=['ei!','ia! ia!','necronomicon','yuggoth','house','dead',"cthulhu r'lyeh"]
@@ -59,6 +59,8 @@ def _collision_list(l,a,positions):
 def _preprocess(movement_sequence):
     movement_sequence = [ x if x != 'SE' else 'Q' for x in movement_sequence]
     movement_sequence = [ x if x != 'SW' else 'T' for x in movement_sequence]
+    movement_sequence = [ x if x != 'R+' else 'X' for x in movement_sequence]
+    movement_sequence = [ x if x != 'R-' else 'Y' for x in movement_sequence]
     movement_sequence = "".join(movement_sequence)
     
     # index of all_known_phrases_of_power_in_class_form, start in movement_sequence, end in movement_sequence
@@ -85,7 +87,7 @@ def _postprocess(retind,positions,movement_sequence):
         mstemp += movement_sequence[e:]
         movement_sequence = mstemp
 
-    for k in ['T','Q','R-','R+','W','E']:
+    for k in ['T','Q','Y','X','W','E']:
         movement_sequence = movement_sequence.replace(k,inp2[k][0])
 
     return movement_sequence
