@@ -76,8 +76,13 @@ def inverseLeft(path):
             print "failed to find a suitable left inverse for", path
             print "inverted merely",i,"tokens:", res, "for", path[0:i]
             return None
-    # for the display
-    print res, "is left-inverse of", path
+    print res, "seems to be a left-inverse of", path
+
+    # need to check that `left-inverse + original path` are still a
+    # valid path
+    if not reduce(lambda x, y: x and y, map(evaluate_meaning, res + path)):
+        print "but the concatenation of them is still not valid!"
+        return None
 
     return res
 
