@@ -62,7 +62,7 @@ class PathManager:
 
         heapq.heapify(paths)
 
-        for i in xrange(1000):
+        for i in xrange(20):
             print "run " + str(i+1)
             paths = self.generate_new_paths(paths, None)
             p1 = paths[-1]
@@ -77,6 +77,10 @@ class PathManager:
 
 
     def clever_extend(self, path, good_segments):
+        if path.spawnLocationBlocked or path.noMoreUnits:
+            # game finnished. no need to extend this path
+            return []
+
         # l = 10 # max lookahead
         # number_of_moves = random.randint(1,l)
 
@@ -145,6 +149,9 @@ class Path:
 
         self.rating = None
         self.move_score = 0
+
+        self.noMoreUnits = False
+        self.spawnLocationBlocked = False
 
         self.board_at_end = None
 
@@ -217,11 +224,13 @@ class Path:
             self.index_active_unit += 1
             if self.index_active_unit == len(unit_queue):
                 #print "no more unites available -> finnished"
+                self.noMoreUnits = True
                 return move_score
             else:
                 self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
                 #self.active_unit.moveToSpawnPosition(working_board.width)
         if not working_board.at_valid_location(self.active_unit):
+            self.spawnLocationBlocked = True
             return move_score
 
         for m in self.moves:
@@ -255,7 +264,8 @@ class Path:
                 else:
                     self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
                     if not working_board.at_valid_location(self.active_unit):
-                        return move_score
+                        self.spawnLocationBlocked = True
+                        return move_score # filled cells at spawn location
                     #self.active_unit.moveToSpawnPosition(working_board.width)
 
         return move_score
