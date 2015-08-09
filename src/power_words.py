@@ -366,6 +366,12 @@ def evaluate_meaning(path):
 
 def main():
     for w in words:
+        print w
+    print
+    print "===================="
+    print
+
+    for w in words:
         m = reverse_matching(w)
         if not evaluate_meaning(m): 
             print "NOPE", w, m
