@@ -15,6 +15,7 @@ def possibleid(a):
 		for seedid in range(len(bm.queued_units)):
 			score = bm.calc_board_state(bm.get_initial_board(seedid),mv).move_score
 			if score >= 0:
+				#print gameid,seedid
 				return (gameid,seedid)
 	return None
 

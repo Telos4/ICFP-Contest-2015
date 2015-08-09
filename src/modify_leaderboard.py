@@ -35,5 +35,5 @@ for gid in range(25):
 		b = [i for i in a if i['problemId']==gid and i['seed']==s]
 		m = max(b,key=lambda x:x['score'])
 		print gid,s,m['score'],m['solution']
-		handlejson.send_response(gid,[s],str(m['solution']))
+		handlejson.send_response(gid,[s],str(m['solution']),'')
 
