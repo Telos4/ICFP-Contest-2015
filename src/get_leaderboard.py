@@ -27,9 +27,7 @@ while True:
 	try:
 		parsed = json.loads(capped)
 	except:
-		print 'original string:'
-		print d
-		raise
+		pass
 
 	# tags of all people
 	# sorted([ a['tags'] for a in parsed['data']['rankings'] ])
