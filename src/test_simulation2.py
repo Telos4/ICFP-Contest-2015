@@ -109,7 +109,7 @@ while True:
 		print listofstrings
 
 
-	diff = [ i for i in listofstrings if i[3] == i[4] ]
+	diff = [ i for i in listofstrings if i[3] != i[4] ]
 
 	print color.RED,diff,color.END
 
