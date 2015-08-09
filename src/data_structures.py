@@ -8,6 +8,7 @@ import draw
 import Queue
 import random
 import heapq
+import pathgeneration as pg
 try:
     import cv2
 except ImportError:
@@ -30,6 +31,12 @@ class BoardManager:
     def get_initial_board(self, game_number):
         board = Board(self.width, self.height, self.filled, self.unit_dict, self.queued_units[game_number][:]) # copy list of units
         return board
+
+    def path_generation(self, game_number):
+        initial_board = pg.Board(self.width, self.height, self.filled)
+        unit_queue = self.queued_units[game_number]
+
+        path_manager = pg.PathManager(initial_board, unit_queue)
 
     def simulation(self, map_number, game_number):
         assert game_number < self.number_of_games, "error: no such game"

@@ -20,6 +20,8 @@ def main():
     # test JSON parser
     problem_dict = handlejson.parse_to_dictionary(datalist[map_number])
 
+
+
     # create a boardmanager
     boardmanager = data_structures.BoardManager(problem_dict)
 

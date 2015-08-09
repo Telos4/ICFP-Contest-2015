@@ -19,19 +19,42 @@ class SimpleBoard:
         self.filledCells = []
         for i in xrange(self.width):
             for j in xrange(self.height):
-                if board[i][j].full == True:
+                if board.fields[i][j].full == True:
                     self.filledCells.append(ds.Cell(i,j, True))
 
     def fill2DArray(self, workingBoard):
+        for i in workingBoard.height:
+            for j in workingBoard.width:
+                workingBoard.fields[i][j].full = False
+
         for cell in self.filledCells:
-            workingBoard[cell.x][cell.y].full = True
+            workingBoard.fields[cell.x][cell.y].full = True
             
 class PathManager:
-    def __init__(self, initial_board):
-        self.working_board = None
+    def __init__(self, initial_board, unit_queue, units):
         self.saved_boards = {}      # hash table of SimpleBoards
+        self.hash_initial_board = initial_board.generate_hash()
+        self.saved_boards[self.hash_initial_board] = SimpleBoard(initial_board)
+
+        self.working_board = None
+        self.unit_queue = unit_queue
+        self.units = units
 
         self.threshold = 0.5
+
+    def run(self):
+        paths = [Path(self, ['W'], self.saved_boards[self.hash_initial_board], deepcopy(self.units[self.unit_queue[0]]),0),
+            Path(self, ['E'], self.saved_boards[self.hash_initial_board], deepcopy(self.units[self.unit_queue[0]]),0),
+            Path(self, ['SW'], self.saved_boards[self.hash_initial_board], deepcopy(self.units[self.unit_queue[0]]),0),
+            Path(self, ['SE'], self.saved_boards[self.hash_initial_board], deepcopy(self.units[self.unit_queue[0]]),0),
+            Path(self, ['R+'], self.saved_boards[self.hash_initial_board], deepcopy(self.units[self.unit_queue[0]]),0),
+            Path(self, ['R-'], self.saved_boards[self.hash_initial_board], deepcopy(self.units[self.unit_queue[0]]),0)]
+        heapq.heapify(paths)
+
+        for i in xrange(5):
+            paths = self.generate_new_paths(paths, None)
+            p1 = paths[0]
+            p2 = paths[1]
 
 
     def clever_extend(self, path, good_segments):
@@ -56,7 +79,7 @@ class PathManager:
 
         return extends
 
-    def generate_paths(self, oldpaths, good_segments):
+    def generate_new_paths(self, oldpaths, good_segments):
         threshold = 0.5
         maxpaths = 100
 
@@ -116,11 +139,11 @@ class Path:
         b = self.path_manager.get_board(self.board_at_start)
         b.fill2DArray(self.path_manager.working_board)  # fill working board
 
-        move_score = self.apply_moves(self.path_manager.working_board, self.path_manager.unit_queue)
+        move_score = self.apply_moves(self.path_manager.working_board, self.path_manager.unit_queue, self.path_manager.units)
 
         return move_score, self.path_manager.working_board
 
-    def apply_moves(self, working_board, unit_queue):
+    def apply_moves(self, working_board, unit_queue, units):
         """
         Calculate final board state for a given movement sequence
         :param board:
@@ -136,7 +159,8 @@ class Path:
                 #print "no more unites available -> finnished"
                 return move_score
             else:
-                self.active_unit = unit_queue[self.index_active_unit]
+                self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
+                self.active_unit.moveToSpawnPosition(working_board.width)
 
         for m in self.moves:
             # if there is an active unit, try moving it to new location
@@ -161,7 +185,8 @@ class Path:
                     #print "no more unites available -> finnished"
                     return move_score
                 else:
-                    self.active_unit = unit_queue[self.index_active_unit]
+                    self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
+                    self.active_unit.moveToSpawnPosition(working_board.width)
 
         return move_score
 
