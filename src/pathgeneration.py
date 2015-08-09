@@ -18,9 +18,8 @@ class SimpleBoard:
         self.height = height
         self.filledCells = filledCells
 
-    def get2DArray(self):
+    def fill2DArray(self, workingBoard):
         # workingBoard: 2D-array to be filled according to self.filledCells
-        workingBoard = []
         col = []
 
         for i in range(self.width):
@@ -31,8 +30,6 @@ class SimpleBoard:
 
         for cell in self.filledCells:
             workingBoard[cell.x][cell.y].full = True
-
-        return workingBoard
 
 class PathManager:
     def __init__(self, initial_board):
