@@ -62,10 +62,10 @@ class PathManager:
 
         heapq.heapify(paths)
 
-        for i in xrange(5):
+        for i in xrange(2000):
             paths = self.generate_new_paths(paths, None)
             p1 = paths[-1]
-            p2 = paths[-2]
+            #p2 = paths[-2]
             self.saved_boards[p1.board_at_end].fill2DArray(self.working_board)
             print self.working_board.plot(p1.active_unit)
             print "____________________________________"
@@ -77,17 +77,17 @@ class PathManager:
 
         extends = [ ]
 
-        possible_moves = ['W', 'E', 'SW', 'SE']#, 'R+', 'R-']
+        possible_moves = ['W', 'E', 'SW', 'SE', 'R+', 'R-']
 
 
 
-        for i in xrange(10):
+        for i in xrange(5):
 
-            number_of_additional_moves = random.randint(1, 25)
+            number_of_additional_moves = random.randint(1, 10)
             additonal_moves = []
 
             for i in xrange(number_of_additional_moves):
-                additonal_moves.append(possible_moves[random.randint(0, 3)])
+                additonal_moves.append(possible_moves[random.randint(0, 5)])
 
             new_path = Path(self, additonal_moves, path.board_at_end, path.active_unit, path.index_active_unit)
             new_path.generate_and_rate()
@@ -97,8 +97,8 @@ class PathManager:
         return extends
 
     def generate_new_paths(self, oldpaths, good_segments):
-        threshold = 0.5
-        maxpaths = 50
+        threshold = 0
+        maxpaths = 10
 
         path_result = []
         while not len(oldpaths) == 0:
@@ -114,9 +114,12 @@ class PathManager:
                 #
 
 
-                if extended_path.rating > threshold:
+                if extended_path.rating >= threshold:
                     p_new = path + extended_path
                     heapq.heappush(path_result, p_new)
+
+            if len(path_result) == 0:
+                heapq.heappush(path_result, path)
 
         while len(path_result) > maxpaths:
             heapq.heappop(path_result)
@@ -139,7 +142,7 @@ class Path:
         # generate end state of the board for the path
         move_score, final_board = self.generate_end_state()
 
-        self.rating = Path.calculate_rating(self.moves, move_score, final_board)
+        self.rating = Path.calculate_rating(self.moves, move_score, final_board, self.active_unit)
 
         if self.rating >= 0:
             # calculate hash of final board
@@ -155,8 +158,8 @@ class Path:
 
 
     @ staticmethod
-    def calculate_rating(moves, move_score, final_board):
-        r = move_score #+ len(moves) # + rate(final_board)
+    def calculate_rating(moves, move_score, final_board, active_unit):
+        r = move_score + active_unit.pivot.y # + rate(final_board)
         return r
 
 
@@ -180,7 +183,7 @@ class Path:
         :return:
         """
         move_score = 0
-        print "-------------------------------------------------"
+        #print "-------------------------------------------------"
 
         if self.active_unit is None:
             # if there is currently no active unit we create a new unit
@@ -260,8 +263,7 @@ class Board:
         self.ls = 0     # number of lines cleared with current unit
         self.ls_old = 0 # number of lines cleared with previous unit
 
-        for f in filled:
-            self.fields[f.x][f.y].full = True
+        self.filled = [ds.Cell(f["x"], f["y"], full=True) for f in filled]
 
     def generate_hash(self):
         p1 = 53
