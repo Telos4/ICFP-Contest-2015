@@ -8,7 +8,7 @@ from data import *
 def main():
     print "ICFP 2015"
 
-    map_number = 1
+    map_number = 0
 
     if not os.path.exists('Movements'):
         os.makedirs('Movements')
@@ -24,6 +24,21 @@ def main():
 
     # create a boardmanager
     boardmanager = data_structures.BoardManager(problem_dict)
+
+
+    # size = len(boardmanager.queued_units[0])
+    # id = 0
+    # for i in xrange(810):
+    #     #board = data_structures.Board(10,10,[],boardmanager.unit_dict,boardmanager.queued_units[0][:])
+    #     #boardmanager.unit_dict[boardmanager.queued_units[0].pop(0)]
+    #     id += 1
+    # print id
+    # for i in boardmanager.queued_units[0]:
+    #     board = data_structures.Board(10,10,[],boardmanager.unit_dict,boardmanager.queued_units[0][:])
+    #     board.plotcv(data_structures.Unit(boardmanager.unit_dict[boardmanager.queued_units[0].pop(810)]), id)
+    #     id += 1
+    # print id
+
     boardmanager.path_generation(0)
 
 
