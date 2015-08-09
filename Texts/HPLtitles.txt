@@ -14,7 +14,7 @@ The Street
 The Terrible Old Man
 The Cats of Ulthar
 The Tree
-Celephaïs
+Celephais
 From Beyond
 The Temple
 Nyarlathotep
@@ -31,7 +31,7 @@ Sweet Ermengarde
 Hypnos
 What the Moon Brings
 Azathoth
-Herbert West–Reanimator
+Herbert West-Reanimator
 The Hound
 The Lurking Fear
 The Rats in the Walls
@@ -90,7 +90,7 @@ The Slaying of the Monster
 The Sorcery of Aphlar
 The Thing in the Moonlight
 Through the Gates of the Silver Key
-Till A’the Seas
+Till A'the Seas
 The Trap
 The Tree on the Hill
 Two Black Bottles
@@ -128,19 +128,19 @@ The Mystery of the Grave-Yard
 The Secret Cave, or John Lees Adventure
 The Poem of Ulysses, or The Odyssey
 Ovid's Metamorphoses
-H. Lovecraft's Attempted Journey betwixt Providence & Fall River on the N.Y.N.H. & H.R.R.
+H. Lovecraft's Attempted Journey betwixt Providence  Fall River on the N.Y.N.H.  H.R.R.
 Poemata Minora, Volume II
 Ode to Selene or Diana
 To the Old Pagan Religion
 On the Ruin of Rome
 To Pan
 On the Vanity of Human Ambition
-C.S.A. 1861-1865: To the Starry Cross of the SOUTH
+To the Starry Cross of the SOUTH
 De Triumpho Naturae
 The Members of the Men's Club of the First Universalist Church of Providence, R.I., to Its President, About to Leave for Florida on Account of His Health
 To His Mother on Thanksgiving
 To Mr. Terhune, on His Historical Fiction
-Providence in 2000 A.D.
+Providence in  A.D.
 New-England Fallen
 On the Creation of Niggers
 Fragment on Whitman
@@ -156,7 +156,7 @@ On a Modern Lothario
 The End of the Jackson War
 To the Members of the Pin-Feathers on the Merits of Their Organisation, and of Their New Publication, The Pinfeather
 To the Rev. James Pyke
-To an Accomplished Young Gentlewoman on Her Birthday, Decr. 2, 1914
+To an Accomplished Young Gentlewoman on Her Birthday, Decr. 2, 
 Regner Lodbrog's Epicedium
 The Power of Wine: A Satire
 The Teuton's Battle-Song
@@ -164,7 +164,6 @@ New England
 Gryphus in Asinum Mutatus
 To the Members of the United Amateur Press Association from the Providence Amateur Press Club
 March
-1914
 The Simple Speller's Tale
 On Slang
 An Elegy on Franklin Chase Clark, M.D.
@@ -201,7 +200,7 @@ The Rose of England
 The Unknown
 Ad Balneum
 On Kelso the Poet
-Providence Amateur Press Club (Deceased) to the Athenaeum Club of Journalism
+Providence Amateur Press Club  to the Athenaeum Club of Journalism
 Brotherhood
 Brumalia
 The Poe-et's Nightmare
@@ -212,7 +211,7 @@ An Elegy on Phillips Gamwell, Esq.
 Lines on Graduation from the R.I. Hospital's School of Nurses
 Fact and Fancy
 The Nymph's Reply to the Modern Business Man
-Pacifist War Song—1917
+Pacifist War Song-
 Percival Lowell
 To Mr. Lockhart, on His Poetry
 Britannia Victura
@@ -222,25 +221,25 @@ Sonnet on Myself
 April
 Iterum Conjunctae
 The Peace Advocate
-To Greece, 1917
+To Greece, 
 On Receiving a Picture of ye Towne of Templeton, in the Colonie of Massachusetts-Bay, with Mount Monadnock, in New-Hampshire, Shewn in the Distance
 The Poet of Passion
 Earth and Sky
-Ode for July Fourth, 1917
+Ode for July Fourth, 
 On the Death of a Rhyming Critic
 Prologue to "Fragments from an Hour of Inspiration" by Jonathan E. Hoag
 To M.W.M.
 To the Incomparable Clorinda
 To Saccharissa, Fairest of Her Sex
-To Rhodoclia—Peerless among Maidens
+To Rhodoclia-Peerless among Maidens
 To Belinda, Favourite of the Graces
-To Heliodora—Sister of Cytheraea
+To Heliodora-Sister of Cytheraea
 To Mistress Sophia Simple, Queen of the Cinema
 An American to the British Flag
 Autumn
 Nemesis
 Astrophobos
-Lines on the 25th. Anniversary of the Providence Evening News, 1892-1917
+Lines on the 25th. Anniversary of the Providence Evening News, -
 Sunset
 Old Christmas
 To the Arcadian
@@ -251,7 +250,7 @@ A Winter Wish
 Laeta; a Lament
 To Jonathan E. Hoag, Esq.
 The Volunteer
-Ad Britannos—1918
+Ad Britannos-
 Ver Rusticum
 To Mr. Kleiner, on Receiving from Him the Poetical Works of Addison, Gay, and Somerville
 A Pastoral Tragedy of Appleton, Wisconsin
@@ -271,7 +270,7 @@ To Delia, Avoiding Damon
 Alfredo; a Tragedy
 The Eidolon
 Monos: An Ode
-Germania—1918
+Germania-
 To Col. Linkaby Didd
 Ambition
 A Cycle of Verse
@@ -294,7 +293,7 @@ Damon: A Monody
 Hylas and Myrrha: A Tale
 North and South Britons
 To the A.H.S.P.C., on Receipt of the May Pippin
-Helene Hoffman Cole: 1893-1919
+Helene Hoffman Cole: -
 John Oldham: A Defence
 On Prohibition
 Myrrha and Strephon
@@ -302,7 +301,7 @@ The House
 Monody on the Late King Alcohol
 The Pensive Swain
 The City
-Oct. 17, 1919
+Oct. 1, 
 On Collaboration
 To Edward John Moreton Drax Plunkett, Eighteenth Baron Dunsany
 Wisdom
@@ -325,11 +324,11 @@ The Voice
 On a Grecian Colonnade in a Park
 The Dream
 October
-To S.S.L.—Oct. 17, 1920
+To S.S.L.-Oct. 1, 
 Christmas
 To Alfred Galpin, Esq.
 Theobaldian Aestivation
-S.S.L.: Christmas 1920
+S.S.L.: Christmas 
 On Receiving a Portraiture of Mrs. Berkeley, ye Poetess
 The Prophecy of Capys Secundus
 To a Youth
@@ -355,7 +354,7 @@ On Marblehead
 To Mr. Baldwin, on Receiving a Picture of Him in a Rural Bower
 Lines for Poets' Night at the Scribblers' Club
 On a Scene in Rural Rhode Island
-Damon and Lycë
+Damon and Lyce
 To Mr. Hoag
 On the Pyramids
 Stanzas on Samarkand I-III
@@ -369,7 +368,7 @@ On the Double-R Coffee House
 To Mr. Hoag
 The Cats
 On Rheinhart Kleiner Being Hit by an Automobile
-To Xanthippe, on Her Birthday—March 16, 1925
+To Xanthippe, on Her Birthday-March 1, 
 Primavera
 To Frank Belknap Long on His Birthday
 A Year Off
@@ -377,12 +376,12 @@ To an Infant
 On a Politician
 On a Room for Rent
 October
-To George Willard Kirk, Gent., of Chelsea-Village, in New-York, upon His Birthday, Novr. 25, 1925
+To George Willard Kirk, Gent., of Chelsea-Village, in New-York, upon His Birthday, Novr. 25, 
 On Old Grimes by Albert Gorton Greene
 Festival
 To Jonathan Hoag
 Hallowe'en in a Suburb
-In Memoriam: Oscar Incoul Verelst of Manhattan: 1920-1926
+In Memoriam: Oscar Incoul Verelst of Manhattan: -
 The Return
 Hedone
 To Miss Beryl Hoyt
@@ -436,14 +435,14 @@ XXX. Background
 XXXI. The Dweller
 XXXII. Alienation
 XXXIII. Harbour Whistles
-XXXIV. Recapture [November 1929]
+XXXIV. Recapture 
 XXXV. Evening Star
 XXXVI. Continuity
 Veteropinguis Redivivus
 To a Young Poet in Dunedin
-FUNGI from YUGGOTH, 6.Nyarlathotep and 7. Azathoth. Verses printed in Jan. 1931 WEIRD TALES.
+FUNGI from YUGGOTH, .Nyarlathotep and . Azathoth. Verses printed in Jan.  WEIRD TALES.
 On an Unspoil'd Rural Prospect
-Bouts Rimés
+Bouts Rimes
 Beyond Zimbabwe
 The White Elephant
 Anthem of the Kappa Alpha Tau
@@ -478,198 +477,195 @@ To Eugene B. Kuntz et al.
 To Laurie A. Sawyer
 To Sonia H. Greene
 To Rheinhart Kleiner
-To Felis (Frank Belknap Long's Cat)
+To Felis 
 To Annie E.P. Gamwell
-To Felis (Frank Belknap Long's Cat)
-The Crime of the Century (1915)
-The Renaissance of Manhood (1915)
-Liquor and Its Friends (1915)
-More Chain Lightning (1915)
-Old England and the "Hyphen" (1916)
-Revolutionary Mythology (1916)
-The Symphonic Ideal (1916)
-Editors Note to McGavacks "Genesis of the Revolutionary War" (1917)
-A Remarkable Document (1917)
-At the Root (1918)
-Merlinus Redivivus (1918)
-Time and Space (1918)
-Anglo Saxondom (1918)
-Americanism (1919)
-The League (1919)
-Bolshevism (1919)
-Idealism and Materialism – A Reflection (1919)
-Life for Humanity's Sake (1920)
-In Defence of "Dagon" (1921)
-Nietzscheism and Realism (1922)
-East and West Harvard Conservatism (1922)
-The Materialist Today (1926)
-Some Causes of Self-Immolation (1931)
-Some Repetitions on the Times (1933)
-Heritage or Modernism: Common Sense in Art Forms (1935)
-Objections to Orthodox Communism (1936)
-The Art of Fusion, Melting Pudling & Casting (1899)
-Chemistry, 4 volumes (1899)
-A Good Anaesthetic (1899)
-The Railroad Review (1901)
-The Moon (1903)
-The Scientific Gazette (1903-4)
-Astronomy/The Monthly Almanack (1903-4)
-The Rhode Island Journal of Astronomy (1903-7)
-Annals of the Providence Observatory (1904)
-Providence Observatory Forecast (1904)
-The Science Library, 3 volumes (1904)
-Astronomy articles for The Pawtuxet Valley Gleaner (1906)
-Astronomy articles for The Providence Tribune (1906-8)
-Third Annual Report of the Providence Meteorological Station (1906)
-Celestial Objects for All (1907)
-Astronomical Notebook (1909–15)
-Astronomy articles for The Providence Evening News (1914-8)
-"Bickerstaffe" articles from The Providence Evening News (1914)
-"Science versus Charlatanry" (9 September 1914)
-"The Falsity of Astrology" (10 October 1914)
-"Astrology and the Future" (13 October 1914)
-"Delavan's Comet and Astrology" (26 October 1914)
-"The Fall of Astrology" (17 December 1914)
-Astronomy articles for The Asheville Gazette-News (1915) [1] 
-Editor's Note to MacManus' "The Irish and the Fairies" (1916)
-The Truth about Mars (1917)
-The Cancer of Superstition (1926)
-A Task for Amateur Journalists (1914)
-Departments of Public Criticism (1914–19)
-What Is Amateur Journalism? (1915)
-Consolidations Autopsy (1915)
-Consolidation's Autopsy (1915)
-The Amateur Press (1915)
-The Morris Faction (1915)
-For President – Leo Fritter(1915)
-Introducing Mr. Chester Pierce Munroe (1915)
-The Question of the Day (1915)
-[Random Notes], from The Conservative (1915)
-Editorials, from The Conservative (1915)
-Finale (1915)
-New Department Proposed: Instruction for the New Recruit (1915)
-Amateur Notes (1915)
-Some Political Phases (1915)
-Introducing Mr. John Russell (1915)
-In a Major Key (1915)
-The Conservative and His Critics (1915)
-The Dignity of Journalism (1915)
-The Youth of Today (1915)
-An Imparitial Spectator (1915)
-Symphony and Stress (1915)
-Little Journeys to the Homes of Prominent Amateurs [biography of A.F. Lockhart] (1915)
-Reports of the First Vice-President (1915–16)
-Systematic Instruction in the United (1915–16)
-Introducing Mr. James T. Pyke (1916)
-Editorial, from The Providence Amateur (1916)
-United Amateur Press Association: Exponent of Amateur Journalism (1916)
-Among the New-Comers (1916)
-Among the Amateurs (1916)
-Concerning "Persia – In Europe" (1917)
-Amateur Standards (1917)
-A Request (1917)
-A Reply to The Lingerer (1917)
-Editorially (1917)
-News Notes (1917)
-The United's Problem (1917)
-Little Journeys to the Homes of Prominent Amateurs [biography of E.J. Barnhart] (1917)
-President's Messages, from The United Amateur (1917-8)
-Comment (1918)
-Les Mouches Fantastiques (1918)
-Amateur Criticism (1918)
-The United: 1917–1918 (1918)
-The Amateur Press Club (1918)
-Helene Hoffman Cole – Littérateur (1919)
-Trimmings (1919)
-For Official Editor – Anne Tillery Renshaw (1919)
-Amateurdom (1919)
-Looking Backward (1920)
-For What Does the United Stand? (1920)
-[Untitled], from The Tryout (1920)
-Editor's Note to Loveman's "A Scene for Macbeth" (1920)
-Amateur Journalism – Its Possible Needs and Betterment (1920)
-The Pseudo-United (1920)
-[Untitled fragments], from The United Amateur (1920-1)
-Editorials, from The United Amateur (1920-5)
-News Notes (1920-5)
-What Amateur Journalism and I Have Done for Each Other (1921)
-Lucubrations Lovecraftian (1921)
-The Vivisector (1921-3)
-The Haverhill Convention (1921-3)
-The Convention Banquet (1921-3)
-"Rainbow" Called Best First Issue (1922)
-President's Messages, from The National Amateur (1922-3)
-Rursus Adsumus (1923)
-Bureau of Critics (1923)
-[Random Notes], from The Conservative (1923)
-The President's Annual Report (1923)
-A Matter of Uniteds (1927)
-The Convention (1930)
-Bureau of Critics (1932-6)
-Mrs. Miniter – Estimates and Recollections (1934)
-Dr. Eugene B. Kuntz (1935)
-Some Current Motives and Practices (1936)
-[Literary Review] (1936)
-Defining the "Ideal" Paper (1936)
-Report of the Executive Judges (1936)
-Metrical Regularity (1915)
-The Allowable Rhyme (1915)
-The Proposed Authors Union (1916)
-The Vers Libre Epidemic (1917)
-Poesy (1918)
-The Despised Pastoral (1918)
-The Literature of Rome (1918)
-The Simple Spelling Mania (1918)
-The Case for Classicism (1919)
-Literary Composition (1919)
-Winifred Virginia Jackson: A Different Poetess (1921)
-Ars Gratia Artis (1921)
-The Poetry of Lilian Middleton (1922)
-Lord Dunsany and His Work (1922)
-Rudis Indigestaque Moles (1923)
-Introduction to Hoags Poetical Works (1923)
-In the Editors Study (1923)
-[Random Notes On Philistine-Grecian controversy] (1923)
-Review of Ebony and Crystal by Clark Ashton Smith (1923)
-The Professional Incubus (1924)
-The Omnipresent Philistine (1924)
-"The Work of Frank Belknap Long, Jr." (1924)
-Supernatural Horror in Literature (1925–1927)
-Preface to Bullens White Fire (1927)
-Preface to Symmes Old World Footprints (1928)
-Notes on Alias Peter Marchall by A. F. Lorenz (1929?)
-Notes on Verse Technique (1932)
-Foreword to Kuntzs Thoughts and Pictures (1932)
-[Notes on Weird Fiction] (1933)
-Weird Story Plots (1933)
-Notes on Writing Weird Fiction (1934)
-Some Notes on Interplanetary Fiction (1935)
-What Belongs in Verse (1935)
-Suggestions for a Reading Guide (1936)
-The Trip of Theobald (1927)
-Vermont – A First Impression (1927)
-Observations on Several Parts of America (1928)
-An Account of a Trip to the Fairbanks House (1929)
-Travels in the Provinces of America (1929)
-An Account of a Visit to Charleston (1930)
-An Account of Charleston (1930)
-A Description of the Town of Quebeck (1930–31)
-European Glimpses (1932) (revision of a Sonia Greene's journey report)
-Some Dutch Footprints in New England (1933)
-Homes and Shrines of Poe (1934)
-The Unknown City in the Ocean (1934)
-Charleston (1936)
-The Brief Autobiography of an Inconsequential Scribbler (1919)
-Within the Gates (1921)
-A Confession of Unfaith (1922)
-Diary (1925)
-Commercial Blurbs (1925)
-Cats and Dogs (1926)
-Notes on Hudson Valley History (1929)
-Autobiography of Howard Phillips Lovecraft (1930–…)
-Correspondence between Wilson Shepherd and R. H. Barlow (1932)
-In Memoriam: Henry St. Claire Whitehead (1932)
-Some Notes on a Nonentity (1933)
-In Memoriam: Robert Ervin Howard (1936)
-Commonplace Book (1919–1935)
-[Death Diary] (1937)
+To Felis 
+The Crime of the Century 
+The Renaissance of Manhood 
+Liquor and Its Friends 
+More Chain Lightning 
+Old England and the "Hyphen" 
+Revolutionary Mythology 
+The Symphonic Ideal 
+Editors Note to McGavacks "Genesis of the Revolutionary War" 
+A Remarkable Document 
+At the Root 
+Merlinus Redivivus 
+Time and Space 
+Anglo Saxondom 
+Americanism 
+The League 
+Bolshevism 
+Idealism and Materialism - A Reflection 
+Life for Humanity's Sake 
+In Defence of "Dagon" 
+Nietzscheism and Realism 
+East and West Harvard Conservatism 
+The Materialist Today 
+Some Causes of Self-Immolation 
+Some Repetitions on the Times 
+Heritage or Modernism: Common Sense in Art Forms 
+Objections to Orthodox Communism 
+The Art of Fusion, Melting Pudling  Casting 
+Chemistry, 4 volumes 
+A Good Anaesthetic 
+The Railroad Review 
+The Moon 
+The Scientific Gazette 
+Astronomy
+The Monthly Almanack 
+The Rhode Island Journal of Astronomy 
+Annals of the Providence Observatory 
+Providence Observatory Forecast 
+The Science Library, 3 volumes 
+Astronomy articles for The Pawtuxet Valley Gleaner 
+Astronomy articles for The Providence Tribune 
+Third Annual Report of the Providence Meteorological Station 
+Celestial Objects for All 
+Astronomical Notebook 
+Astronomy articles for The Providence Evening News 
+"Bickerstaffe" articles from The Providence Evening News 
+"Science versus Charlatanry" 
+"The Falsity of Astrology" 
+"Astrology and the Future" 
+"Delavan's Comet and Astrology" 
+"The Fall of Astrology" 
+Astronomy articles for The Asheville Gazette-News   
+Editor's Note to MacManus' "The Irish and the Fairies" 
+The Truth about Mars 
+The Cancer of Superstition 
+A Task for Amateur Journalists 
+Departments of Public Criticism 
+What Is Amateur Journalism? 
+Consolidations Autopsy 
+Consolidation's Autopsy 
+The Amateur Press 
+The Morris Faction 
+For President - Leo Fritter
+Introducing Mr. Chester Pierce Munroe 
+The Question of the Day 
+, from The Conservative 
+Editorials, from The Conservative 
+Finale 
+New Department Proposed: Instruction for the New Recruit 
+Amateur Notes 
+Some Political Phases 
+Introducing Mr. John Russell 
+In a Major Key 
+The Conservative and His Critics 
+The Dignity of Journalism 
+The Youth of Today 
+An Imparitial Spectator 
+Symphony and Stress 
+Little Journeys to the Homes of Prominent Amateurs  
+Reports of the First Vice-President 
+Systematic Instruction in the United 
+Introducing Mr. James T. Pyke 
+Editorial, from The Providence Amateur 
+United Amateur Press Association: Exponent of Amateur Journalism 
+Among the New-Comers 
+Among the Amateurs 
+Concerning "Persia - In Europe" 
+Amateur Standards 
+A Request 
+A Reply to The Lingerer 
+Editorially 
+News Notes 
+The United's Problem 
+Little Journeys to the Homes of Prominent Amateurs  
+President's Messages, from The United Amateur 
+Comment 
+Les Mouches Fantastiques 
+Amateur Criticism 
+The United: - 
+The Amateur Press Club 
+Helene Hoffman Cole - Litterateur 
+Trimmings 
+For Official Editor - Anne Tillery Renshaw 
+Amateurdom 
+Looking Backward 
+For What Does the United Stand? 
+, from The Tryout 
+Editor's Note to Loveman's "A Scene for Macbeth" 
+Amateur Journalism - Its Possible Needs and Betterment 
+The Pseudo-United 
+, from The United Amateur 
+Editorials, from The United Amateur 
+News Notes 
+What Amateur Journalism and I Have Done for Each Other 
+Lucubrations Lovecraftian 
+The Vivisector 
+The Haverhill Convention 
+The Convention Banquet 
+"Rainbow" Called Best First Issue 
+President's Messages, from The National Amateur 
+Rursus Adsumus 
+Bureau of Critics 
+, from The Conservative 
+The President's Annual Report 
+A Matter of Uniteds 
+The Convention 
+Bureau of Critics 
+Mrs. Miniter - Estimates and Recollections 
+Dr. Eugene B. Kuntz 
+Some Current Motives and Practices  
+Defining the "Ideal" Paper 
+Report of the Executive Judges 
+Metrical Regularity 
+The Allowable Rhyme 
+The Proposed Authors Union 
+The Vers Libre Epidemic 
+Poesy 
+The Despised Pastoral 
+The Literature of Rome 
+The Simple Spelling Mania 
+The Case for Classicism 
+Literary Composition 
+Winifred Virginia Jackson: A Different Poetess 
+Ars Gratia Artis 
+The Poetry of Lilian Middleton 
+Lord Dunsany and His Work 
+Rudis Indigestaque Moles 
+Introduction to Hoags Poetical Works 
+In the Editors Study 
+Review of Ebony and Crystal by Clark Ashton Smith 
+The Professional Incubus 
+The Omnipresent Philistine 
+The Work of Frank Belknap Long, Jr.
+Supernatural Horror in Literature
+Preface to Bullens White Fire 
+Preface to Symmes Old World Footprints 
+Notes on Alias Peter Marchall by A. F. Lorenz
+Notes on Verse Technique 
+Foreword to Kuntzs Thoughts and Pictures 
+Weird Story Plots 
+Notes on Writing Weird Fiction 
+Some Notes on Interplanetary Fiction 
+What Belongs in Verse 
+Suggestions for a Reading Guide 
+The Trip of Theobald 
+Vermont - A First Impression 
+Observations on Several Parts of America 
+An Account of a Trip to the Fairbanks House 
+Travels in the Provinces of America 
+An Account of a Visit to Charleston 
+An Account of Charleston 
+A Description of the Town of Quebeck
+European Glimpses  
+Some Dutch Footprints in New England 
+Homes and Shrines of Poe 
+The Unknown City in the Ocean 
+Charleston 
+The Brief Autobiography of an Inconsequential Scribbler 
+Within the Gates 
+A Confession of Unfaith 
+Diary 
+Commercial Blurbs 
+Cats and Dogs 
+Notes on Hudson Valley History 
+Autobiography of Howard Phillips Lovecraft
+Correspondence between Wilson Shepherd and R. H. Barlow 
+In Memoriam: Henry St. Claire Whitehead 
+Some Notes on a Nonentity 
+In Memoriam: Robert Ervin Howard 
+Commonplace Book

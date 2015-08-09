@@ -1,4 +1,8 @@
+import data_structures
 import handlejson
+import check_word
+import data
+import convert_class_to_letters
 
 allseeds={0:[0],
 1:[0],
@@ -26,14 +30,31 @@ allseeds={0:[0],
 23:[0],
 24:[18]}
 
+def firstpart(inputstring):
+
+	if type(inputstring) == str:
+		inputstring_mv = convert_class_to_letters.convert_back_letter_to_classes(inputstring)
 
 
-a = handlejson.get_dictionary_of_all_solutions()
+	a = check_word.possibleid(inputstring_mv)
+	if a == None:
+		print "no map and seed to execute"
+		return
+	g,s = a
 
-for gid in range(25):
-	for s in allseeds[gid]:
-		b = [i for i in a if i['problemId']==gid and i['seed']==s]
-		m = max(b,key=lambda x:x['score'])
-		print gid,s,m['score'],m['solution']
-		handlejson.send_response(gid,[s],str(m['solution']),'')
+	print "evaluating on mapid",g,"and seedid",s
 
+	bm = data_structures.BoardManager(handlejson.parse_to_dictionary(data.datas[g]))
+	score = bm.calc_board_state(bm.get_initial_board(s),inputstring_mv).move_score
+	print "our score is", score
+
+	handlejson.send_response(g,[allseeds[g][s]],inputstring,'qwe')
+
+	print "request sent"
+
+
+def secondpart(inputstring):
+	a = handlejson.get_dictionary_of_all_solutions()
+	b = [ i for i in a if i['solution'] == inputstring ]
+
+	print b
