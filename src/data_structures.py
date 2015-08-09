@@ -333,8 +333,9 @@ class Board:
             unit = Unit(self.unit_dict[self.queued_units.pop()])
             unit = unit.moveToSpawnPosition(self.width)
             if not self.at_valid_location(unit):
-                print "spawn location was already occupied! -> Game over"
-                self.status = 'fail'
+                #print "spawn location was already occupied! -> Game over"
+                #self.status = 'fail'
+                self.status = 'done'
                 unit = None
         else:
             self.status = 'done'
