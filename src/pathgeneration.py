@@ -62,7 +62,7 @@ class PathManager:
 
         heapq.heapify(paths)
 
-        for i in xrange(20):
+        for i in xrange(50):
             print "run " + str(i+1)
             paths = self.generate_new_paths(paths, None)
             p1 = paths[-1]
@@ -88,7 +88,7 @@ class PathManager:
 
         possible_moves = ['W', 'E', 'SW', 'SE', 'R+', 'R-']
 
-        number_of_additional_paths = 10
+        number_of_additional_paths = 20
 
         for i in xrange(number_of_additional_paths):
 
@@ -193,7 +193,6 @@ class Path:
 
         rate_board = maxFilledCellsInRow * 2.0
         rate_board += 1000.0 * final_board.ls_old
-
         #print rate_board
 
         r = move_score + rate_board  + active_unit.pivot.y
@@ -256,7 +255,7 @@ class Path:
                 # print working_board.plot(self.active_unit)
             else:
                 # move was invalid -> unit gets locked
-                move_score = working_board.lock_fields(self.active_unit)
+                move_score += working_board.lock_fields(self.active_unit)
 
                 #print "Unit locked! New move score:   " + str(board.move_score)
 
