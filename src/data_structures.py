@@ -8,6 +8,7 @@ import draw
 import Queue
 import random
 import heapq
+import pathgeneration as pg
 try:
     import cv2
 except ImportError:
@@ -30,6 +31,20 @@ class BoardManager:
     def get_initial_board(self, game_number):
         board = Board(self.width, self.height, self.filled, self.unit_dict, self.queued_units[game_number][:]) # copy list of units
         return board
+
+    def path_generation(self, game_number):
+        initial_board = pg.Board(self.width, self.height, self.filled)
+        unit_queue = self.queued_units[game_number]
+
+        units = []
+        for unit_entry in self.unit_dict:
+            u = Unit(unit_entry)
+            u.moveToSpawnPosition(initial_board.width)
+            units.append(u)
+
+
+        path_manager = pg.PathManager(initial_board, unit_queue, units)
+        path_manager.run()
 
     def simulation(self, map_number, game_number):
         assert game_number < self.number_of_games, "error: no such game"
@@ -495,7 +510,6 @@ class Unit:
         self.pivot = Cell(unit_dict["pivot"]["x"], unit_dict["pivot"]["y"])  # pivot cell
 
         self.states = [] # list of sets of visited locations
-        self.startTracking = False
 
     def moveToSpawnPosition(self, map_width):
         minX = map_width - 1
@@ -509,19 +523,18 @@ class Unit:
 
         unit_width = maxX - minX + 1
         # unit spawns in the middle of the first row
-        for i in range(int(floor((map_width - unit_width) / 2))):
-            self = self.move('E')
-
-        self.startTracking = True
+        offset = int(floor((map_width - unit_width) / 2))
+        for cell in self.members:
+            cell.x += offset
+        self.pivot.x += offset
 
         return self
 
     def move(self, direction):
-        if self.startTracking == True:
-            unitSet = set()
-            for cell in self.members:
-                unitSet.add((cell.x,cell.y))
-            self.states.append(unitSet)
+        unitSet = set()
+        for cell in self.members:
+            unitSet.add((cell.x,cell.y))
+        self.states.append(unitSet)
 
         movedUnit = deepcopy(self)
 

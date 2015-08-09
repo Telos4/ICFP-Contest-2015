@@ -20,12 +20,16 @@ def main():
     # test JSON parser
     problem_dict = handlejson.parse_to_dictionary(datalist[map_number])
 
+
+
     # create a boardmanager
     boardmanager = data_structures.BoardManager(problem_dict)
+    boardmanager.path_generation(0)
 
-    for game_number in range(len(boardmanager.queued_units)):
+
+    #for game_number in range(len(boardmanager.queued_units)):
         #boardmanager.simulation(map_number, game_number)
-        boardmanager.playTetris(map_number, game_number)
+        #boardmanager.playTetris(map_number, game_number)
 
 
 if __name__ == "__main__":
