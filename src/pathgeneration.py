@@ -21,18 +21,19 @@ class SimpleBoard:
     def get2DArray(self):
         # workingBoard: 2D-array to be filled according to self.filledCells
         workingBoard = []
-        row = []
+        col = []
 
-        for j in range(self.height):
-            for i in range(self.width):
-                row.append(ds.Cell(i,j,False))
-            workingBoard.append(row)
-            row = []
+        for i in range(self.width):
+            for j in range(self.height):
+                col.append(ds.Cell(i,j,False))
+            workingBoard.append(col)
+            col = []
 
         for cell in self.filledCells:
             workingBoard[cell.x][cell.y].full = True
 
         return workingBoard
+
 class PathManager:
     def __init__(self, initial_board):
         self.working_board = None
