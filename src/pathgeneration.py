@@ -62,7 +62,7 @@ class PathManager:
 
         heapq.heapify(paths)
 
-        for i in xrange(50):
+        for i in xrange(20):
             print "run " + str(i+1)
             paths = self.generate_new_paths(paths, None)
             p1 = paths[-1]
