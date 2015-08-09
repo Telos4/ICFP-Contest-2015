@@ -36,7 +36,15 @@ class BoardManager:
         initial_board = pg.Board(self.width, self.height, self.filled)
         unit_queue = self.queued_units[game_number]
 
-        path_manager = pg.PathManager(initial_board, unit_queue)
+        units = []
+        for unit_entry in self.unit_dict:
+            u = Unit(unit_entry)
+            u.moveToSpawnPosition(initial_board.width)
+            units.append(u)
+
+
+        path_manager = pg.PathManager(initial_board, unit_queue, units)
+        path_manager.run()
 
     def simulation(self, map_number, game_number):
         assert game_number < self.number_of_games, "error: no such game"
@@ -516,6 +524,7 @@ class Unit:
 
         unit_width = maxX - minX + 1
         # unit spawns in the middle of the first row
+
         for i in range(int(floor((map_width - unit_width) / 2))):
             self = self.move('E')
 
