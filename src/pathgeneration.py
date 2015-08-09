@@ -21,7 +21,6 @@ class SimpleBoard:
             for x in xrange(self.width):
                 if board.fields[y][x].full == True:
                     self.filledCells.append(ds.Cell(x,y, True))
-        print "done"
 
     def fill2DArray(self, workingBoard):
         for y in xrange(workingBoard.height):
@@ -63,7 +62,7 @@ class PathManager:
 
         heapq.heapify(paths)
 
-        for i in xrange(100):
+        for i in xrange(500):
             print "run " + str(i+1)
             paths = self.generate_new_paths(paths, None)
             p1 = paths[-1]
@@ -107,8 +106,9 @@ class PathManager:
         maxpaths = 25
 
         path_result = []
+        print "number of old paths: " + str(len(oldpaths))
         while not len(oldpaths) == 0:
-            print "print paths remaining = " + str(len(oldpaths))
+            #print "print paths remaining = " + str(len(oldpaths))
             path = heapq.heappop(oldpaths)
             extends = self.clever_extend(path, good_segments)
 
