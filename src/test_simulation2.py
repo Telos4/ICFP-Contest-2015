@@ -30,23 +30,28 @@ allseeds={0:[0],
 23:[0],
 24:[18]}
 
-def firstpart(inputstring):
+def firstpart(inputstring,g=None,s=None):
 
 	if type(inputstring) == str:
 		inputstring_mv = convert_class_to_letters.convert_back_letter_to_classes(inputstring)
 
 
-	a = check_word.possibleid(inputstring_mv)
-	if a == None:
-		print "no map and seed to execute"
-		return
-	g,s = a
+	if g == None or s == None
+		a = check_word.possibleid(inputstring_mv)
+		if a == None:
+			print "no map and seed to execute"
+			return
+		g,s = a
 
 	print "evaluating on mapid",g,"and seedid",s
 
 	bm = data_structures.BoardManager(handlejson.parse_to_dictionary(data.datas[g]))
 	score = bm.calc_board_state(bm.get_initial_board(s),inputstring_mv).move_score
 	print "our score is", score
+
+	if score <0:
+		print "we have an error"
+		return
 
 	handlejson.send_response(g,[allseeds[g][s]],inputstring,'qwe')
 
