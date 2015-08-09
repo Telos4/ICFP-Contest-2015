@@ -169,7 +169,18 @@ class Path:
 
     @ staticmethod
     def calculate_rating(moves, move_score, final_board, active_unit):
-        r = move_score + active_unit.pivot.y # + rate(final_board)
+        maxFilledCellsInRow = 0
+        for y in xrange(final_board.height):
+            filledCellsInRow = 0
+            for x in xrange(final_board.width):
+                if final_board.fields[y][x].full:
+                    filledCellsInRow += 1
+            if filledCellsInRow > maxFilledCellsInRow:
+                maxFilledCellsInRow = filledCellsInRow
+
+        rate_board = maxFilledCellsInRow * 1.5
+
+        r = move_score + active_unit.pivot.y + rate_board
         return r
 
 
