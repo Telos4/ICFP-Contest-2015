@@ -157,3 +157,11 @@ def convert_back_letter_to_classes(s):
                 ret.append(k)
     return ret
 
+all_known_phrases_of_power_direction_form=[]
+for item in all_known_phrases_of_power:
+    all_known_phrases_of_power_direction_form.append(convert_back_letter_to_classes(item))
+
+if __name__ == "__main__":
+    for p in all_known_phrases_of_power_direction_form:
+        print p
+
