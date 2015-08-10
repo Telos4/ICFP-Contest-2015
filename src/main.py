@@ -4,9 +4,25 @@ import handlejson
 import data_structures
 import os
 from data import *
+import convert_class_to_letters
 import send_to_server
 import datetime
 import time
+
+def main2(problem_dict, powerwords, timebound, membound, corebound):
+
+    powerwords_direction_form=[]
+    for item in powerwords:
+        powerwords_direction_form.append(convert_class_to_letters.convert_back_letter_to_classes(item))
+
+    mvlists = []
+    seeds = problem_dict['sourceSeeds']
+    for seedIndex in range(len(seeds)):
+        seed = seeds[seedIndex]
+        boardmanager = data_structures.BoardManager(problem_dict)
+        mvlist = boardmanager.path_generation(seedIndex, powerwords_direction_form)
+        mvlists.append(mvlist)
+    return mvlists
 
 def main():
     print "ICFP 2015"
@@ -18,7 +34,7 @@ def main():
                 data11, data12, data13, data14, data15, data16, data17, data18, data19, data20,
                 data21, data22, data23, data24]
 
-    for gid in range(10,11):
+    for gid in reversed(range(12,25)):
         # test JSON parser
         problem_dict = handlejson.parse_to_dictionary(datalist[gid])
         seeds = problem_dict['sourceSeeds']

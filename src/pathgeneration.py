@@ -16,6 +16,7 @@ import power_words
 
 #stores all matched powerwords
 strAllpowerwords = []
+powerwords_direction_form = []
 
 class SimpleBoard:
     def __init__(self, board):
@@ -49,9 +50,12 @@ class PathManager:
 
         random.seed(0)
 
-    def run(self):
+    def run(self, powerwords):
         #stores all matched powerwords
+        global strAllpowerwords
+        global powerwords_direction_form
         strAllpowerwords = []
+        powerwords_direction_form = powerwords
 
         paths_init = [Path(self, ['W'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
             Path(self, ['E'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
@@ -72,7 +76,7 @@ class PathManager:
 
         for i in xrange(50):
             print "run " + str(i+1)
-            paths = self.generate_new_paths(paths, convert_class_to_letters.all_known_phrases_of_power_direction_form)
+            paths = self.generate_new_paths(paths, powerwords_direction_form)#convert_class_to_letters.all_known_phrases_of_power_direction_form)
             if len(paths) == 0:
                 break
             p1 = paths[-1]
@@ -172,8 +176,6 @@ class Path:
 
         self.board_at_end = None
 
-        self.strAllpowerwords = []
-
     def generate_and_rate(self):
         # generate end state of the board for the path
         move_score, final_board = self.generate_end_state()
@@ -196,7 +198,10 @@ class Path:
 
     @ staticmethod
     def getPOPpoints(moves):
-        for powerword in convert_class_to_letters.all_known_phrases_of_power_direction_form:
+        global strAllpowerwords
+        global powerwords_direction_form
+
+        for powerword in powerwords_direction_form: #convert_class_to_letters.all_known_phrases_of_power_direction_form:
             if len(powerword) <= len(moves):
                 for start in range(len(moves) - len(powerword) + 1):
                     if powerword == moves[start:start+len(powerword)]:
@@ -206,9 +211,9 @@ class Path:
                             return 2*len(powerword)
                         else:
                             strAllpowerwords.append(powerword)
-                            index = convert_class_to_letters.all_known_phrases_of_power_direction_form.index(powerword)
-                            pw = convert_class_to_letters.all_known_phrases_of_power_direction_form.pop(index)
-                            convert_class_to_letters.all_known_phrases_of_power_direction_form.append(pw)
+                            index = powerwords_direction_form.index(powerword) #convert_class_to_letters.all_known_phrases_of_power_direction_form.index(powerword)
+                            pw = powerwords_direction_form.pop(index) #convert_class_to_letters.all_known_phrases_of_power_direction_form.pop(index)
+                            powerwords_direction_form.append(pw) #convert_class_to_letters.all_known_phrases_of_power_direction_form.append(pw)
                             return 2*len(powerword) + 300
         return 0
 

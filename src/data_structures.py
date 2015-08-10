@@ -37,7 +37,7 @@ class BoardManager:
         board = Board(self.width, self.height, self.filled, self.unit_dict, self.queued_units[game_number][:]) # copy list of units
         return board
 
-    def path_generation(self, game_number):
+    def path_generation(self, game_number, powerwords_direction_form):
         initial_board = pg.Board(self.width, self.height, self.filled)
         unit_queue = self.queued_units[game_number]
 
@@ -57,7 +57,7 @@ class BoardManager:
         #print path.noMoreUnits
 
         path_manager = pg.PathManager(initial_board, unit_queue, units)
-        return path_manager.run()
+        return path_manager.run(powerwords_direction_form)
 
     def simulation(self, map_number, game_number):
         assert game_number < self.number_of_games, "error: no such game"
