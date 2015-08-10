@@ -419,28 +419,28 @@ print dt
 
 
 
-# lines = open('../Texts/rlyehian').readlines()
+lines = open('../Texts/possible_words.txt').readlines()
 
-# # print lines 
+# print lines 
 
-# for l in lines:
-# 	#print l
-# 	a = check_word.possibleid("aaaaa"+l)
-# 	if a == None:
-# 		pass
-# 		#print 'None'
-# 	else:
-# 		g,s = a
-# 		l = l.lower()
-# 		for i in ["-",'"',",",";","(",")","?",":","\97","\85","\96","\92","\97","\e9","\f1","[","]"]:
-# 			l = l.replace(i,"")
-# 		# try:
-# 		# 	handlejson._create_response(0,0,l)
-# 		# except:
-# 		# 	print l
-# 		handlejson.send_response(g,[allseeds[g][s]],"aaaaa"+l)
+for l in lines:
+	#print l
+	a = check_word.possibleid(l)
+	if a == None:
+		pass
+		#print 'None'
+	else:
+		g,s = a
+		l = l.lower()
+		for i in ["-",'"',",",";","(",")","?",":","\97","\85","\96","\92","\97","\e9","\f1","[","]"]:
+			l = l.replace(i,"")
+		# try:
+		# 	handlejson._create_response(0,0,l)
+		# except:
+		# 	print l
+		handlejson.send_response(g,[allseeds[g][s]],l)
 
 
-l = 'battle of armageddon'
-for g in range(25):
-	handlejson.send_response(g,allseeds[g],l,dt)
+# l = 'ai golem'
+# for g in range(25):
+# 	handlejson.send_response(g,allseeds[g],l,dt)
