@@ -182,14 +182,16 @@ class Path:
 
     @ staticmethod
     def calculate_rating(moves, move_score, final_board, active_unit):
-        maxFilledCellsInRow = 0
-        for y in xrange(final_board.height):
-            filledCellsInRow = 0
-            for x in xrange(final_board.width):
-                if final_board.fields[y][x].full:
-                    filledCellsInRow += 1
-            if filledCellsInRow > maxFilledCellsInRow:
-                maxFilledCellsInRow = filledCellsInRow
+        maxFilledCellsInRow = max( sum( 1 for x in xrange(final_board.width) if final_board.fields[y][x].full ) for y in xrange(final_board.height) )
+        # maxFilledCellsInRow = 0
+        # for y in xrange(final_board.height):
+        #     filledCellsInRow = sum( 1 for x in xrange(final_board.width) if final_board.fields[y][x].full )
+        #     # filledCellsInRow = 0
+        #     # for x in xrange(final_board.width):
+        #     #     if final_board.fields[y][x].full:
+        #     #         filledCellsInRow += 1
+        #     if filledCellsInRow > maxFilledCellsInRow:
+        #         maxFilledCellsInRow = filledCellsInRow
 
         rate_board = maxFilledCellsInRow * 2.0
         rate_board += 1000.0 * final_board.ls_old
@@ -319,33 +321,37 @@ class Board:
         p1 = 53
         p2 = 101
 
-        hashvalue = 0
-        for y in xrange(self.height):
-            for x in xrange(self.width):
-                if self.fields[y][x].full == True:
-                    hashvalue += x * p1 + y * p2
-        return hashvalue
+        return sum( x * p1 + y * p2 for y in xrange(self.height) for x in xrange(self.width) if self.fields[y][x].full )
+
+        # hashvalue = 0
+        # for y in xrange(self.height):
+        #     for x in xrange(self.width):
+        #         if self.fields[y][x].full == True:
+        #             hashvalue += x * p1 + y * p2
+        # return hashvalue
 
     def already_visited(self, states, unit):
-        unitSet = set()
-        for cell in unit.members:
-            unitSet.add((cell.x,cell.y))
-        for state in states:
-            if len(unitSet.symmetric_difference(state)) == 0:
-                #print "already visited -> error"
-                return True
-        return False
+        unitSet = set( (cell.x,cell.y) for cell in unit.members )
+        # for cell in unit.members:
+        #     unitSet.add((cell.x,cell.y))
+        return any( len(unitSet.symmetric_difference(state)) == 0 for state in states )
+        # for state in states:
+        #     if len(unitSet.symmetric_difference(state)) == 0:
+        #         #print "already visited -> error"
+        #         return True
+        # return False
 
     def at_valid_location(self, unit):
-        for m in unit.members:
-            if m.x < 0 or m.x >= self.width or m.y < 0 or m.y >= self.height:
-                #print "moved out of the map -> invalid location"
-                return False
-            # check whether field is already occupied
-            elif self.fields[m.y][m.x].full == True:
-                #print "moved unit to occupied space -> invalid location"
-                return False
-        return True
+        return not any(m.x < 0 or m.x >= self.width or m.y < 0 or m.y >= self.height or self.fields[m.y][m.x].full for m in unit.members)
+        # for m in unit.members:
+        #     if m.x < 0 or m.x >= self.width or m.y < 0 or m.y >= self.height:
+        #         #print "moved out of the map -> invalid location"
+        #         return False
+        #     # check whether field is already occupied
+        #     elif self.fields[m.y][m.x].full == True:
+        #         #print "moved unit to occupied space -> invalid location"
+        #         return False
+        # return True
 
     def lock_fields(self, unit):
         """
@@ -382,8 +388,8 @@ class Board:
             # while because downshifted row can be full too...
             while all([self.fields[y][x].full for x in xrange(self.width)]):
                 # delete the row
-                for x in xrange(self.width):
-                    self.fields[y][x].full = False
+                # for x in xrange(self.width):
+                #     self.fields[y][x].full = False
 
                 # move all of the above rows one cell down
                 for k in xrange(y, 0, -1):
