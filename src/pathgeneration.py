@@ -62,7 +62,7 @@ class PathManager:
 
         heapq.heapify(paths)
 
-        for i in xrange(50):
+        for i in xrange(20):
             print "run " + str(i+1)
             paths = self.generate_new_paths(paths, None)
             p1 = paths[-1]
@@ -88,7 +88,7 @@ class PathManager:
 
         possible_moves = ['W', 'E', 'SW', 'SE', 'R+', 'R-']
 
-        number_of_additional_paths = 20
+        number_of_additional_paths = 10
 
         for i in xrange(number_of_additional_paths):
 
@@ -193,6 +193,7 @@ class Path:
 
         rate_board = maxFilledCellsInRow * 2.0
         rate_board += 1000.0 * final_board.ls_old
+
         #print rate_board
 
         r = move_score + rate_board  + active_unit.pivot.y
@@ -255,7 +256,7 @@ class Path:
                 # print working_board.plot(self.active_unit)
             else:
                 # move was invalid -> unit gets locked
-                move_score += working_board.lock_fields(self.active_unit)
+                move_score = working_board.lock_fields(self.active_unit)
 
                 #print "Unit locked! New move score:   " + str(board.move_score)
 
@@ -396,31 +397,19 @@ class Board:
                 self.ls += 1 # count number of deleted rows        return "moves: " + str(self.moves) + "\nrating: " + str(self.rating)
 
     def plot(self, unit):
-        if unit is not None:
-            s = ''.join(['-' for x in xrange(self.width + 2)])
-            s += '\n'
-            for y in xrange(self.height):
-                s += '|'
-                for x in xrange(self.width):
-                    if (x,y) in [(m.x,m.y) for m in unit.members]:
-                        if (x,y) == (unit.pivot.x, unit.pivot.y):
-                            s += 'U'
-                        else:
-                            s += 'u'
-                    elif (x,y) == (unit.pivot.x, unit.pivot.y):
-                        s += '.'
+        s = '-' * (self.width + 2) + '\n'
+        for y in xrange(self.height):
+            s += '|'
+            for x in xrange(self.width):
+                if unit is not None and (x,y) in [(m.x,m.y) for m in unit.members]:
+                    if (x,y) == (unit.pivot.x, unit.pivot.y):
+                        s += 'U'
                     else:
-                        s += str(self.fields[y][x])
-                s += '|\n'
-            s += ''.join(['-' for x in xrange(self.width + 2)])
-
-        else:
-            s = ''.join(['-' for x in xrange(self.width + 2)])
-            s += '\n'
-            for y in xrange(self.height):
-                s += '|'
-                for x in xrange(self.width):
+                        s += 'u'
+                elif unit is not None and (x,y) == (unit.pivot.x, unit.pivot.y):
+                    s += '.'
+                else:
                     s += str(self.fields[y][x])
-                s += '|\n'
-            s += ''.join(['-' for x in xrange(self.width + 2)])
+            s += '|\n'
+        s += '-' * (self.width + 2)
         return s
