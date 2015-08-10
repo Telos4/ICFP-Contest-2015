@@ -36,3 +36,19 @@ email: icfp.bayreuth@gmail.com or simon.pirkelmann@gmail.com
 skype: simon.pirkelmann
 
 phone: 01602291063
+
+README for the submission:
+------------
+
+Team H. P. Wagner
+
+Contact icfp.bayreuth@gmail.com or simon.pirkelmann@gmail.com if desired.
+
+(Private) repository available under https://github.com/Telos4/ICFP-Contest-2015.git
+
+This is a nearly pure python project, but all the important files are written in python.
+
+You don't have to compile it and therefore the Makefile does nothing.
+
+The main parts of the whole program are not in one single file, rather they are distributed over many of them.
+
