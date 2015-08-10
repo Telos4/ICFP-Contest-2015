@@ -12,7 +12,8 @@ import pathgeneration as pg
 try:
     import cv2
 except ImportError:
-    print "opencv not found"
+    1
+    #print "opencv not found"
 import power_words
 import os
 import sys
@@ -94,8 +95,8 @@ class BoardManager:
 
         board = self.calc_board_state(board, movement_sequence)
 
-        print "board after movements: \n" + str(board)
-        print "final score: " + str(board.move_score + board.power_score)
+        #print "board after movements: \n" + str(board)
+        #print "final score: " + str(board.move_score + board.power_score)
 
     def playTetris(self, map_number, game_number):
         board = self.get_initial_board(game_number)
@@ -208,7 +209,7 @@ class BoardManager:
 
                 if board.at_valid_location(moved_unit):
                     if board.already_visited(board.active_unit.states, moved_unit):
-                        print "error: already visited!"
+                        #print "error: already visited!"
                         break
                     else:
                         # move was valid -> unit is moved
@@ -217,7 +218,7 @@ class BoardManager:
                     # move was invalid -> unit gets locked
                     board.lock_fields(board.active_unit)
 
-                    print board.move_score
+                    #print board.move_score
 
                     # get new active unit
                     board.active_unit = board.get_new_unit()
@@ -231,10 +232,10 @@ class BoardManager:
 
             if board.active_unit is None:
                 # there are no more active units -> stop
-                print "no more units in queue!"
+                #print "no more units in queue!"
                 break
 
-        print board.move_score
+        #print board.move_score
 
         answ = raw_input('save movements? (y/n)')
         if answ == 'y':
@@ -310,7 +311,7 @@ def generate_paths(oldpaths, good_segments):
 
     path_result = []
     while not len(oldpaths) == 0:
-        print "print paths remaining = " + str(len(oldpaths))
+        #print "print paths remaining = " + str(len(oldpaths))
         path = heapq.heappop(oldpaths)
         extends = clever_extend(path, good_segments)
 
@@ -414,7 +415,7 @@ class Board:
         points = 0
         for m in unit.members:
             if self.fields[m.x][m.y].full == True:
-                print "error: field was already locked! this should not have happend!"
+                #print "error: field was already locked! this should not have happend!"
                 raise
             self.fields[m.x][m.y].full = True
             self.filled.append(self.fields[m.x][m.y])
@@ -839,7 +840,7 @@ def fake():
     # boardmanager.path_generation(p)
 
     r = boardmanager.calc_board_state(boardmanager.get_initial_board(s), sys.argv[1])
-    print "sim says:",r.move_score
+    #print "sim says:",r.move_score
 
 if __name__ == "__main__":
     fake()

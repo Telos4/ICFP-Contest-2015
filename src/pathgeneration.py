@@ -67,18 +67,18 @@ class PathManager:
         heapq.heapify(paths)
 
         for i in xrange(50):
-            print "run " + str(i+1)
+            #print "run " + str(i+1)
             paths = self.generate_new_paths(paths, powerwords_direction_form)#convert_class_to_letters.all_known_phrases_of_power_direction_form)
             if len(paths) == 0:
                 break
             p1 = paths[-1]
             #p2 = paths[-2]
             self.saved_boards[p1.board_at_end].fill2DArray(self.working_board)
-            print self.working_board.plot(p1.active_unit)
-            print "best path: " + str(p1)
-            print "____________________________________"
+            #print self.working_board.plot(p1.active_unit)
+            #print "best path: " + str(p1)
+            #print "____________________________________"
 
-        print "best path: " + str(p1)
+        #print "best path: " + str(p1)
         return p1.moves
 
 
@@ -94,11 +94,11 @@ class PathManager:
 
         possible_moves = ['W', 'E', 'SW', 'SE', 'R+', 'R-']
 
-        number_of_additional_paths =10
+        number_of_additional_paths = 10
 
         for i in xrange(number_of_additional_paths):
 
-            number_of_additional_moves = random.randint(1, 10)
+            number_of_additional_moves = random.randint(1, 5)
             additonal_moves = [ random.choice(possible_moves) for j in xrange(number_of_additional_moves) ]
 
             # for j in xrange(number_of_additional_moves):
@@ -118,7 +118,7 @@ class PathManager:
         maxpaths = 10
 
         path_result = []
-        print "number of old paths: " + str(len(oldpaths))
+        #print "number of old paths: " + str(len(oldpaths))
         while not len(oldpaths) == 0:
             #print "print paths remaining = " + str(len(oldpaths))
             path = heapq.heappop(oldpaths)
@@ -231,8 +231,8 @@ class Path:
 
     def generate_end_state(self):
         # get board state at start of the path
-        if self.board_at_start is None:
-            print "is none"
+        #if self.board_at_start is None:
+            #print "is none"
         b = self.path_manager.saved_boards[self.board_at_start]
         b.fill2DArray(self.path_manager.working_board)  # fill working board
 
@@ -370,7 +370,7 @@ class Path:
                     #print "after move"
                     # print working_board.plot(self.active_unit)
                 else:
-                     print "error: unknown return value"
+                     #print "error: unknown return value"
                      raise
 
             return move_score
@@ -462,7 +462,7 @@ class Board:
         # points = 0
         for m in unit.members:
             if self.fields[m.y][m.x].full == True:
-                print "error: field was already locked! this should not have happend!"
+                #print "error: field was already locked! this should not have happend!"
                 raise
             self.fields[m.y][m.x].full = True
             # points += 1

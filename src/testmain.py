@@ -3,6 +3,7 @@
 import argparse
 import handlejson
 import main
+import convert_class_to_letters
 
 parser = argparse.ArgumentParser(description='H. P. Wagner, ICFP 2015')
 
@@ -20,12 +21,7 @@ m = args.m
 c = args.c
 p = [ "".join(i[0]) for i in args.p ]
 
-print f,t,m,c,p
-
-
 j = [ handlejson.parse_to_dictionary(open(i).read()) for i in f ]
-
-import convert_class_to_letters
 
 
 for singlejson in j:
@@ -44,11 +40,9 @@ for singlejson in j:
         conv = convert_class_to_letters.convert_greedy(current_mv,p)
         arr_tuple_pid_seednr_tag_sol.append((singlejson['id'], seed, '', conv))
 
-
 #arr_tuple_pid_seednr_tag_sol=[
 #(1,2,'','a'),
 #(3,4,'','b')
 #]
-print
 
 print handlejson.get_final_output(arr_tuple_pid_seednr_tag_sol)
