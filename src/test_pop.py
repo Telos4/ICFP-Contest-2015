@@ -441,7 +441,7 @@ for l in lines:
 		# except:
 		# 	print l
 		#print g,[allseeds[g][s]],l
-		handlejson.send_response(g,[allseeds[g][s]],l)
+		handlejson.send_response(g,[allseeds[g][s]],l,'rrr')
 
 
 # l = 'ai golem'
