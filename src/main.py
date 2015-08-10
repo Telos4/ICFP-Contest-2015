@@ -4,6 +4,9 @@ import handlejson
 import data_structures
 import os
 from data import *
+import send_to_server
+import datetime
+import time
 
 def main():
     print "ICFP 2015"
@@ -17,13 +20,23 @@ def main():
                 data11, data12, data13, data14, data15, data16, data17, data18, data19, data20,
                 data21, data22, data23, data24]
 
-    # test JSON parser
-    problem_dict = handlejson.parse_to_dictionary(datalist[map_number])
+    for gid in range(25):
+        # test JSON parser
+        problem_dict = handlejson.parse_to_dictionary(datalist[gid])
+        seeds = problem_dict['sourceSeeds']
+        for seedIndex in range(len(seeds)):
+            seed = seeds[seedIndex]
+            # create a boardmanager
+            boardmanager = data_structures.BoardManager(problem_dict)
+            mvlist = boardmanager.path_generation(seedIndex)
 
+            ts = time.time()
+            st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
-
-    # create a boardmanager
-    boardmanager = data_structures.BoardManager(problem_dict)
+            tag = st + str(gid) + '_' + str(seed)
+            print "main = "
+            print mvlist
+            send_to_server.send(gid, seed, mvlist, tag)
 
 
     # size = len(boardmanager.queued_units[0])
@@ -39,9 +52,7 @@ def main():
     #     id += 1
     # print id
 
-    boardmanager.path_generation(0)
-
-    #boardmanager.simulation(10, 0)
+    #boardmanager.path_generation(0)
 
 
     #for game_number in range(len(boardmanager.queued_units)):
