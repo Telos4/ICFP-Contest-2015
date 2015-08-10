@@ -17,7 +17,7 @@ inp2 = { 'W' : ['p', '\'',  '!', '.', '0', '3'],
         'X': ['k', 's', 't', 'u', 'w', 'x'],
         ' ' : ['\t', '\n', '\r', '-']} # let's also ignore '-'
 
-all_known_phrases_of_power=['ei!', 'tsathoggua', 'yuggoth', 'necronomicon', 'ia! ia!', "r'lyeh"]
+all_known_phrases_of_power=['ei!', 'tsathoggua', 'yuggoth', 'necronomicon', 'ia! ia!', "r'lyeh", "in his house at r'lyeh dead cthulhu waits dreaming."]
 
 all_known_phrases_of_power_in_class_form=[]
 for pop in all_known_phrases_of_power:

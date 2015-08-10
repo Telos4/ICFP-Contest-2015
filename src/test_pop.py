@@ -419,13 +419,13 @@ print dt
 
 
 
-# lines = open('../Texts/vancouver_neighbours.txt').readlines()
+# lines = open('../Texts/rlyehian').readlines()
 
 # # print lines 
 
 # for l in lines:
 # 	#print l
-# 	a = check_word.possibleid(l)
+# 	a = check_word.possibleid("aaaaa"+l)
 # 	if a == None:
 # 		pass
 # 		#print 'None'
@@ -438,9 +438,9 @@ print dt
 # 		# 	handlejson._create_response(0,0,l)
 # 		# except:
 # 		# 	print l
-# 		handlejson.send_response(g,[allseeds[g][s]],l)
+# 		handlejson.send_response(g,[allseeds[g][s]],"aaaaa"+l)
 
 
-l = 'deep ones'
+l = 'battle of armageddon'
 for g in range(25):
 	handlejson.send_response(g,allseeds[g],l,dt)
