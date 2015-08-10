@@ -20,20 +20,8 @@ m = args.m
 c = args.c
 p = [ "".join(i[0]) for i in args.p ]
 
-print f,t,m,c,p
-
-
 j = [ handlejson.parse_to_dictionary(open(i).read()) for i in f ]
 
-print j
-
-print
-
-print j[0]
-
-print
-
-print j[1]
 
 import convert_class_to_letters
 
@@ -59,6 +47,5 @@ for singlejson in j:
 #(1,2,'','a'),
 #(3,4,'','b')
 #]
-print
 
 print handlejson.get_final_output(arr_tuple_pid_seednr_tag_sol)
