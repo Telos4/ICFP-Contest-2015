@@ -10,3 +10,4 @@ Texts/en.*
 Texts/txt/*
 Texts/html/*
 gurobi.log
+.idea/
