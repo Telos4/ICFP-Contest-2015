@@ -71,8 +71,16 @@ class BoardManager:
         #     print "..."
 
 
-        movement_sequence = []
+        movement_sequence = ['W', 'W', 'R-', 'SW', 'SW', 'R-', 'R-', 'R-', 'SE', 'SE', 'W', 'R-', 'SE', 'SW', 'E', 'R-', 'SW', 'SW', 'W', 'W', 'SE', 'E', 'R-', 'SW', 'E', 'E', 'E', 'R-', 'SE', 'SW', 'E', 'E', 'E', 'E', 'R-', 'SE', 'E', 'SE', 'R-', 'R-', 'R-', 'R-', 'R-', 'SE', 'E', 'R-', 'E', 'SW', 'W', 'SW', 'E', 'E', 'E', 'E', 'R-', 'SE', 'E', 'SE', 'E', 'R-', 'R-', 'E', 'W', 'W', 'W', 'R+', 'W', 'W', 'SE', 'R-', 'SE', 'R-', 'R-', 'W', 'R-', 'SW', 'R-', 'E', 'E', 'E', 'R-', 'E', 'SE', 'E', 'E', 'SE', 'E', 'SW', 'R-', 'E', 'E', 'R-', 'R-', 'SW', 'R-', 'R-', 'W', 'R-', 'E', 'W', 'R-', 'SW', 'E', 'SW', 'E', 'E', 'E', 'R-', 'SE', 'E', 'E', 'SE', 'W', 'SE', 'SE', 'E', 'R-', 'E', 'R-', 'E', 'R+', 'E', 'E', 'SW', 'R-', 'E', 'R+', 'SE', 'R-', 'SE', 'E', 'E', 'E', 'SW', 'SW', 'W', 'R-', 'SW', 'W', 'R-', 'E', 'SE', 'E', 'R-', 'SW', 'SE', 'E', 'SW', 'E', 'R+', 'SE', 'SE', 'W', 'W', 'SE', 'E', 'E', 'R+', 'W', 'W', 'SW', 'E', 'SW', 'W', 'W', 'R-', 'R-', 'SE', 'SE', 'W', 'SE', 'R+', 'E', 'SW', 'SE', 'R+', 'SW', 'E', 'SE', 'SW', 'W', 'W', 'SE', 'R-', 'SE', 'SE', 'SE', 'E', 'R+', 'SE', 'E', 'SW', 'SW', 'R+', 'E', 'E', 'E', 'R+', 'SW', 'W', 'R-', 'W']
+
+        units = []
+        for unit_entry in self.unit_dict:
+            u = Unit(unit_entry)
+            u.moveToSpawnPosition(board.width)
+            units.append(u)
+
         board = self.calc_board_state(board, movement_sequence)
+        #self.apply_moves_test(movement_sequence, board, self.queued_units[game_number], units)
 
         print "board after movements: \n" + str(board)
         print "final score: " + str(board.move_score + board.power_score)
@@ -101,9 +109,20 @@ class BoardManager:
             if board.status == 'done': # this means no more units are available for spawning
                 return board
 
+        i = 0
         for m in movement_sequence:
+
+
+            print "\n"
+            print "move: " + str(m)
+            print i
+            i += 1
+
+
             # if there is an active unit, try moving it to new location
             moved_unit = board.active_unit.move(m)  # get location of unit after move
+
+            print board.plot(moved_unit)
 
             if board.already_visited(board.active_unit.states, moved_unit):
                 #print "error: already visited!"
@@ -112,6 +131,7 @@ class BoardManager:
                 board.power_score = -1000
             elif board.at_valid_location(moved_unit):
                 # move was valid -> unit is moved
+
                 board.active_unit = moved_unit
             else:
                 # move was invalid -> unit gets locked
@@ -130,14 +150,84 @@ class BoardManager:
                 if board.status == 'done':  # this means no more units are available for spawning
                     return board
 
-            # if board.active_unit is not None:
-            #     print board.plot(board.active_unit)
-            # else:
-            #     print str(board)
-            # pass
+            if board.active_unit is not None:
+                print board.plot(board.active_unit)
+            else:
+                print str(board)
+            pass
+
 
 
         return board
+
+
+
+    @staticmethod
+    def apply_moves_test(moves, working_board, unit_queue, units):
+        """
+        Calculate final board state for a given movement sequence
+        :param board:
+        :param unit_queue:
+        :return:
+        """
+        index_active_unit = 0
+        move_score = 0
+        #print "-------------------------------------------------"
+        #print "initial board state: "
+        #print working_board.plot(self.active_unit)
+        if working_board.active_unit is None:
+            # if there is currently no active unit we create a new unit
+            if index_active_unit == len(unit_queue):
+                #print "no more unites available -> finnished"
+                noMoreUnits = True
+                return move_score
+            else:
+                active_unit = deepcopy(units[unit_queue[index_active_unit]])
+                #self.active_unit.moveToSpawnPosition(working_board.width)
+            index_active_unit += 1
+
+        if working_board.at_valid_location_test(active_unit) == False:
+            spawnLocationBlocked = True
+            return move_score
+
+        for m in moves:
+            # if there is an active unit, try moving it to new location
+            moved_unit = active_unit.move(m)  # get location of unit after move
+
+            #print "before move"
+            #print working_board.plot(self.active_unit)
+
+            if working_board.already_visited_test(active_unit.states, moved_unit):
+                #print "error: already visited!"
+                move_score = -100000000
+                return move_score
+            elif working_board.at_valid_location_test(moved_unit):
+                # move was valid -> unit is moved
+                active_unit = moved_unit
+
+                # print "after move"
+                # print working_board.plot(self.active_unit)
+            else:
+                # move was invalid -> unit gets locked
+                move_score += working_board.lock_fields_test(active_unit)
+
+                #print "Unit locked! New move score:   " + str(board.move_score)
+
+                # get new active unit
+
+                if index_active_unit == len(unit_queue):
+                    #print "no more unites available -> finnished"
+                    noMoreUnits = True
+                    return move_score
+                else:
+                    active_unit = deepcopy(units[unit_queue[index_active_unit]])
+                    if working_board.at_valid_location_test(active_unit) == False:
+                        spawnLocationBlocked = True
+                        return move_score # filled cells at spawn location
+                index_active_unit += 1
+                    #self.active_unit.moveToSpawnPosition(working_board.width)
+
+        return move_score
 
     def manual(self, board, map_number, game_number):
         """
@@ -376,6 +466,65 @@ class Board:
                 return True
         return False
 
+    def already_visited_test(self, states, unit):
+        unitSet = set()
+        for cell in unit.members:
+            unitSet.add((cell.x,cell.y))
+        for state in states:
+            if len(unitSet.symmetric_difference(state)) == 0:
+                #print "already visited -> error"
+                return True
+        return False
+
+    def lock_fields_test(self, unit):
+        """
+        lock the fields of the given board for the members of the unit
+        """
+        points = 0
+        for m in unit.members:
+            if self.fields[m.y][m.x].full == True:
+                print "error: field was already locked! this should not have happend!"
+                raise
+            self.fields[m.y][m.x].full = True
+            points += 1
+
+        self.update_fields_after_lock_test()
+
+        # update points
+        points += 100 * (1 + self.ls) * self.ls / 2.0
+        line_bonus = floor((self.ls_old - 1) * points / 10.0) if self.ls_old > 1 else 0
+
+        self.move_score += points + line_bonus
+
+        self.ls_old = self.ls
+        self.ls = 0
+
+        return points + line_bonus
+
+    def update_fields_after_lock_test(self):
+        """
+        check if any rows are completely filled and delete them
+        """
+        self.ls = 0
+        for y in xrange(self.height-1, -1, -1):
+            # check if row is full
+            # while because downshifted row can be full too...
+            while all([self.fields[y][x].full for x in xrange(self.width)]):
+                # delete the row
+                for x in xrange(self.width):
+                    self.fields[y][x].full = False
+
+                # move all of the above rows one cell down
+                for k in xrange(y, 0, -1):
+                    for x in xrange(self.width):
+                        self.fields[k][x].full = self.fields[k-1][x].full
+
+                # update topmost layer separately
+                for x in xrange(self.width):
+                    self.fields[0][x].full = False
+
+                self.ls += 1 # count number of deleted rows        return "moves: " + str(self.moves) + "\nrating: " + str(self.rating)
+
     def at_valid_location(self, unit):
         for m in unit.members:
             if m.x < 0 or m.x >= self.width or m.y < 0 or m.y >= self.height:
@@ -383,6 +532,17 @@ class Board:
                 return False
             # check whether field is already occupied
             elif self.fields[m.x][m.y].full == True:
+                #print "moved unit to occupied space -> invalid location"
+                return False
+        return True
+
+    def at_valid_location_test(self, unit):
+        for m in unit.members:
+            if m.x < 0 or m.x >= self.width or m.y < 0 or m.y >= self.height:
+                #print "moved out of the map -> invalid location"
+                return False
+            # check whether field is already occupied
+            elif self.fields[m.y][m.x].full == True:
                 #print "moved unit to occupied space -> invalid location"
                 return False
         return True

@@ -41,6 +41,8 @@ def main():
 
     boardmanager.path_generation(0)
 
+    #boardmanager.simulation(10, 0)
+
 
     #for game_number in range(len(boardmanager.queued_units)):
         #boardmanager.simulation(map_number, game_number)

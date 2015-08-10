@@ -9,6 +9,7 @@ import Queue
 import random
 import heapq
 import data_structures as ds
+import hashlib
 
 import power_words
 
@@ -62,7 +63,7 @@ class PathManager:
 
         heapq.heapify(paths)
 
-        for i in xrange(20):
+        for i in xrange(100):
             print "run " + str(i+1)
             paths = self.generate_new_paths(paths, None)
             p1 = paths[-1]
@@ -77,14 +78,17 @@ class PathManager:
 
 
     def clever_extend(self, path, good_segments):
-        if path.spawnLocationBlocked or path.noMoreUnits:
-            # game finnished. no need to extend this path
-            return []
+        # if path.spawnLocationBlocked or path.noMoreUnits:
+        #     # game finnished. no need to extend this path
+        #     return []
 
         # l = 10 # max lookahead
         # number_of_moves = random.randint(1,l)
 
         extends = [ ]
+
+        if path.moves == ['W', 'W', 'R-', 'SW', 'SW', 'R-', 'R-', 'R-', 'SE', 'SE', 'W', 'R-', 'SE', 'SW', 'E', 'R-', 'SW', 'SW', 'W', 'W', 'SE', 'E', 'R-', 'SW', 'E', 'E', 'E', 'R-', 'SE', 'SW', 'E', 'E', 'E', 'E', 'R-', 'SE', 'E', 'SE', 'R-', 'R-', 'R-', 'R-', 'R-', 'SE', 'E']:
+            print "at bad path"
 
         possible_moves = ['W', 'E', 'SW', 'SE', 'R+', 'R-']
 
@@ -109,7 +113,7 @@ class PathManager:
 
     def generate_new_paths(self, oldpaths, good_segments):
         threshold = 0
-        maxpaths = 25
+        maxpaths = 50
 
         path_result = []
         print "number of old paths: " + str(len(oldpaths))
@@ -122,8 +126,8 @@ class PathManager:
 
             extends = self.clever_extend(path, good_segments)
 
-            if len(extends) == 0:
-                heapq.heappush(path_result, path)
+            # if len(extends) == 0:
+            #     heapq.heappush(path_result, path)
 
             while not len(extends) == 0:
                 extended_path = heapq.heappop(extends)
@@ -132,6 +136,10 @@ class PathManager:
 
                 if extended_path.rating > self.threshold:
                     p_new = path + extended_path
+
+                    if p_new.moves[0:46] == ['W', 'W', 'R-', 'SW', 'SW', 'R-', 'R-', 'R-', 'SE', 'SE', 'W', 'R-', 'SE', 'SW', 'E', 'R-', 'SW', 'SW', 'W', 'W', 'SE', 'E', 'R-', 'SW', 'E', 'E', 'E', 'R-', 'SE', 'SW', 'E', 'E', 'E', 'E', 'R-', 'SE', 'E', 'SE', 'R-', 'R-', 'R-', 'R-', 'R-', 'SE', 'E', 'R-']:
+                        print "path found!"
+
                     heapq.heappush(path_result, p_new)
 
             if len(path_result) == 0:
@@ -174,6 +182,23 @@ class Path:
                 self.path_manager.saved_boards[self.board_at_end] = SimpleBoard(final_board)
             else:
                 #print "board already exists!"
+                # b0 = SimpleBoard(final_board)
+                # b0.fill2DArray(self.path_manager.working_board)
+                # s0 = self.path_manager.working_board.plot(None)
+                #
+                # # get already saved board
+                # b1 = self.path_manager.saved_boards[self.board_at_end]
+                # b1.fill2DArray(self.path_manager.working_board)
+                # s1 = self.path_manager.working_board.plot(None) # string rep of already existing board
+                #
+                # if s0 != s1:
+                #     print "error: hash equal for distinct fields!"
+                #     print "s0: "
+                #     print s0
+                #
+                #     print "s1: "
+                #     print s1
+                #     print "---"
                 pass
         else:
             #print "path is bad!"
@@ -256,7 +281,7 @@ class Path:
                 # print working_board.plot(self.active_unit)
             else:
                 # move was invalid -> unit gets locked
-                move_score = working_board.lock_fields(self.active_unit)
+                move_score += working_board.lock_fields(self.active_unit)
 
                 #print "Unit locked! New move score:   " + str(board.move_score)
 
@@ -316,15 +341,21 @@ class Board:
             self.fields[f.y][f.x] = f
 
     def generate_hash(self):
-        p1 = 53
-        p2 = 101
+        #p1 = 3
+        #p2 = 94889
 
-        hashvalue = 0
+        hashstring = ''
         for y in xrange(self.height):
             for x in xrange(self.width):
                 if self.fields[y][x].full == True:
-                    hashvalue += x * p1 + y * p2
-        return hashvalue
+                    hashstring += 'X'
+                else:
+                    hashstring += ' '
+
+        m = hashlib.md5()
+        m.update(hashstring)
+
+        return m.hexdigest()
 
     def already_visited(self, states, unit):
         unitSet = set()
