@@ -18,7 +18,7 @@ def main():
                 data11, data12, data13, data14, data15, data16, data17, data18, data19, data20,
                 data21, data22, data23, data24]
 
-    for gid in range(25):
+    for gid in range(10,11):
         # test JSON parser
         problem_dict = handlejson.parse_to_dictionary(datalist[gid])
         seeds = problem_dict['sourceSeeds']
@@ -31,7 +31,7 @@ def main():
             ts = time.time()
             st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
-            tag = st + str(gid) + '_' + str(seed)
+            tag = st + '_sid=' + str(seed)
             print "main = "
             print mvlist
             send_to_server.send(gid, seed, mvlist, tag)

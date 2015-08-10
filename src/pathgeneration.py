@@ -14,6 +14,9 @@ import convert_class_to_letters
 
 import power_words
 
+#stores all matched powerwords
+strAllpowerwords = []
+
 class SimpleBoard:
     def __init__(self, board):
         self.width = board.width
@@ -47,6 +50,9 @@ class PathManager:
         random.seed(0)
 
     def run(self):
+        #stores all matched powerwords
+        strAllpowerwords = []
+
         paths_init = [Path(self, ['W'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
             Path(self, ['E'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
             Path(self, ['SW'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
@@ -174,7 +180,7 @@ class Path:
 
         self.move_score = move_score
 
-        self.rating = Path.calculate_rating(self, self.moves, self.move_score, final_board, self.active_unit)
+        self.rating = Path.calculate_rating(self.moves, self.move_score, final_board, self.active_unit)
 
         if self.rating >= 0:
             # calculate hash of final board
@@ -189,17 +195,17 @@ class Path:
             pass
 
     @ staticmethod
-    def getPOPpoints(path, moves):
+    def getPOPpoints(moves):
         for powerword in convert_class_to_letters.all_known_phrases_of_power_direction_form:
             if len(powerword) <= len(moves):
                 for start in range(len(moves) - len(powerword) + 1):
                     if powerword == moves[start:start+len(powerword)]:
                         # shift found powerword to the end
                         # i want in the next steps the other powerwords to be found first...
-                        if powerword in path.strAllpowerwords:
+                        if powerword in strAllpowerwords:
                             return 2*len(powerword)
                         else:
-                            path.strAllpowerwords.append(powerword)
+                            strAllpowerwords.append(powerword)
                             index = convert_class_to_letters.all_known_phrases_of_power_direction_form.index(powerword)
                             pw = convert_class_to_letters.all_known_phrases_of_power_direction_form.pop(index)
                             convert_class_to_letters.all_known_phrases_of_power_direction_form.append(pw)
@@ -207,8 +213,8 @@ class Path:
         return 0
 
     @ staticmethod
-    def calculate_rating(path, moves, move_score, final_board, active_unit):
-        popPoints = Path.getPOPpoints(path, moves) * 2
+    def calculate_rating(moves, move_score, final_board, active_unit):
+        popPoints = Path.getPOPpoints(moves) * 2
 
         maxFilledCellsInRow = 0
         for y in xrange(final_board.height):
