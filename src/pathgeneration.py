@@ -6,6 +6,10 @@ import data_structures as ds
 import hashlib
 
 
+#stores all matched powerwords
+strAllpowerwords = []
+powerwords_direction_form = []
+
 class SimpleBoard:
     def __init__(self, board):
         self.width = board.width
@@ -38,14 +42,19 @@ class PathManager:
 
         random.seed(0)
 
-    def run(self):
-        paths_init = [ Path(self, [i], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0) for i in ['W','E','SW','SE','R+','R-'] ]
-        # paths_init = [Path(self, ['W'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
-        #     Path(self, ['E'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
-        #     Path(self, ['SW'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
-        #     Path(self, ['SE'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
-        #     Path(self, ['R+'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
-        #     Path(self, ['R-'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0)]
+    def run(self, powerwords):
+        #stores all matched powerwords
+        global strAllpowerwords
+        global powerwords_direction_form
+        strAllpowerwords = []
+        powerwords_direction_form = powerwords
+
+        paths_init = [Path(self, ['W'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
+            Path(self, ['E'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
+            Path(self, ['SW'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
+            Path(self, ['SE'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
+            Path(self, ['R+'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
+            Path(self, ['R-'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0)]
 
         paths = []
         for p in paths_init:
@@ -59,8 +68,7 @@ class PathManager:
 
         for i in xrange(50):
             print "run " + str(i+1)
-            paths = self.generate_new_paths(paths, None)
-
+            paths = self.generate_new_paths(paths, powerwords_direction_form)#convert_class_to_letters.all_known_phrases_of_power_direction_form)
             if len(paths) == 0:
                 break
             p1 = paths[-1]
@@ -165,8 +173,6 @@ class Path:
 
         self.rating = Path.calculate_rating(self.moves, self.move_score, final_board, self.active_unit)
 
-        print "hash: " + final_board.generate_hash()
-
         if self.rating >= 0:
             # calculate hash of final board
             self.board_at_end = final_board.generate_hash()     # generate and save hash value of board at end
@@ -179,19 +185,39 @@ class Path:
             #print "path is bad!"
             pass
 
+    @ staticmethod
+    def getPOPpoints(moves):
+        global strAllpowerwords
+        global powerwords_direction_form
+
+        for powerword in powerwords_direction_form: #convert_class_to_letters.all_known_phrases_of_power_direction_form:
+            if len(powerword) <= len(moves):
+                for start in range(len(moves) - len(powerword) + 1):
+                    if powerword == moves[start:start+len(powerword)]:
+                        # shift found powerword to the end
+                        # i want in the next steps the other powerwords to be found first...
+                        if powerword in strAllpowerwords:
+                            return 2*len(powerword)
+                        else:
+                            strAllpowerwords.append(powerword)
+                            index = powerwords_direction_form.index(powerword) #convert_class_to_letters.all_known_phrases_of_power_direction_form.index(powerword)
+                            pw = powerwords_direction_form.pop(index) #convert_class_to_letters.all_known_phrases_of_power_direction_form.pop(index)
+                            powerwords_direction_form.append(pw) #convert_class_to_letters.all_known_phrases_of_power_direction_form.append(pw)
+                            return 2*len(powerword) + 300
+        return 0
 
     @ staticmethod
     def calculate_rating(moves, move_score, final_board, active_unit):
-        maxFilledCellsInRow = max( sum( 1 for x in xrange(final_board.width) if final_board.fields[y][x].full ) for y in xrange(final_board.height) )
-        # maxFilledCellsInRow = 0
-        # for y in xrange(final_board.height):
-        #     filledCellsInRow = sum( 1 for x in xrange(final_board.width) if final_board.fields[y][x].full )
-        #     # filledCellsInRow = 0
-        #     # for x in xrange(final_board.width):
-        #     #     if final_board.fields[y][x].full:
-        #     #         filledCellsInRow += 1
-        #     if filledCellsInRow > maxFilledCellsInRow:
-        #         maxFilledCellsInRow = filledCellsInRow
+        popPoints = Path.getPOPpoints(moves) * 2
+
+        maxFilledCellsInRow = 0
+        for y in xrange(final_board.height):
+            filledCellsInRow = 0
+            for x in xrange(final_board.width):
+                if final_board.fields[y][x].full:
+                    filledCellsInRow += 1
+            if filledCellsInRow > maxFilledCellsInRow:
+                maxFilledCellsInRow = filledCellsInRow
 
         rate_board = maxFilledCellsInRow * 2.0
         #rate_board += 1000.0 * final_board.ls_old

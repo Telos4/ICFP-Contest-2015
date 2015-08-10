@@ -1,6 +1,6 @@
 import argparse
 import handlejson
-
+import main
 
 parser = argparse.ArgumentParser(description='H. P. Wagner, ICFP 2015')
 
@@ -23,7 +23,6 @@ print f,t,m,c,p
 
 j = [ handlejson.parse_to_dictionary(open(i).read()) for i in f ]
 
-"""
 print j
 
 print
@@ -34,28 +33,30 @@ print
 
 print j[1]
 
+import convert_class_to_letters
 
+
+for singlejson in j:
 # do something
-"""
+    l_mv=main.main2(singlejson, p, t, m, c)
 
-for map_ in j:
-    # old code:
-    
-    # create a boardmanager
-    boardmanager = BoardManager(j)
+    for i,seed in enumerate(singlejson):
+        current_mv = l_mv[i]
+        conv = convert_class_to_letters.convert_greedy(current_mv,p)
+        handlejson.send_response(singlejson['id'],[seed],conv,'test')
 
+arr_tuple_pid_seednr_tag_sol = []
+for singlejson in j:
+    seeds = singlejson['sourceSeeds']
+    for seedIndex in range(len(seeds)):
+        tag = ''
+        mv = l_mv.pop(0)
+        arr_tuple_pid_seednr_tag_sol.append((singlejson['id'], singlejson['sourceSeeds'][seedIndex], tag, mv))
 
-    boardmanager.path_generation()
-
-    r = boardmanager.calc_board_state(boardmanager.get_initial_board(s), sys.argv[1])
-    print "sim says:",r.move_score
-
-
-## output format
-arr_tuple_pid_seednr_tag_sol=[
-(1,2,'','a'),
-(3,4,'','b')
-]
+#arr_tuple_pid_seednr_tag_sol=[
+#(1,2,'','a'),
+#(3,4,'','b')
+#]
 print
 
 print handlejson.get_final_output(arr_tuple_pid_seednr_tag_sol)

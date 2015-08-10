@@ -20,9 +20,9 @@ inp2 = { 'W' : ['p', '\'',  '!', '.', '0', '3'],
 #all_known_phrases_of_power=['ei!', 'tsathoggua', 'yuggoth', 'necronomicon', 'ia! ia!', "r'lyeh", "in his house at r'lyeh dead cthulhu waits dreaming."]
 
 
-def all_known_phrases_of_power_in_class_form(pop):
+def all_known_phrases_of_power_in_class_form(pop2):
     all_known_phrases_of_power_in_class_form=[]
-    for pop in all_known_phrases_of_power:
+    for pop in pop2:
         newrep=""
         for letter in pop:
             for k in inp2.keys():
@@ -30,7 +30,7 @@ def all_known_phrases_of_power_in_class_form(pop):
                 if letter in data:
                     newrep += k
         all_known_phrases_of_power_in_class_form.append(newrep)
-
+    return all_known_phrases_of_power_in_class_form
 
 
 def convert_back_letter_to_classes(s):
@@ -45,15 +45,7 @@ def all_known_phrases_of_power_direction_form(pop):
     all_known_phrases_of_power_direction_form=[]
     for item in pop:
         all_known_phrases_of_power_direction_form.append(convert_back_letter_to_classes(item))
-
-# if __name__ == "__main__":
-#     for p in all_known_phrases_of_power_direction_form:
-#         print p
-
-
-
-
-
+    return all_known_phrases_of_power_direction_form
 
 def convert_random(movement_sequence, pop):
     out = ""
@@ -67,7 +59,7 @@ def convert_random(movement_sequence, pop):
 def _collision(a,b):
     _,sa,ea=a
     _,sb,eb=b
-    
+
     if sa <= sb:
         return sb < ea
     else:
@@ -87,7 +79,7 @@ def _preprocess(movement_sequence, pop):
     movement_sequence = [ x if x != 'R+' else 'X' for x in movement_sequence]
     movement_sequence = [ x if x != 'R-' else 'Y' for x in movement_sequence]
     movement_sequence = "".join(movement_sequence)
-    
+
     # index of all_known_phrases_of_power_in_class_form, start in movement_sequence, end in movement_sequence
     positions=[]
     for i,rep in enumerate(all_known_phrases_of_power_in_class_form(pop)):
@@ -101,12 +93,12 @@ def _preprocess(movement_sequence, pop):
 
     return positions, movement_sequence
 
-    
+
 def _postprocess(retind,positions,movement_sequence, pop):
     for i in retind:
         p,s,e = positions[i]
         pp = pop[p]
-        
+
         mstemp = movement_sequence[:s]
         mstemp += pp
         mstemp += movement_sequence[e:]
@@ -118,7 +110,7 @@ def _postprocess(retind,positions,movement_sequence, pop):
     return movement_sequence
 
 
-def convert_ilp(movement_sequence, pop):    
+def convert_ilp(movement_sequence, pop):
     positions, movement_sequence = _preprocess(movement_sequence,pop)
 
     try:
@@ -130,15 +122,15 @@ def convert_ilp(movement_sequence, pop):
     m.params.OutputFlag = 0
     X,Y=[],[]
     for i in range(len(positions)):
-        X.append(m.addVar(vtype=gurobipy.GRB.BINARY, obj=-2*len(all_known_phrases_of_power[positions[i][0]]), name='X'+str(i)))
-    for j in range(len(all_known_phrases_of_power)):
+        X.append(m.addVar(vtype=gurobipy.GRB.BINARY, obj=-2*len(pop[positions[i][0]]), name='X'+str(i)))
+    for j in range(len(pop)):
         Y.append(m.addVar(vtype=gurobipy.GRB.BINARY, obj=-300, name='Y'+str(j)))
     m.update()
 
     for i,j in itertools.combinations(range(len(positions)), 2):
         if _collision(positions[i],positions[j]):
             m.addConstr(X[i]+X[j]<=1)
-    for r in range(len(all_known_phrases_of_power)):
+    for r in range(len(pop)):
         m.addConstr(gurobipy.quicksum( X[i] for i in range(len(positions)) if all_known_phrases_of_power_in_class_form(pop)[positions[i][0]] == all_known_phrases_of_power_in_class_form(pop)[r] ) >= Y[r])
         for i in range(len(positions)):
             if all_known_phrases_of_power_in_class_form(pop)[positions[i][0]] == all_known_phrases_of_power_in_class_form(pop)[r]:
@@ -147,7 +139,7 @@ def convert_ilp(movement_sequence, pop):
     m.update()
     #m.write('test.lp')
     m.optimize()
-    
+
     retind = [ i for i in range(len(positions)) if X[i].x >= 0.8 ]
 
     return _postprocess(retind,positions,movement_sequence,pop)

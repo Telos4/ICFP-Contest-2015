@@ -4,9 +4,23 @@ import handlejson
 import data_structures
 import os
 from data import *
+import convert_class_to_letters
 import send_to_server
 import datetime
 import time
+
+def main2(problem_dict, powerwords, timebound, membound, corebound):
+
+    powerwords_direction_form = convert_class_to_letters.all_known_phrases_of_power_direction_form(powerwords)
+    print powerwords_direction_form
+    mvlists = []
+    seeds = problem_dict['sourceSeeds']
+    for seedIndex in range(len(seeds)):
+        seed = seeds[seedIndex]
+        boardmanager = data_structures.BoardManager(problem_dict)
+        mvlist = boardmanager.path_generation(seedIndex, powerwords_direction_form)
+        mvlists.append(mvlist)
+    return mvlists
 
 def main():
     print "ICFP 2015"
@@ -20,23 +34,31 @@ def main():
                 data11, data12, data13, data14, data15, data16, data17, data18, data19, data20,
                 data21, data22, data23, data24]
 
-    for gid in range(0,1):
+    for gid in reversed(range(3,4)):
         # test JSON parser
         problem_dict = handlejson.parse_to_dictionary(datalist[gid])
-        seeds = problem_dict['sourceSeeds']
-        for seedIndex in range(len(seeds)):
-            seed = seeds[seedIndex]
-            # create a boardmanager
-            boardmanager = data_structures.BoardManager(problem_dict)
-            mvlist = boardmanager.path_generation(seedIndex)
 
-            ts = time.time()
-            st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+        powerwords = ['ei!', 'tsathoggua', 'yuggoth', 'necronomicon', 'ia! ia!', "r'lyeh", "in his house at r'lyeh dead cthulhu waits dreaming."]
+        mvlists = main2(problem_dict, powerwords, 0, 0, 0)
 
-            tag = st + str(gid) + '_' + str(seed)
-            print "main = "
-            print mvlist
-            send_to_server.send(gid, seed, mvlist, tag)
+        print mvlists
+
+        #raise
+
+        # seeds = problem_dict['sourceSeeds']
+        # for seedIndex in range(len(seeds)):
+        #     seed = seeds[seedIndex]
+        #     # create a boardmanager
+        #     boardmanager = data_structures.BoardManager(problem_dict)
+        #     mvlist = boardmanager.path_generation(seedIndex)
+        #
+        #     ts = time.time()
+        #     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+        #
+        #     tag = st + '_sid=' + str(seed)
+        #     print "main = "
+        #     print mvlist
+        #     send_to_server.send(gid, seed, mvlist, tag)
 
 
     # size = len(boardmanager.queued_units[0])
