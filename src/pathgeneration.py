@@ -57,9 +57,12 @@ class PathManager:
 
         heapq.heapify(paths)
 
-        for i in xrange(20):
+        for i in xrange(100):
             print "run " + str(i+1)
             paths = self.generate_new_paths(paths, None)
+
+            if len(paths) == 0:
+                break
             p1 = paths[-1]
             #p2 = paths[-2]
             self.saved_boards[p1.board_at_end].fill2DArray(self.working_board)
@@ -67,8 +70,7 @@ class PathManager:
             print "best path: " + str(p1)
             print "____________________________________"
 
-        p = paths[-1]
-        print "best path: " + str(p)
+        print "best path: " + str(p1)
 
 
     def clever_extend(self, path, good_segments):
@@ -83,11 +85,11 @@ class PathManager:
 
         possible_moves = ['W', 'E', 'SW', 'SE', 'R+', 'R-']
 
-        number_of_additional_paths = 10
+        number_of_additional_paths = 20
 
         for i in xrange(number_of_additional_paths):
 
-            number_of_additional_moves = random.randint(1, 5)
+            number_of_additional_moves = random.randint(1, 10)
             additonal_moves = [ random.choice(possible_moves) for j in xrange(number_of_additional_moves) ]
 
             # for j in xrange(number_of_additional_moves):
@@ -104,7 +106,7 @@ class PathManager:
 
     def generate_new_paths(self, oldpaths, good_segments):
         threshold = 0
-        maxpaths = 25
+        maxpaths = 10
 
         path_result = []
         print "number of old paths: " + str(len(oldpaths))
@@ -189,7 +191,7 @@ class Path:
         #         maxFilledCellsInRow = filledCellsInRow
 
         rate_board = maxFilledCellsInRow * 2.0
-        rate_board += 1000.0 * final_board.ls_old
+        #rate_board += 1000.0 * final_board.ls_old
 
         #print rate_board
 
@@ -236,22 +238,19 @@ class Path:
 
         for m in self.moves:
             # if there is an active unit, try moving it to new location
-            moved_unit = self.active_unit.move(m)  # get location of unit after move
+            #moved_unit = self.active_unit.move(m)  # get location of unit after move
+            move_result = self.active_unit.try_move(m, working_board)
 
             #print "before move"
             #print working_board.plot(self.active_unit)
 
-            if working_board.already_visited(self.active_unit.states, moved_unit):
+            #if working_board.already_visited(self.active_unit.states, moved_unit):
+            if move_result == 'already_visited':
                 #print "error: already visited!"
                 move_score = -100000000
                 return move_score
-            elif working_board.at_valid_location(moved_unit):
-                # move was valid -> unit is moved
-                self.active_unit = moved_unit
-
-                # print "after move"
-                # print working_board.plot(self.active_unit)
-            else:
+            #elif working_board.at_valid_location(moved_unit):
+            elif move_result == 'invalid_location':
                 # move was invalid -> unit gets locked
                 move_score += working_board.lock_fields(self.active_unit)
 
@@ -264,11 +263,26 @@ class Path:
                     self.noMoreUnits = True
                     return move_score
                 else:
-                    self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
+                    # new version
+                    new_unit = units[unit_queue[self.index_active_unit]]
+                    self.active_unit.reset(new_unit)
+
+                    # old version
+                    #self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
+
                     if working_board.at_valid_location(self.active_unit) == False:
                         self.spawnLocationBlocked = True
                         return move_score # filled cells at spawn location
                     #self.active_unit.moveToSpawnPosition(working_board.width)
+            elif move_result == 'move_complete':
+            # move was valid -> unit is moved
+                #self.active_unit = moved_unit
+                pass
+                # print "after move"
+                # print working_board.plot(self.active_unit)
+            else:
+                print "error: unknown return value"
+                raise
 
         return move_score
 

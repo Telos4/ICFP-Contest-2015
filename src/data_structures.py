@@ -526,6 +526,13 @@ class Unit:
 
         self.states = [] # list of sets of visited locations
 
+    def reset(self, other_unit):
+        self.states = []    # clear visited states
+        self.pivot.x = other_unit.pivot.x
+        self.pivot.y = other_unit.pivot.y
+        self.members = []
+        self.members = [Cell(m.x, m.y) for m in other_unit.members]
+
     def moveToSpawnPosition(self, map_width):
         minX = map_width - 1
         maxX = 0
@@ -546,6 +553,174 @@ class Unit:
         self.pivot.x += offset
 
         return self
+
+    def try_move(self, direction, board):
+
+        if direction == 'W':
+            self.pivot.x = self.pivot.x - 1
+            for cell in self.members:
+                cell.x = cell.x - 1
+
+        elif direction == 'E':
+            self.pivot.x = self.pivot.x + 1
+            for cell in self.members:
+                cell.x = cell.x + 1
+
+        elif direction == 'SW':
+            if self.pivot.y % 2 == 0:
+                self.pivot.x = self.pivot.x - 1
+            self.pivot.y = self.pivot.y + 1
+
+            for cell in self.members:
+                if cell.y % 2 == 0:
+                    cell.x = cell.x - 1
+                cell.y = cell.y + 1
+
+        elif direction == 'SE':
+            if not self.pivot.y % 2 == 0:
+                self.pivot.x = self.pivot.x + 1
+            self.pivot.y = self.pivot.y + 1
+
+            for cell in self.members:
+                if not cell.y % 2 == 0:
+                    cell.x = cell.x + 1
+                cell.y = cell.y + 1
+
+        elif direction == 'R+':  # rotate conter-clockwise
+            for cell in self.members:
+                upRight = self.pivot.y - cell.y
+                tempX = self.pivot.x
+                if self.pivot.y % 2 == 0:
+                    tempX = tempX + int(floor(upRight / 2.0))
+                else:
+                    tempX = tempX + int(ceil(upRight / 2.0))
+                right = cell.x - tempX
+
+                newY = self.pivot.y - upRight
+                if self.pivot.y % 2 == 0:
+                    newX = self.pivot.x - int(ceil(upRight / 2.0))
+                else:
+                    newX = self.pivot.x - int(floor(upRight / 2.0))
+
+                newY = newY - right
+                if (newY + right) % 2 == 0:
+                    newX = newX + int(floor(right / 2.0))
+                else:
+                    newX = newX + int(ceil(right / 2.0))
+
+                cell.x = newX
+                cell.y = newY
+
+        elif direction == 'R-':  # rotate clockwise
+            for cell in self.members:
+                upRight = self.pivot.y - cell.y
+                tempX = self.pivot.x
+                if self.pivot.y % 2 == 0:
+                    tempX = tempX + int(floor(upRight / 2.0))
+                else:
+                    tempX = tempX + int(ceil(upRight / 2.0))
+                right = cell.x - tempX
+
+                newX = self.pivot.x + upRight
+                newY = self.pivot.y + right
+                if (newY - right) % 2 == 0:
+                    newX = newX + int(floor(right / 2.0))
+                else:
+                    newX = newX + int(ceil(right / 2.0))
+
+                cell.x = newX
+                cell.y = newY
+
+
+        unitSet = set( (cell.x,cell.y) for cell in self.members )
+
+        # have I already been at the new location?
+        if any( len(unitSet.symmetric_difference(state)) == 0 for state in self.states ):
+            self.reverse_move(direction)
+            return 'already_visited'
+        elif any(m.x < 0 or m.x >= board.width or m.y < 0 or m.y >= board.height or board.fields[m.y][m.x].full for m in self.members):
+            self.reverse_move(direction)
+            return 'invalid_location'
+        else:
+            # remember the unit set for next time
+            self.states.append(unitSet)
+            return 'move_complete'
+
+    def reverse_move(self, direction):
+        if direction == 'W':
+            self.pivot.x = self.pivot.x + 1
+            for cell in self.members:
+                cell.x = cell.x + 1
+
+        elif direction == 'E':
+            self.pivot.x = self.pivot.x - 1
+            for cell in self.members:
+                cell.x = cell.x - 1
+
+        elif direction == 'SW':
+            if self.pivot.y % 2 == 1:
+                self.pivot.x = self.pivot.x + 1
+            self.pivot.y = self.pivot.y - 1
+
+            for cell in self.members:
+                if cell.y % 2 == 1:
+                    cell.x = cell.x + 1
+                cell.y = cell.y - 1
+
+        elif direction == 'SE':
+            if not self.pivot.y % 2 == 1:
+                self.pivot.x = self.pivot.x - 1
+            self.pivot.y = self.pivot.y - 1
+
+            for cell in self.members:
+                if not cell.y % 2 == 1:
+                    cell.x = cell.x - 1
+                cell.y = cell.y - 1
+
+        elif direction == 'R-':  # rotate conter-clockwise
+            for cell in self.members:
+                upRight = self.pivot.y - cell.y
+                tempX = self.pivot.x
+                if self.pivot.y % 2 == 0:
+                    tempX = tempX + int(floor(upRight / 2.0))
+                else:
+                    tempX = tempX + int(ceil(upRight / 2.0))
+                right = cell.x - tempX
+
+                newY = self.pivot.y - upRight
+                if self.pivot.y % 2 == 0:
+                    newX = self.pivot.x - int(ceil(upRight / 2.0))
+                else:
+                    newX = self.pivot.x - int(floor(upRight / 2.0))
+
+                newY = newY - right
+                if (newY + right) % 2 == 0:
+                    newX = newX + int(floor(right / 2.0))
+                else:
+                    newX = newX + int(ceil(right / 2.0))
+
+                cell.x = newX
+                cell.y = newY
+
+        elif direction == 'R+':  # rotate clockwise
+            for cell in self.members:
+                upRight = self.pivot.y - cell.y
+                tempX = self.pivot.x
+                if self.pivot.y % 2 == 0:
+                    tempX = tempX + int(floor(upRight / 2.0))
+                else:
+                    tempX = tempX + int(ceil(upRight / 2.0))
+                right = cell.x - tempX
+
+                newX = self.pivot.x + upRight
+                newY = self.pivot.y + right
+                if (newY - right) % 2 == 0:
+                    newX = newX + int(floor(right / 2.0))
+                else:
+                    newX = newX + int(ceil(right / 2.0))
+
+                cell.x = newX
+                cell.y = newY
 
     def move(self, direction):
         unitSet = set()
