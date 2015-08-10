@@ -47,9 +47,17 @@ class BoardManager:
             u.moveToSpawnPosition(initial_board.width)
             units.append(u)
 
+        #moves = ['W', 'R-', 'SW', 'W', 'SW', 'E', 'R-', 'SE', 'E', 'SE', 'R-', 'R-', 'SW', 'E', 'E', 'SE', 'W', 'W', 'SW', 'R-', 'W', 'SE', 'W', 'SW', 'R-', 'W', 'SW', 'R-', 'SW']
+        #path_manager = pg.PathManager(initial_board, unit_queue, units)
+        #path = pg.Path(path_manager, moves, initial_board, deepcopy(units[0]),0)
+        #path.apply_moves(initial_board, unit_queue, units)
+        #print initial_board.plot(None)
+        #print initial_board.generate_hash()
+        #print path.spawnLocationBlocked
+        #print path.noMoreUnits
 
         path_manager = pg.PathManager(initial_board, unit_queue, units)
-        path_manager.run()
+        return path_manager.run()
 
     def simulation(self, map_number, game_number):
         assert game_number < self.number_of_games, "error: no such game"
@@ -462,7 +470,7 @@ class Board:
         s += ''.join(['-' for i in xrange(self.width + 2)])
         return s
 
-    def plotcv(self, unit, id, seed):
+    def plotcv(self, unit):#, id, seed):
         scale = 20
         img = draw.drawBoard(self.width, self.height, scale)
         for cell in self.filled:
@@ -473,8 +481,8 @@ class Board:
 
         draw.drawPivot(img, (0,255,0), unit.pivot.x, unit.pivot.y, scale)
 
-        name = 'Maps/Map_24_Units/' + str(id) + '.png'
-        cv2.imwrite(name, img)
+        #name = 'Maps/Map_24_Units/' + str(id) + '.png'
+        #cv2.imwrite(name, img)
 
         k = '0'
         """
@@ -487,9 +495,9 @@ class Board:
         9: rotate clockwise
         q: exit
         """
-        #while not (k in [ord('1'),ord('3'),ord('4'),ord('5'),ord('6'),ord('7'),ord('9'),ord('q')]):
-            #cv2.imshow('board', img)
-            #k = cv2.waitKey(1)
+        while not (k in [ord('1'),ord('3'),ord('4'),ord('5'),ord('6'),ord('7'),ord('9'),ord('q')]):
+            cv2.imshow('board', img)
+            k = cv2.waitKey(1)
 
         return k
 

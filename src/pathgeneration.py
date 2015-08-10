@@ -9,6 +9,8 @@ import Queue
 import random
 import heapq
 import data_structures as ds
+import hashlib
+import convert_class_to_letters
 
 import power_words
 
@@ -64,7 +66,9 @@ class PathManager:
 
         for i in xrange(50):
             print "run " + str(i+1)
-            paths = self.generate_new_paths(paths, None)
+            paths = self.generate_new_paths(paths, convert_class_to_letters.all_known_phrases_of_power_direction_form)
+            if len(paths) == 0:
+                break
             p1 = paths[-1]
             #p2 = paths[-2]
             self.saved_boards[p1.board_at_end].fill2DArray(self.working_board)
@@ -72,8 +76,8 @@ class PathManager:
             print "best path: " + str(p1)
             print "____________________________________"
 
-        p = paths[-1]
-        print "best path: " + str(p)
+        print "best path: " + str(p1)
+        return p1.moves
 
 
     def clever_extend(self, path, good_segments):
@@ -90,13 +94,15 @@ class PathManager:
 
         number_of_additional_paths = 20
 
-        for i in xrange(number_of_additional_paths):
+        for i in range(number_of_additional_paths):
+            if i < len(good_segments):
+                additonal_moves = good_segments[i]
+            else:
+                number_of_additional_moves = random.randint(1, 5)
+                additonal_moves = []
 
-            number_of_additional_moves = random.randint(1, 5)
-            additonal_moves = []
-
-            for j in xrange(number_of_additional_moves):
-                additonal_moves.append(possible_moves[random.randint(0, 5)])
+                for j in xrange(number_of_additional_moves):
+                    additonal_moves.append(possible_moves[random.randint(0, 5)])
 
             new_path = Path(self, additonal_moves, path.board_at_end, path.active_unit, path.index_active_unit)
             new_path.generate_and_rate()
@@ -123,7 +129,8 @@ class PathManager:
             extends = self.clever_extend(path, good_segments)
 
             if len(extends) == 0:
-                heapq.heappush(path_result, path)
+                continue
+                #heapq.heappush(path_result, path)
 
             while not len(extends) == 0:
                 extended_path = heapq.heappop(extends)
@@ -159,13 +166,15 @@ class Path:
 
         self.board_at_end = None
 
+        self.strAllpowerwords = []
+
     def generate_and_rate(self):
         # generate end state of the board for the path
         move_score, final_board = self.generate_end_state()
 
         self.move_score = move_score
 
-        self.rating = Path.calculate_rating(self.moves, self.move_score, final_board, self.active_unit)
+        self.rating = Path.calculate_rating(self, self.moves, self.move_score, final_board, self.active_unit)
 
         if self.rating >= 0:
             # calculate hash of final board
@@ -179,9 +188,28 @@ class Path:
             #print "path is bad!"
             pass
 
+    @ staticmethod
+    def getPOPpoints(path, moves):
+        for powerword in convert_class_to_letters.all_known_phrases_of_power_direction_form:
+            if len(powerword) <= len(moves):
+                for start in range(len(moves) - len(powerword) + 1):
+                    if powerword == moves[start:start+len(powerword)]:
+                        # shift found powerword to the end
+                        # i want in the next steps the other powerwords to be found first...
+                        if powerword in path.strAllpowerwords:
+                            return 2*len(powerword)
+                        else:
+                            path.strAllpowerwords.append(powerword)
+                            index = convert_class_to_letters.all_known_phrases_of_power_direction_form.index(powerword)
+                            pw = convert_class_to_letters.all_known_phrases_of_power_direction_form.pop(index)
+                            convert_class_to_letters.all_known_phrases_of_power_direction_form.append(pw)
+                            return 2*len(powerword) + 300
+        return 0
 
     @ staticmethod
-    def calculate_rating(moves, move_score, final_board, active_unit):
+    def calculate_rating(path, moves, move_score, final_board, active_unit):
+        popPoints = Path.getPOPpoints(path, moves) * 2
+
         maxFilledCellsInRow = 0
         for y in xrange(final_board.height):
             filledCellsInRow = 0
@@ -192,10 +220,9 @@ class Path:
                 maxFilledCellsInRow = filledCellsInRow
 
         rate_board = maxFilledCellsInRow * 2.0
-        rate_board += 1000.0 * final_board.ls_old
         #print rate_board
 
-        r = move_score + rate_board  + active_unit.pivot.y
+        r = move_score + rate_board  + active_unit.pivot.y + popPoints
         return r
 
 
@@ -222,21 +249,28 @@ class Path:
         #print "-------------------------------------------------"
         #print "initial board state: "
         #print working_board.plot(self.active_unit)
+
         if self.active_unit is None:
-            # if there is currently no active unit we create a new unit
             self.index_active_unit += 1
+            # if there is currently no active unit we create a new unit
             if self.index_active_unit == len(unit_queue):
                 #print "no more unites available -> finnished"
                 self.noMoreUnits = True
                 return move_score
             else:
                 self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
-                #self.active_unit.moveToSpawnPosition(working_board.width)
+
         if working_board.at_valid_location(self.active_unit) == False:
             self.spawnLocationBlocked = True
             return move_score
 
+        #counter = 1
         for m in self.moves:
+            #print counter
+            #counter += 1
+            if self.spawnLocationBlocked == True:
+                print "WTF"
+                raise
             # if there is an active unit, try moving it to new location
             moved_unit = self.active_unit.move(m)  # get location of unit after move
 
@@ -270,7 +304,6 @@ class Path:
                     if working_board.at_valid_location(self.active_unit) == False:
                         self.spawnLocationBlocked = True
                         return move_score # filled cells at spawn location
-                    #self.active_unit.moveToSpawnPosition(working_board.width)
 
         return move_score
 
@@ -293,7 +326,7 @@ class Path:
         return p_new
 
     def __str__(self):
-        return "moves: " + str(self.moves) + "\nrating: " + str(self.rating) + "\nmove_score: " + str(self.move_score)
+        return str(self.moves)
 
 class Board:
     """
@@ -315,15 +348,18 @@ class Board:
             self.fields[f.y][f.x] = f
 
     def generate_hash(self):
-        p1 = 53
-        p2 = 101
-
-        hashvalue = 0
+        hashstring = ''
         for y in xrange(self.height):
             for x in xrange(self.width):
                 if self.fields[y][x].full == True:
-                    hashvalue += x * p1 + y * p2
-        return hashvalue
+                    hashstring += 'X'
+                else:
+                    hashstring += ' '
+
+        m = hashlib.md5()
+        m.update(hashstring)
+
+        return m.hexdigest()
 
     def already_visited(self, states, unit):
         unitSet = set()

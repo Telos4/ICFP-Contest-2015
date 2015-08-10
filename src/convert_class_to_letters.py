@@ -17,7 +17,7 @@ inp2 = { 'W' : ['p', '\'',  '!', '.', '0', '3'],
         'X': ['k', 's', 't', 'u', 'w', 'x'],
         ' ' : ['\t', '\n', '\r', '-']} # let's also ignore '-'
 
-all_known_phrases_of_power=['ei!', 'tsathoggua', 'yuggoth', 'necronomicon', 'ia! ia!', "r'lyeh"]
+all_known_phrases_of_power=['ei!', 'tsathoggua', 'yuggoth', 'necronomicon', 'ia! ia!', "r'lyeh", "in his house at r'lyeh dead cthulhu waits dreaming."]
 
 all_known_phrases_of_power_in_class_form=[]
 for pop in all_known_phrases_of_power:
@@ -156,4 +156,12 @@ def convert_back_letter_to_classes(s):
             if i in inp[k]:
                 ret.append(k)
     return ret
+
+all_known_phrases_of_power_direction_form=[]
+for item in all_known_phrases_of_power:
+    all_known_phrases_of_power_direction_form.append(convert_back_letter_to_classes(item))
+
+if __name__ == "__main__":
+    for p in all_known_phrases_of_power_direction_form:
+        print p
 
