@@ -47,11 +47,11 @@ for singlejson in j:
 
 arr_tuple_pid_seednr_tag_sol = []
 for singlejson in j:
-    seeds = singlejson['sourceSeeds']
-    for seedIndex in range(len(seeds)):
-        tag = ''
-        mv = l_mv.pop(0)
-        arr_tuple_pid_seednr_tag_sol.append((singlejson['id'], singlejson['sourceSeeds'][seedIndex], tag, mv))
+    for i,seed in enumerate(singlejson):
+        current_mv = l_mv[i]
+        conv = convert_class_to_letters.convert_greedy(current_mv,p)
+        arr_tuple_pid_seednr_tag_sol.append((singlejson['id'], seed, '', conv))
+
 
 #arr_tuple_pid_seednr_tag_sol=[
 #(1,2,'','a'),
