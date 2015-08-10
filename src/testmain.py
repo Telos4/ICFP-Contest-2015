@@ -31,7 +31,7 @@ for singlejson in j:
     for i,seed in enumerate(singlejson['sourceSeeds']):
         current_mv = l_mv[i]
         conv = convert_class_to_letters.convert_greedy(current_mv,p)
-        handlejson.send_response(singlejson['id'],[seed],conv,'test')
+        # handlejson.send_response(singlejson['id'],[seed],conv,'test')
 
 arr_tuple_pid_seednr_tag_sol = []
 for singlejson in j:
