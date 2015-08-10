@@ -1,17 +1,10 @@
-import json
 from math import floor
-from math import ceil
 from copy import deepcopy
-import string
-import lcd_generator as lcd
-import draw
-import Queue
 import random
 import heapq
 import data_structures as ds
 import hashlib
 
-import power_words
 
 class SimpleBoard:
     def __init__(self, board):
@@ -46,12 +39,13 @@ class PathManager:
         random.seed(0)
 
     def run(self):
-        paths_init = [Path(self, ['W'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
-            Path(self, ['E'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
-            Path(self, ['SW'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
-            Path(self, ['SE'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
-            Path(self, ['R+'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
-            Path(self, ['R-'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0)]
+        paths_init = [ Path(self, [i], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0) for i in ['W','E','SW','SE','R+','R-'] ]
+        # paths_init = [Path(self, ['W'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
+        #     Path(self, ['E'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
+        #     Path(self, ['SW'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
+        #     Path(self, ['SE'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
+        #     Path(self, ['R+'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0),
+        #     Path(self, ['R-'], self.hash_initial_board, deepcopy(self.units[self.unit_queue[0]]),0)]
 
         paths = []
         for p in paths_init:
@@ -63,7 +57,7 @@ class PathManager:
 
         heapq.heapify(paths)
 
-        for i in xrange(100):
+        for i in xrange(20):
             print "run " + str(i+1)
             paths = self.generate_new_paths(paths, None)
             p1 = paths[-1]
@@ -78,17 +72,14 @@ class PathManager:
 
 
     def clever_extend(self, path, good_segments):
-        # if path.spawnLocationBlocked or path.noMoreUnits:
-        #     # game finnished. no need to extend this path
-        #     return []
+        if path.spawnLocationBlocked or path.noMoreUnits:
+            # game finnished. no need to extend this path
+            return []
 
         # l = 10 # max lookahead
         # number_of_moves = random.randint(1,l)
 
         extends = [ ]
-
-        if path.moves == ['W', 'W', 'R-', 'SW', 'SW', 'R-', 'R-', 'R-', 'SE', 'SE', 'W', 'R-', 'SE', 'SW', 'E', 'R-', 'SW', 'SW', 'W', 'W', 'SE', 'E', 'R-', 'SW', 'E', 'E', 'E', 'R-', 'SE', 'SW', 'E', 'E', 'E', 'E', 'R-', 'SE', 'E', 'SE', 'R-', 'R-', 'R-', 'R-', 'R-', 'SE', 'E']:
-            print "at bad path"
 
         possible_moves = ['W', 'E', 'SW', 'SE', 'R+', 'R-']
 
@@ -97,10 +88,10 @@ class PathManager:
         for i in xrange(number_of_additional_paths):
 
             number_of_additional_moves = random.randint(1, 5)
-            additonal_moves = []
+            additonal_moves = [ random.choice(possible_moves) for j in xrange(number_of_additional_moves) ]
 
-            for j in xrange(number_of_additional_moves):
-                additonal_moves.append(possible_moves[random.randint(0, 5)])
+            # for j in xrange(number_of_additional_moves):
+            #     additonal_moves.append(random.choice(possible_moves))
 
             new_path = Path(self, additonal_moves, path.board_at_end, path.active_unit, path.index_active_unit)
             new_path.generate_and_rate()
@@ -113,7 +104,7 @@ class PathManager:
 
     def generate_new_paths(self, oldpaths, good_segments):
         threshold = 0
-        maxpaths = 50
+        maxpaths = 25
 
         path_result = []
         print "number of old paths: " + str(len(oldpaths))
@@ -136,10 +127,6 @@ class PathManager:
 
                 if extended_path.rating > self.threshold:
                     p_new = path + extended_path
-
-                    if p_new.moves[0:46] == ['W', 'W', 'R-', 'SW', 'SW', 'R-', 'R-', 'R-', 'SE', 'SE', 'W', 'R-', 'SE', 'SW', 'E', 'R-', 'SW', 'SW', 'W', 'W', 'SE', 'E', 'R-', 'SW', 'E', 'E', 'E', 'R-', 'SE', 'SW', 'E', 'E', 'E', 'E', 'R-', 'SE', 'E', 'SE', 'R-', 'R-', 'R-', 'R-', 'R-', 'SE', 'E', 'R-']:
-                        print "path found!"
-
                     heapq.heappush(path_result, p_new)
 
             if len(path_result) == 0:
@@ -182,23 +169,6 @@ class Path:
                 self.path_manager.saved_boards[self.board_at_end] = SimpleBoard(final_board)
             else:
                 #print "board already exists!"
-                # b0 = SimpleBoard(final_board)
-                # b0.fill2DArray(self.path_manager.working_board)
-                # s0 = self.path_manager.working_board.plot(None)
-                #
-                # # get already saved board
-                # b1 = self.path_manager.saved_boards[self.board_at_end]
-                # b1.fill2DArray(self.path_manager.working_board)
-                # s1 = self.path_manager.working_board.plot(None) # string rep of already existing board
-                #
-                # if s0 != s1:
-                #     print "error: hash equal for distinct fields!"
-                #     print "s0: "
-                #     print s0
-                #
-                #     print "s1: "
-                #     print s1
-                #     print "---"
                 pass
         else:
             #print "path is bad!"
@@ -207,14 +177,16 @@ class Path:
 
     @ staticmethod
     def calculate_rating(moves, move_score, final_board, active_unit):
-        maxFilledCellsInRow = 0
-        for y in xrange(final_board.height):
-            filledCellsInRow = 0
-            for x in xrange(final_board.width):
-                if final_board.fields[y][x].full:
-                    filledCellsInRow += 1
-            if filledCellsInRow > maxFilledCellsInRow:
-                maxFilledCellsInRow = filledCellsInRow
+        maxFilledCellsInRow = max( sum( 1 for x in xrange(final_board.width) if final_board.fields[y][x].full ) for y in xrange(final_board.height) )
+        # maxFilledCellsInRow = 0
+        # for y in xrange(final_board.height):
+        #     filledCellsInRow = sum( 1 for x in xrange(final_board.width) if final_board.fields[y][x].full )
+        #     # filledCellsInRow = 0
+        #     # for x in xrange(final_board.width):
+        #     #     if final_board.fields[y][x].full:
+        #     #         filledCellsInRow += 1
+        #     if filledCellsInRow > maxFilledCellsInRow:
+        #         maxFilledCellsInRow = filledCellsInRow
 
         rate_board = maxFilledCellsInRow * 2.0
         rate_board += 1000.0 * final_board.ls_old
@@ -341,8 +313,6 @@ class Board:
             self.fields[f.y][f.x] = f
 
     def generate_hash(self):
-        #p1 = 3
-        #p2 = 94889
 
         hashstring = ''
         for y in xrange(self.height):
@@ -358,37 +328,40 @@ class Board:
         return m.hexdigest()
 
     def already_visited(self, states, unit):
-        unitSet = set()
-        for cell in unit.members:
-            unitSet.add((cell.x,cell.y))
-        for state in states:
-            if len(unitSet.symmetric_difference(state)) == 0:
-                #print "already visited -> error"
-                return True
-        return False
+        unitSet = set( (cell.x,cell.y) for cell in unit.members )
+        # for cell in unit.members:
+        #     unitSet.add((cell.x,cell.y))
+        return any( len(unitSet.symmetric_difference(state)) == 0 for state in states )
+        # for state in states:
+        #     if len(unitSet.symmetric_difference(state)) == 0:
+        #         #print "already visited -> error"
+        #         return True
+        # return False
 
     def at_valid_location(self, unit):
-        for m in unit.members:
-            if m.x < 0 or m.x >= self.width or m.y < 0 or m.y >= self.height:
-                #print "moved out of the map -> invalid location"
-                return False
-            # check whether field is already occupied
-            elif self.fields[m.y][m.x].full == True:
-                #print "moved unit to occupied space -> invalid location"
-                return False
-        return True
+        return not any(m.x < 0 or m.x >= self.width or m.y < 0 or m.y >= self.height or self.fields[m.y][m.x].full for m in unit.members)
+        # for m in unit.members:
+        #     if m.x < 0 or m.x >= self.width or m.y < 0 or m.y >= self.height:
+        #         #print "moved out of the map -> invalid location"
+        #         return False
+        #     # check whether field is already occupied
+        #     elif self.fields[m.y][m.x].full == True:
+        #         #print "moved unit to occupied space -> invalid location"
+        #         return False
+        # return True
 
     def lock_fields(self, unit):
         """
         lock the fields of the given board for the members of the unit
         """
-        points = 0
+        # points = 0
         for m in unit.members:
             if self.fields[m.y][m.x].full == True:
                 print "error: field was already locked! this should not have happend!"
                 raise
             self.fields[m.y][m.x].full = True
-            points += 1
+            # points += 1
+        points = len(unit.members)
 
         self.update_fields_after_lock()
 
@@ -413,8 +386,8 @@ class Board:
             # while because downshifted row can be full too...
             while all([self.fields[y][x].full for x in xrange(self.width)]):
                 # delete the row
-                for x in xrange(self.width):
-                    self.fields[y][x].full = False
+                # for x in xrange(self.width):
+                #     self.fields[y][x].full = False
 
                 # move all of the above rows one cell down
                 for k in xrange(y, 0, -1):
@@ -428,31 +401,19 @@ class Board:
                 self.ls += 1 # count number of deleted rows        return "moves: " + str(self.moves) + "\nrating: " + str(self.rating)
 
     def plot(self, unit):
-        if unit is not None:
-            s = ''.join(['-' for x in xrange(self.width + 2)])
-            s += '\n'
-            for y in xrange(self.height):
-                s += '|'
-                for x in xrange(self.width):
-                    if (x,y) in [(m.x,m.y) for m in unit.members]:
-                        if (x,y) == (unit.pivot.x, unit.pivot.y):
-                            s += 'U'
-                        else:
-                            s += 'u'
-                    elif (x,y) == (unit.pivot.x, unit.pivot.y):
-                        s += '.'
+        s = '-' * (self.width + 2) + '\n'
+        for y in xrange(self.height):
+            s += '|'
+            for x in xrange(self.width):
+                if unit is not None and (x,y) in [(m.x,m.y) for m in unit.members]:
+                    if (x,y) == (unit.pivot.x, unit.pivot.y):
+                        s += 'U'
                     else:
-                        s += str(self.fields[y][x])
-                s += '|\n'
-            s += ''.join(['-' for x in xrange(self.width + 2)])
-
-        else:
-            s = ''.join(['-' for x in xrange(self.width + 2)])
-            s += '\n'
-            for y in xrange(self.height):
-                s += '|'
-                for x in xrange(self.width):
+                        s += 'u'
+                elif unit is not None and (x,y) == (unit.pivot.x, unit.pivot.y):
+                    s += '.'
+                else:
                     s += str(self.fields[y][x])
-                s += '|\n'
-            s += ''.join(['-' for x in xrange(self.width + 2)])
+            s += '|\n'
+        s += '-' * (self.width + 2)
         return s
