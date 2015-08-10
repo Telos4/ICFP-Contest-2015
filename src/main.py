@@ -32,23 +32,31 @@ def main():
                 data11, data12, data13, data14, data15, data16, data17, data18, data19, data20,
                 data21, data22, data23, data24]
 
-    for gid in reversed(range(12,25)):
+    for gid in reversed(range(3,4)):
         # test JSON parser
         problem_dict = handlejson.parse_to_dictionary(datalist[gid])
-        seeds = problem_dict['sourceSeeds']
-        for seedIndex in range(len(seeds)):
-            seed = seeds[seedIndex]
-            # create a boardmanager
-            boardmanager = data_structures.BoardManager(problem_dict)
-            mvlist = boardmanager.path_generation(seedIndex)
 
-            ts = time.time()
-            st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+        powerwords = ['ei!', 'tsathoggua', 'yuggoth', 'necronomicon', 'ia! ia!', "r'lyeh", "in his house at r'lyeh dead cthulhu waits dreaming."]
+        mvlists = main2(problem_dict, powerwords, 0, 0, 0)
 
-            tag = st + '_sid=' + str(seed)
-            print "main = "
-            print mvlist
-            send_to_server.send(gid, seed, mvlist, tag)
+        print mvlists
+
+        #raise
+
+        # seeds = problem_dict['sourceSeeds']
+        # for seedIndex in range(len(seeds)):
+        #     seed = seeds[seedIndex]
+        #     # create a boardmanager
+        #     boardmanager = data_structures.BoardManager(problem_dict)
+        #     mvlist = boardmanager.path_generation(seedIndex)
+        #
+        #     ts = time.time()
+        #     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+        #
+        #     tag = st + '_sid=' + str(seed)
+        #     print "main = "
+        #     print mvlist
+        #     send_to_server.send(gid, seed, mvlist, tag)
 
 
     # size = len(boardmanager.queued_units[0])
