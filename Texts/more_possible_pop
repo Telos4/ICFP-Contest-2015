@@ -4,19 +4,12 @@ defeat unholy trinity
 end of world
 cataclysm
 devastation
-
-word elder things
-['E', 'SE', 'R-', 'E', 'R-', 'SE', 'R+', 'SW', 'SW', 'SE', 'SW', 'R+']
-word great race
-['SW', 'R-', 'E', 'SW', 'R+', 'SE', 'R-', 'SW', 'E', 'E']
-NOPE apocalypse ['SW', 'W', 'SE', 'E', 'SW', 'SE', 'E', 'W', 'R+', 'E']
-word arrival of the messiah
-['SW', 'R-', 'R-', 'SW', 'R-', 'SW', 'SE', 'SE', 'SE', 'E', 'SE', 'R+', 'SW', 'E', 'SE', 'SE', 'E', 'R+', 'R+', 'SW', 'SW', 'SW']
-NOPE defeat unholy trinity ['R-', 'E', 'E', 'E', 'SW', 'R+', 'SE', 'R+', 'SE', 'SW', 'SE', 'SE', 'E', 'SE', 'R+', 'R-', 'SW', 'SE', 'SW', 'R+', 'E']
-word end of world
-['E', 'SE', 'R-', 'SE', 'SE', 'E', 'SE', 'R+', 'SE', 'R-', 'SE', 'R-']
-word cataclysm
-['E', 'SW', 'R+', 'SW', 'E', 'SE', 'E', 'R+', 'SE']
-word devastation
-['R-', 'E', 'R-', 'SW', 'R+', 'R+', 'SW', 'R+', 'SW', 'SE', 'SE']
+elder things
+great race
+apocalypse
+arrival of the messiah
+defeat unholy trinity
+end of world
+cataclysm
+devastation
 

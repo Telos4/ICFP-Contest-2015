@@ -419,7 +419,9 @@ print dt
 
 
 
-lines = open('../Texts/possible_words.txt').readlines()
+lines = open('../Texts/more_possible_pop').readlines()
+
+#lines =['the','cipher','bureau','ciper bureau']
 
 # print lines 
 
@@ -438,6 +440,7 @@ for l in lines:
 		# 	handlejson._create_response(0,0,l)
 		# except:
 		# 	print l
+		#print g,[allseeds[g][s]],l
 		handlejson.send_response(g,[allseeds[g][s]],l)
 
 
