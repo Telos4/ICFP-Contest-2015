@@ -42,7 +42,9 @@ words_even_less_prob = ["derleth",
                         "dagon", "ghatanothoa",
                         "mother hydra", "zoth-ommog", "gatanozoa",
                         "ghatanothoa", "arlyeh", "elder things",
-                        "great race"]
+                        "great race", "apocalypse", "arrival of the messiah",
+                        "defeat unholy trinity", "end of world",
+                        "cataclysm", "devastation"]
 
 """
 https://lovecraftbookclub.wordpress.com/the-lovecraft-dictionary/
@@ -304,7 +306,9 @@ validation below said nope. check and remove from lists above
 words_rejected = "nyarlathotep", "shub-niggurath", "huitloxopetl",
 "wza-y'ei!", "y'kaa haa ho-ii", "hastur", "ithaqua", "ponape"
 
-words = words_for_sure + words_probable + words_even_less_prob + more_words + even_more
+words = words_for_sure + words_probable + words_even_less_prob
+# +  more_words
+# + even_more
 
 def reverse_matching(word):
     r = []
