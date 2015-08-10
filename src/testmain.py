@@ -25,16 +25,6 @@ print f,t,m,c,p
 
 j = [ handlejson.parse_to_dictionary(open(i).read()) for i in f ]
 
-print j
-
-print
-
-print j[0]
-
-print
-
-print j[1]
-
 import convert_class_to_letters
 
 
@@ -42,14 +32,14 @@ for singlejson in j:
 # do something
     l_mv=main.main2(singlejson, p, t, m, c)
 
-    for i,seed in enumerate(singlejson):
+    for i,seed in enumerate(singlejson['sourceSeeds']):
         current_mv = l_mv[i]
         conv = convert_class_to_letters.convert_greedy(current_mv,p)
-        handlejson.send_response(singlejson['id'],[seed],conv,'test')
+        #handlejson.send_response(singlejson['id'],[seed],conv,'test')
 
 arr_tuple_pid_seednr_tag_sol = []
 for singlejson in j:
-    for i,seed in enumerate(singlejson):
+    for i,seed in enumerate(singlejson['sourceSeeds']):
         current_mv = l_mv[i]
         conv = convert_class_to_letters.convert_greedy(current_mv,p)
         arr_tuple_pid_seednr_tag_sol.append((singlejson['id'], seed, '', conv))
