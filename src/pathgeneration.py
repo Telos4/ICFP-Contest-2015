@@ -1,16 +1,9 @@
-import json
 from math import floor
-from math import ceil
 from copy import deepcopy
-import string
-import lcd_generator as lcd
-import draw
-import Queue
 import random
 import heapq
 import data_structures as ds
 
-import power_words
 
 class SimpleBoard:
     def __init__(self, board):
@@ -93,10 +86,10 @@ class PathManager:
         for i in xrange(number_of_additional_paths):
 
             number_of_additional_moves = random.randint(1, 5)
-            additonal_moves = []
+            additonal_moves = [ random.choice(possible_moves) for j in xrange(number_of_additional_moves) ]
 
-            for j in xrange(number_of_additional_moves):
-                additonal_moves.append(possible_moves[random.randint(0, 5)])
+            # for j in xrange(number_of_additional_moves):
+            #     additonal_moves.append(random.choice(possible_moves))
 
             new_path = Path(self, additonal_moves, path.board_at_end, path.active_unit, path.index_active_unit)
             new_path.generate_and_rate()
@@ -357,13 +350,14 @@ class Board:
         """
         lock the fields of the given board for the members of the unit
         """
-        points = 0
+        # points = 0
         for m in unit.members:
             if self.fields[m.y][m.x].full == True:
                 print "error: field was already locked! this should not have happend!"
                 raise
             self.fields[m.y][m.x].full = True
-            points += 1
+            # points += 1
+        points = len(unit.members)
 
         self.update_fields_after_lock()
 
