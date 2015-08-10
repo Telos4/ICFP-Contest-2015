@@ -20,7 +20,7 @@ def main():
                 data11, data12, data13, data14, data15, data16, data17, data18, data19, data20,
                 data21, data22, data23, data24]
 
-    for gid in range(25):
+    for gid in range(0,1):
         # test JSON parser
         problem_dict = handlejson.parse_to_dictionary(datalist[gid])
         seeds = problem_dict['sourceSeeds']
