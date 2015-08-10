@@ -12,7 +12,6 @@ import time
 def main2(problem_dict, powerwords, timebound, membound, corebound):
 
     powerwords_direction_form = convert_class_to_letters.all_known_phrases_of_power_direction_form(powerwords)
-    print powerwords_direction_form
     mvlists = []
     seeds = problem_dict['sourceSeeds']
     for seedIndex in range(len(seeds)):
