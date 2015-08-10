@@ -1,10 +1,18 @@
+import json
 from math import floor
+from math import ceil
 from copy import deepcopy
+import string
+import lcd_generator as lcd
+import draw
+import Queue
 import random
 import heapq
 import data_structures as ds
 import hashlib
+import convert_class_to_letters
 
+import power_words
 
 #stores all matched powerwords
 strAllpowerwords = []
@@ -94,15 +102,17 @@ class PathManager:
 
         possible_moves = ['W', 'E', 'SW', 'SE', 'R+', 'R-']
 
-        number_of_additional_paths = 10
+        number_of_additional_paths = 20
 
-        for i in xrange(number_of_additional_paths):
+        for i in range(number_of_additional_paths):
+            if i < len(good_segments):
+                additonal_moves = good_segments[i]
+            else:
+                number_of_additional_moves = random.randint(1, 5)
+                additonal_moves = []
 
-            number_of_additional_moves = random.randint(1, 5)
-            additonal_moves = [ random.choice(possible_moves) for j in xrange(number_of_additional_moves) ]
-
-            # for j in xrange(number_of_additional_moves):
-            #     additonal_moves.append(random.choice(possible_moves))
+                for j in xrange(number_of_additional_moves):
+                    additonal_moves.append(possible_moves[random.randint(0, 5)])
 
             new_path = Path(self, additonal_moves, path.board_at_end, path.active_unit, path.index_active_unit)
             new_path.generate_and_rate()
@@ -115,7 +125,7 @@ class PathManager:
 
     def generate_new_paths(self, oldpaths, good_segments):
         threshold = 0
-        maxpaths = 10
+        maxpaths = 25
 
         path_result = []
         #print "number of old paths: " + str(len(oldpaths))
@@ -128,8 +138,9 @@ class PathManager:
 
             extends = self.clever_extend(path, good_segments)
 
-            # if len(extends) == 0:
-            #     heapq.heappush(path_result, path)
+            if len(extends) == 0:
+                continue
+                #heapq.heappush(path_result, path)
 
             while not len(extends) == 0:
                 extended_path = heapq.heappop(extends)
@@ -220,11 +231,9 @@ class Path:
                 maxFilledCellsInRow = filledCellsInRow
 
         rate_board = maxFilledCellsInRow * 2.0
-        #rate_board += 1000.0 * final_board.ls_old
-
         #print rate_board
 
-        r = move_score + rate_board  + active_unit.pivot.y
+        r = move_score + rate_board  + active_unit.pivot.y + popPoints
         return r
 
 
@@ -246,75 +255,56 @@ class Path:
         :param board:
         :param unit_queue:
         :return:
-        # 1e68934346ee57858834a205017af8b7
         """
-        old = True
-        if old:
-            move_score = 0
-            if self.active_unit is None:
-                # if there is currently no active unit we create a new unit
-                self.index_active_unit += 1
-                if self.index_active_unit == len(unit_queue):
-                    #print "no more unites available -> finnished"
-                    self.noMoreUnits = True
-                    return move_score
-                else:
-                    self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
-                    #self.active_unit.moveToSpawnPosition(working_board.width)
-            if working_board.at_valid_location(self.active_unit) == False:
-                self.spawnLocationBlocked = True
+        move_score = 0
+        #print "-------------------------------------------------"
+        #print "initial board state: "
+        #print working_board.plot(self.active_unit)
+
+        if self.active_unit is None:
+            self.index_active_unit += 1
+            # if there is currently no active unit we create a new unit
+            if self.index_active_unit == len(unit_queue):
+                #print "no more unites available -> finnished"
+                self.noMoreUnits = True
                 return move_score
+            else:
+                self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
 
-            for m in self.moves:
-                # if there is an active unit, try moving it to new location
-                moved_unit = self.active_unit.move(m)  # get location of unit after move
-
-                if working_board.already_visited(self.active_unit.states, moved_unit):
-                    #print "error: already visited!"
-                    move_score = -100000000
-                    return move_score
-                elif not working_board.at_valid_location(moved_unit):
-                    # move was invalid -> unit gets locked
-                    move_score += working_board.lock_fields(self.active_unit)
-
-                    #print "Unit locked! New move score:   " + str(board.move_score)
-
-                    # get new active unit
-                    self.index_active_unit += 1
-                    if self.index_active_unit == len(unit_queue):
-                        #print "no more unites available -> finnished"
-                        #print working_board.plot(self.active_unit)
-                        self.noMoreUnits = True
-                        return move_score
-                    else:
-
-                        # new version
-                        new_unit = units[unit_queue[self.index_active_unit]]
-                        self.active_unit.reset(new_unit)
-
-                        # old version
-                        #self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
-                        #print working_board.plot(self.active_unit)
-                        if working_board.at_valid_location(self.active_unit) == False:
-                            self.spawnLocationBlocked = True
-                            return move_score # filled cells at spawn location
-
-                        #self.active_unit.moveToSpawnPosition(working_board.width)
-                else:
-                    #print working_board.plot(self.active_unit)
-                    # move was valid -> unit is moved
-                    self.active_unit = moved_unit
-                    pass
-                    #print "after move"
-
+        if working_board.at_valid_location(self.active_unit) == False:
+            self.spawnLocationBlocked = True
             return move_score
-        else:
-            move_score = 0
-            #print "-------------------------------------------------"
-            #print "initial board state: "
+
+        #counter = 1
+        for m in self.moves:
+            #print counter
+            #counter += 1
+            if self.spawnLocationBlocked == True:
+                #print "WTF"
+                raise
+            # if there is an active unit, try moving it to new location
+            moved_unit = self.active_unit.move(m)  # get location of unit after move
+
+            #print "before move"
             #print working_board.plot(self.active_unit)
-            if self.active_unit is None:
-                # if there is currently no active unit we create a new unit
+
+            if working_board.already_visited(self.active_unit.states, moved_unit):
+                #print "error: already visited!"
+                move_score = -100000000
+                return move_score
+            elif working_board.at_valid_location(moved_unit):
+                # move was valid -> unit is moved
+                self.active_unit = moved_unit
+
+                # print "after move"
+                # print working_board.plot(self.active_unit)
+            else:
+                # move was invalid -> unit gets locked
+                move_score += working_board.lock_fields(self.active_unit)
+
+                #print "Unit locked! New move score:   " + str(board.move_score)
+
+                # get new active unit
                 self.index_active_unit += 1
                 if self.index_active_unit == len(unit_queue):
                     #print "no more unites available -> finnished"
@@ -322,60 +312,11 @@ class Path:
                     return move_score
                 else:
                     self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
-                    #self.active_unit.moveToSpawnPosition(working_board.width)
-            if working_board.at_valid_location(self.active_unit) == False:
-                self.spawnLocationBlocked = True
-                return move_score
+                    if working_board.at_valid_location(self.active_unit) == False:
+                        self.spawnLocationBlocked = True
+                        return move_score # filled cells at spawn location
 
-            for m in self.moves:
-                # if there is an active unit, try moving it to new location
-                #moved_unit = self.active_unit.move(m)  # get location of unit after move
-                #print working_board.plot(self.active_unit)
-
-                move_result = self.active_unit.try_move(m, working_board)
-
-                if move_result == 'already_visited':
-                    #print "error: already visited!"
-                    move_score = -100000000
-                    return move_score
-                elif move_result == 'invalid_location':
-                    # move was invalid -> unit gets locked
-                    move_score += working_board.lock_fields(self.active_unit)
-
-                    #print "Unit locked! New move score:   " + str(board.move_score)
-
-                    # get new active unit
-                    self.index_active_unit += 1
-                    if self.index_active_unit == len(unit_queue):
-                        #print "no more unites available -> finnished"
-                        #print working_board.plot(self.active_unit)
-                        self.noMoreUnits = True
-                        return move_score
-                    else:
-
-                        # new version
-                        new_unit = units[unit_queue[self.index_active_unit]]
-                        self.active_unit.reset(new_unit)
-
-                        # old version
-                        #self.active_unit = deepcopy(units[unit_queue[self.index_active_unit]])
-                        #print working_board.plot(self.active_unit)
-                        if working_board.at_valid_location(self.active_unit) == False:
-                            self.spawnLocationBlocked = True
-                            return move_score # filled cells at spawn location
-
-                        #self.active_unit.moveToSpawnPosition(working_board.width)
-                elif move_result == 'move_complete':
-                    pass
-                    #print "after move"
-                    # print working_board.plot(self.active_unit)
-                else:
-                     #print "error: unknown return value"
-                     raise
-
-            return move_score
-
-
+        return move_score
 
     # def rate(self):
     #     # calculate end state for the path
@@ -396,7 +337,7 @@ class Path:
         return p_new
 
     def __str__(self):
-        return "number of moves: " + str(len(self.moves)) + "\nrating: " + str(self.rating) + "\nmove_score: " + str(self.move_score)
+        return str(self.moves)
 
 class Board:
     """
@@ -418,7 +359,6 @@ class Board:
             self.fields[f.y][f.x] = f
 
     def generate_hash(self):
-
         hashstring = ''
         for y in xrange(self.height):
             for x in xrange(self.width):
@@ -433,40 +373,37 @@ class Board:
         return m.hexdigest()
 
     def already_visited(self, states, unit):
-        unitSet = set( (cell.x,cell.y) for cell in unit.members )
-        # for cell in unit.members:
-        #     unitSet.add((cell.x,cell.y))
-        return any( len(unitSet.symmetric_difference(state)) == 0 for state in states )
-        # for state in states:
-        #     if len(unitSet.symmetric_difference(state)) == 0:
-        #         #print "already visited -> error"
-        #         return True
-        # return False
+        unitSet = set()
+        for cell in unit.members:
+            unitSet.add((cell.x,cell.y))
+        for state in states:
+            if len(unitSet.symmetric_difference(state)) == 0:
+                #print "already visited -> error"
+                return True
+        return False
 
     def at_valid_location(self, unit):
-        return not any(m.x < 0 or m.x >= self.width or m.y < 0 or m.y >= self.height or self.fields[m.y][m.x].full for m in unit.members)
-        # for m in unit.members:
-        #     if m.x < 0 or m.x >= self.width or m.y < 0 or m.y >= self.height:
-        #         #print "moved out of the map -> invalid location"
-        #         return False
-        #     # check whether field is already occupied
-        #     elif self.fields[m.y][m.x].full == True:
-        #         #print "moved unit to occupied space -> invalid location"
-        #         return False
-        # return True
+        for m in unit.members:
+            if m.x < 0 or m.x >= self.width or m.y < 0 or m.y >= self.height:
+                #print "moved out of the map -> invalid location"
+                return False
+            # check whether field is already occupied
+            elif self.fields[m.y][m.x].full == True:
+                #print "moved unit to occupied space -> invalid location"
+                return False
+        return True
 
     def lock_fields(self, unit):
         """
         lock the fields of the given board for the members of the unit
         """
-        # points = 0
+        points = 0
         for m in unit.members:
             if self.fields[m.y][m.x].full == True:
                 #print "error: field was already locked! this should not have happend!"
                 raise
             self.fields[m.y][m.x].full = True
-            # points += 1
-        points = len(unit.members)
+            points += 1
 
         self.update_fields_after_lock()
 
@@ -491,8 +428,8 @@ class Board:
             # while because downshifted row can be full too...
             while all([self.fields[y][x].full for x in xrange(self.width)]):
                 # delete the row
-                # for x in xrange(self.width):
-                #     self.fields[y][x].full = False
+                for x in xrange(self.width):
+                    self.fields[y][x].full = False
 
                 # move all of the above rows one cell down
                 for k in xrange(y, 0, -1):
@@ -506,19 +443,31 @@ class Board:
                 self.ls += 1 # count number of deleted rows        return "moves: " + str(self.moves) + "\nrating: " + str(self.rating)
 
     def plot(self, unit):
-        s = '-' * (self.width + 2) + '\n'
-        for y in xrange(self.height):
-            s += '|'
-            for x in xrange(self.width):
-                if unit is not None and (x,y) in [(m.x,m.y) for m in unit.members]:
-                    if (x,y) == (unit.pivot.x, unit.pivot.y):
-                        s += 'U'
+        if unit is not None:
+            s = ''.join(['-' for x in xrange(self.width + 2)])
+            s += '\n'
+            for y in xrange(self.height):
+                s += '|'
+                for x in xrange(self.width):
+                    if (x,y) in [(m.x,m.y) for m in unit.members]:
+                        if (x,y) == (unit.pivot.x, unit.pivot.y):
+                            s += 'U'
+                        else:
+                            s += 'u'
+                    elif (x,y) == (unit.pivot.x, unit.pivot.y):
+                        s += '.'
                     else:
-                        s += 'u'
-                elif unit is not None and (x,y) == (unit.pivot.x, unit.pivot.y):
-                    s += '.'
-                else:
+                        s += str(self.fields[y][x])
+                s += '|\n'
+            s += ''.join(['-' for x in xrange(self.width + 2)])
+
+        else:
+            s = ''.join(['-' for x in xrange(self.width + 2)])
+            s += '\n'
+            for y in xrange(self.height):
+                s += '|'
+                for x in xrange(self.width):
                     s += str(self.fields[y][x])
-            s += '|\n'
-        s += '-' * (self.width + 2)
+                s += '|\n'
+            s += ''.join(['-' for x in xrange(self.width + 2)])
         return s
